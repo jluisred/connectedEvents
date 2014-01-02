@@ -4,226 +4,136 @@
 
 \documentclass{acm_proc_article-sp}
 
+\newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
+\def\sharedaffiliation{\end{tabular}\newline\begin{tabular}{c}}
+
+\def\wu{\superscript{1}}
+\def\wg{\superscript{2}}
+
 \begin{document}
 
 \title{Context-aware Connections between News Events}
-\subtitle{Exploring  DBPedia paths between named entities belonging to different event contexts}
+%\subtitle{Exploring DBpedia paths between named entities belonging to different event contexts}
+% MOVED TO ABSTRACT TO SAVE SPACE
 
-\numberofauthors{4} 
+\numberofauthors{5} 
 
 \author{
-% 1st. author
-\alignauthor Erik Mannens\\
-       \affaddr{Ghent University}\\
-       \affaddr{Gent, Belgium}\\
-       \email{erik.mannens@ugent.be}
-% 2nd. author
-\alignauthor Laurens De Vocht\\
-       \affaddr{Ghent University}\\
-       \affaddr{Gent, Belgium}\\
-       \email{laurens.devocht@ugent.be}
+\alignauthor
+Laurens De Vocht\wu
+       \affaddr{\email{\texttt{laurens.devocht@ugent.be}}}
+\and
+\alignauthor
+Erik Mannens\wu
+       \affaddr{\email{\texttt{erik.mannens@ugent.be}}}
+\and
+\alignauthor
+Rik Van de Walle\wu
+       \affaddr{\email{\texttt{rik.vandewalle@ugent.be}}}
 % 3rd. author
 \and
-\alignauthor Rapha\"el Troncy\\
-	\affaddr{EURECOM}\\
-	\affaddr{Biot, France}\\
-	\email{raphael.troncy@eurecom.fr}	
-% 4th. author
-\alignauthor Jos\'e Luis Redondo Garc\'ia\\
-	\affaddr{EURECOM}\\
-	\affaddr{Biot, France}\\
-	\email{redondo@eurecom.fr}
+\alignauthor 
+Rapha\"el Troncy\wg
+	\affaddr{\email{\texttt{raphael.troncy@eurecom.fr}}}
+\and
+\alignauthor 
+Jos\'e Luis Redondo Garc\'ia\wg
+	\affaddr{\email{\texttt{redondo@eurecom.fr}}}
+\sharedaffiliation
+\begin{tabular}{ccc}
+    \affaddr{{\wu}Ghent University - iMinds - Multimedia Lab{\ }} & & 
+    \affaddr{{\wg}EURECOM{\ }} \\
+    %\affaddr{Gaston Crommenlaan 8/201} & \affaddr{} \\
+    \affaddr{Ghent, Belgium} & &
+    \affaddr{Biot, France} \\
+\end{tabular}
 }
+%USED SHARED AFFILIATIONS TO SAVE SPACE
 
 \maketitle
 \begin{abstract}
-This paper provides a sample of a \LaTeX\ document which conforms to
-the formatting guidelines for ACM SIG Proceedings.
-It complements the document \textit{Author's Guide to Preparing
-ACM SIG Proceedings Using \LaTeX$2_\epsilon$\ and Bib\TeX}. This
-source file has been written with the intention of being
-compiled under \LaTeX$2_\epsilon$\ and BibTeX.
+Exploring DBpedia paths between named entities belonging to different event contexts...
 
-The developers have tried to include every imaginable sort
-of ``bells and whistles", such as a subtitle, footnotes on
-title, subtitle and authors, as well as in the text, and
-every optional component (e.g. Acknowledgments, Additional
-Authors, Appendices), not to mention examples of
-equations, theorems, tables and figures.
+As extracting named entities out of media is more common, many applications and users want to leverage these entities to construct and link to other media.
 
-To make best use of this sample document, run it through \LaTeX\
-and BibTeX, and compare this source code with the printed
-output produced by the dvi file.
 \end{abstract}
 
 % A category with the (minimum) three required fields
-\category{H.4}{Information Systems Applications}{Miscellaneous}
+%\category{H.4}{Information Systems Applications}{Miscellaneous}
 %A category including the fourth, optional field follows...
-\category{D.2.8}{Software Engineering}{Metrics}[complexity measures, performance measures]
+%\category{D.2.8}{Software Engineering}{Metrics}[complexity measures, performance measures]
 
-\terms{Theory}
+%\terms{Theory}
 
-\keywords{ACM proceedings, \LaTeX, text tagging} % NOT required for Proceedings
+%\keywords{ACM proceedings, \LaTeX, text tagging} % NOT required for Proceedings
 
 \section{Introduction}
-The \textit{proceedings} are the records of a conference.
-ACM seeks to give these conference by-products a uniform,
-high-quality appearance.  To do this, ACM has some rigid
-requirements for the format of the proceedings documents: there
-is a specified format (balanced  double columns), a specified
-set of fonts (Arial or Helvetica and Times Roman) in
-certain specified sizes (for instance, 9 point for body copy),
-a specified live area (18 $\times$ 23.5 cm [7" $\times$ 9.25"]) centered on
-the page, specified size of margins (1.9 cm [0.75"]) top, (2.54 cm [1"]) bottom
-and (1.9 cm [.75"]) left and right; specified column width
-(8.45 cm [3.33"]) and gutter size (.83 cm [.33"]).
 
-[State of the Art: Named Entity Extraction, Expansion]The good news is, with only a handful of manual
-settings\footnote{Two of these, the {\texttt{\char'134 numberofauthors}}
-and {\texttt{\char'134 alignauthor}} commands, you have
-already used; another, {\texttt{\char'134 balancecolumns}}, will
-be used in your very last run of \LaTeX\ to ensure
-balanced column heights on the last page.}, the \LaTeX\ document
-class file handles all of this for you.
+Online media is increasing in scale and ubiquity, but it is currently still unstructured and not good connected to media of other forms or from other sources.
 
-The remainder of this document is concerned with showing, in
-the context of an ``actual'' document, the \LaTeX\ commands
-specifically available for denoting the structure of a
-proceedings paper, rather than with giving rigorous descriptions
-or explanations of such commands.
+LinkedTV is an integrated and practical approach towards experiencing Networked Media in the Future Internet.
+
+[More about LinkedTV?]
+
+Within LinkedTV we want to connect media based on extracted entities that we link to DBpedia resources.
+
+[State of the Art: Named Entity Extraction, Expansion]
+
+We uses therefore an optimized pathfinding algorithm \cite{de2013discovering} implemented in the Everything is Connected Engine (EiCE), firstly introduced with the Everything is Connected (EiC) Demo at the \emph{ISWC`12 Boston} conference.
+
+[State of the Art: Everything is Connected]
 
 \section{The Approach}
 
 Given events expressed in documents (textual dimension). 
 World wide coverage.
 
- \LaTeX\ handles the numbering
-and placement of these headings for you, when you use
-the appropriate heading commands around the titles
-of the headings.  If you want a sub-subsection or
-smaller part to be unnumbered in your output, simply append an
-asterisk to the command name.  Examples of both
-numbered and unnumbered headings will appear throughout the
-balance of this sample document.
+\subsection{Context through Expansion}
 
-\subsection{Context  through Expansion}
 
-Because the entire article is contained in
-the \textbf{document} environment, you can indicate the
-start of a new paragraph with a blank line in your
-input file; that is why this sentence forms a separate paragraph.
 
 \subsection{Generating DBpedia paths}
-We have already seen several typeface changes in this sample.  You
-can indicate italicized words or phrases in your text with
-the command \texttt{{\char'134}textit}; emboldening with the
-command \texttt{{\char'134}textbf}
-and typewriter-style (for instance, for computer code) with
-\texttt{{\char'134}texttt}.  But remember, you do not
-have to indicate typestyle changes when such changes are
-part of the \textit{structural} elements of your
-article; for instance, the heading of this subsection will
-be in a sans serif\footnote{A third footnote, here.
-Let's make this a rather short one to
-see how it looks.} typeface, but that is handled by the
-document class file. Take care with the use
-of\footnote{A fourth, and last, footnote.}
-the curly braces in typeface changes; they mark
-the beginning and end of
-the text that is to be in the different typeface.
 
-You can use whatever symbols, accented characters, or
-non-English characters you need anywhere in your document;
-you can find a complete list of what is
-available in the \textit{\LaTeX\
-User's Guide}\cite{Lamport:LaTeX}.
+INPUT: A main input item, a destination and VIA Points
+
+[TODO Laurens]
+
+Before we filter the relations between resources, the candidate resources to be included in relations are being pre-ranked. They are pre-ranked according to ``popularity'' and ``rarity'' essential components in the original PageRank algorithm \cite{page1999pagerank} and is used to sort candidate related nodes in the EiCE. The implementation of the EiCE takes the relations in to account by making use of the Jaccard coefficient to measure the dissimilarity and assign random walks based weight able to highly rank more rare resources, guaranteeing that paths between resources prefer specific relations and not general ones \cite{moore2012novel}.
+
+OUTPUT: A set of optimized paths used to for the context expansion
 
 \subsection{Filtering Context Relevant Paths}
-You may want to display math equations in three distinct styles:
-inline, numbered or non-numbered display.  Each of
-the three are discussed in the next sections.
 
-Citations to articles \cite{bowman:reasoning, clark:pct, braams:babel, herlihy:methodology},
-conference
-proceedings \cite{clark:pct} or books \cite{salas:calculus, Lamport:LaTeX} listed
-in the Bibliography section of your
-article will occur throughout the text of your article.
-You should use BibTeX to automatically produce this bibliography;
-you simply need to insert one of several citation commands with
-a key of the item cited in the proper location in
-the \texttt{.tex} file \cite{Lamport:LaTeX}.
-The key is a short reference you invent to uniquely
-identify each work; in this sample document, the key is
-the first author's surname and a
-word from the title.  This identifying key is included
-with each item in the \texttt{.bib} file for your article.
+TODO: Ranking mechanism
+
+Count(?) the most frequently(?) occurring:
+
+predicate,
+resource,
+query pattern
+
+
+
+
 
 \subsection{Results}
 
-The details of the construction of the \texttt{.bib} file
-are beyond the scope of this sample document, but more
-information can be found in the \textit{Author's Guide},
-and exhaustive details in the \textit{\LaTeX\ User's
-Guide}\cite{Lamport:LaTeX}.
-
-This article shows only the plainest form
-of the citation command, using \texttt{{\char'134}cite}.
-This is what is stipulated in the SIGS style specifications.
-No other citation format is endorsed.
-
-\begin{table}
-\centering
-\caption{Frequency of Special Characters}
-\begin{tabular}{|c|c|l|} \hline
-Non-English or Math&Frequency&Comments\\ \hline
-\O & 1 in 1,000& For Swedish names\\ \hline
-$\pi$ & 1 in 5& Common in math\\ \hline
-\$ & 4 in 5 & Used in business\\ \hline
-$\Psi^2_1$ & 1 in 40,000& Unexplained usage\\
-\hline\end{tabular}
-\end{table}
 
 
 \section{Use Case: Snowden Assylum}
-Other common constructs that may occur in your article are
-the forms for logical constructs like theorems, axioms,
-corollaries and proofs.  There are
-two forms, one produced by the
-command \texttt{{\char'134}newtheorem} and the
-other by the command \texttt{{\char'134}newdef}; perhaps
-the clearest and easiest way to distinguish them is
-to compare the two in the output of this sample document:
-
-This uses the \textbf{theorem} environment, created by
-the\linebreak\texttt{{\char'134}newtheorem} command:
-\newtheorem{theorem}{Theorem}
-\begin{theorem}
-Let $f$ be continuous on $[a,b]$.  If $G$ is
-an antiderivative for $f$ on $[a,b]$, then
-\begin{displaymath}\int^b_af(t)dt = G(b) - G(a).\end{displaymath}
-\end{theorem}
 
 
 \section{Conclusions}
-This paragraph will end the body of this sample document.
-Remember that you might still have Acknowledgments or
-Appendices; brief samples of these
-follow.  There is still the Bibliography to deal with; and
-we will make a disclaimer about that here: with the exception
-of the reference to the \LaTeX\ book, the citations in
-this paper are to articles which have nothing to
-do with the present subject and are used as
-examples only.
+We presented a new approach for context-aware connecting news events. Our preliminary results indicate that by exploring DBpedia paths in named entities occuring in news media. ...
 %\end{document}  % This is where a 'short' article might terminate
 
 %ACKNOWLEDGMENTS are optional
 \section{Acknowledgments}
-This section is optional; it is a location for you
-to acknowledge grants, funding, editing assistance and
-what have you.  In the present case, for example, the
-authors would like to thank Gerald Murray of ACM for
-his help in codifying this \textit{Author's Guide}
-and the \textbf{.cls} and \textbf{.tex} files that it describes.
+The research activities described in this paper were funded by Ghent University,
+%iMinds (Interdisciplinary institute for Technology) a research institute founded by the Flemish Government,
+the Institute for the Promotion of Innovation by Science and Technology in Flanders (IWT), the Fund for Scientific Research-Flanders (FWO-Flanders), and the European Union.
+
+[EURECOM related acknowledgement]
 
 %
 % The following two commands are all you need in the
