@@ -104,11 +104,11 @@ Before we filter the relations between resources, the candidate resources to be 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.4\textwidth]{graphmultipatternmatching.png}
-\caption{Interaction with Research and Social Media Data over a Semantic Model}
+\caption{Pattern matching with multiple results using an iterative pathfinding process.}
 \label{fig:patternmatching}
 \end{figure}
 
-We pass on the main start resource, a target and via points. Figure~\ref{fig:patternmatching} shows the iterative process for generating DBPedia paths. An initial state is computed in step \ref{fig:patternmatching}a. There are low weights and high weights, for the example 1 and 2 respectively. The path from start to end is forced through the given via points. This leads to additional visited resource as via points. They occur because to resolve each path, the route is being computed starting in the start resource, target and the via points. The resources where they converge to each other are considered as the new via points. These via points are included in the paths and therefore marked as visited. This is to make sure that in the next iteration paths will go around the visited via. The next paths are being computed over and over until a treshold number of paths is found, and the context is large enough or when it takes to long to compute the next path (out of range). The final set of optimized paths used to for the context expansion.
+We pass on the main start resource, a target and via points. Figure~\ref{fig:patternmatching} shows the iterative process for generating DBPedia paths. An initial state is computed in step \ref{fig:patternmatching}a. There are low weights and high weights, for the example 1 and 2 respectively. The path from start to end is forced through the given via points (\ref{fig:patternmatching}b). This leads to additional visited resource as via points (\ref{fig:patternmatching}c). They occur because to resolve each path, the route is being computed starting in the start resource, target and the via points. The resources where they converge to each other are considered as the new via points. These via points are included in the paths and therefore marked as visited. This is to make sure that in the next iteration paths will go around the visited via (\ref{fig:patternmatching}d). The next paths are being computed over and over (\ref{fig:patternmatching}e) until a treshold number of paths is found , and the context is large enough or when it takes to long to compute the next path (out of range). The final set of optimized paths used to for the context expansion.
 
 \subsection{Filtering Context Relevant Paths}
 
