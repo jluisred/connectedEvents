@@ -71,46 +71,53 @@ As extracting named entities out of media is more common, many applications and 
 
 Online media is increasing in scale and ubiquity, but it is currently still unstructured and not good connected to media of other forms or from other sources.
 
-LinkedTV is an integrated and practical approach towards experiencing Networked Media in the Future Internet.
+LinkedTV is an integrated and practical approach towards experiencing Networked Media in the Future Internet. Within LinkedTV we want to connect media based on extracted entities that we link to DBpedia resources.
 
 [More about LinkedTV?]
 
-Within LinkedTV we want to connect media based on extracted entities that we link to DBpedia resources.
-
 [State of the Art: Named Entity Extraction, Expansion]
 
-We uses therefore an optimized pathfinding algorithm \cite{de2013discovering} implemented in the Everything is Connected Engine (EiCE), firstly introduced with the Everything is Connected (EiC) Demo at the \emph{ISWC`12 Boston} conference.
+%[State of the Art: Everything is Connected]
 
-[State of the Art: Everything is Connected]
+We usee therefore an optimized pathfinding algorithm \cite{de2013discovering} implemented in the Everything is Connected Engine (EiCE), firstly introduced with the Everything is Connected (EiC) Demo at the \emph{ISWC`12 Boston} conference.
+Applying these algorithms to Linked Data can facilitate the resolving of complex queries that involve the semantics of the relations between resources. This method makes it is possible not only to discover relevant resources but also to filter them adapted to a specific context. Users can control and define which kinds of connections and types of resources really matter. Each path path between the discovered resources has a semantic meaning can be traced back to the original configuration of the user and
+forms the basis of an explanation rather than a ranking. A major
+contribution in this approach is that it minimizes the size of the candidate pool of nodes in order to optimize queries and increase
+the quality of the resulting paths.
 
 \section{The Approach}
 
 Given events expressed in documents (textual dimension). 
 World wide coverage.
+Expand the context by identifying named entities in the media fragments.
+We find paths between those named entities, to find other related items.
+Out of the resulting expanded context we extract the most important(?) entities and predicates to find related media fragments.
 
 \subsection{Context through Expansion}
 
-
+It can be seen as an "entity expansion" method
 
 \subsection{Generating DBpedia paths}
 
-INPUT: A main input item, a destination and VIA Points
-
-[TODO Laurens]
-
 Before we filter the relations between resources, the candidate resources to be included in relations are being pre-ranked. They are pre-ranked according to ``popularity'' and ``rarity'' essential components in the original PageRank algorithm \cite{page1999pagerank} and is used to sort candidate related nodes in the EiCE. The implementation of the EiCE takes the relations in to account by making use of the Jaccard coefficient to measure the dissimilarity and assign random walks based weight able to highly rank more rare resources, guaranteeing that paths between resources prefer specific relations and not general ones \cite{moore2012novel}.
 
-OUTPUT: A set of optimized paths used to for the context expansion
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.4\textwidth]{graphmultipatternmatching.png}
+\caption{Interaction with Research and Social Media Data over a Semantic Model}
+\label{fig:patternmatching}
+\end{figure}
+
+We pass on the main start resource, a target and via points. Figure~\ref{fig:patternmatching} shows the iterative process for generating DBPedia paths. An initial state is computed in step \ref{fig:patternmatching}a. There are low weights and high weights, for the example 1 and 2 respectively. The path from start to end is forced through the given via points. This leads to additional visited resource as via points. They occur because to resolve each path, the route is being computed starting in the start resource, target and the via points. The resources where they converge to each other are considered as the new via points. These via points are included in the paths and therefore marked as visited. This is to make sure that in the next iteration paths will go around the visited via. The next paths are being computed over and over until a treshold number of paths is found, and the context is large enough or when it takes to long to compute the next path (out of range). The final set of optimized paths used to for the context expansion.
 
 \subsection{Filtering Context Relevant Paths}
 
-TODO: Ranking mechanism
+We use the current API calls with the entities we have detected and investigate what the frequent paths returned are. We count(?) the most frequently(?) occurring:
+predicates and resources.
 
-Count(?) the most frequently(?) occurring:
+Issue: what is the most important information in the path? The via node or the edges (dbpedia properties)?
 
-predicate,
-resource,
-query pattern
+
 
 
 
