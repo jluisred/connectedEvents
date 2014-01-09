@@ -10,11 +10,17 @@
 \def\wu{\superscript{1}}
 \def\wg{\superscript{2}}
 
+
+
+\usepackage{url}
+\usepackage{color}
+\usepackage{multirow}
+
 \begin{document}
 
-\title{Context-aware Connections between News Events}
+%\title{Context-aware Connections between News Events}
+\title{Describing and Contextualizing News Events in TV}
 %\subtitle{Exploring DBpedia paths between named entities belonging to different event contexts}
-% MOVED TO ABSTRACT TO SAVE SPACE
 
 \numberofauthors{5} 
 
@@ -52,9 +58,14 @@ Jos\'e Luis Redondo Garc\'ia\wg
 
 \maketitle
 \begin{abstract}
-Exploring DBpedia paths between named entities belonging to different event contexts...
 
-As extracting named entities out of media is more common, many applications and users want to leverage these entities to construct and link to other media.
+There are many approaches that tackle the problem of finding relevant entities to a document.
+
+1) there are not mentioned. 2)There are not ranked 3)there are not related.
+
+combine de powerful of non structured resources with structured resources DBpedia.
+
+many applications and users want to leverage these entities to construct and link to other media.
 
 \end{abstract}
 
@@ -71,6 +82,8 @@ As extracting named entities out of media is more common, many applications and 
 
 Online media is increasing in scale and ubiquity, but it is currently still unstructured and not good connected to media of other forms or from other sources.
 
+First attempts: As extracting named entities out of media is more common, but there are problems
+
 LinkedTV is an integrated and practical approach towards experiencing Networked Media in the Future Internet. Within LinkedTV we want to connect media based on extracted entities that we link to DBpedia resources.
 
 [More about LinkedTV?]
@@ -79,36 +92,42 @@ LinkedTV is an integrated and practical approach towards experiencing Networked 
 
 %[State of the Art: Everything is Connected]
 
-We usee therefore an optimized pathfinding algorithm \cite{de2013discovering} implemented in the Everything is Connected Engine (EiCE), firstly introduced with the Everything is Connected (EiC) Demo at the \emph{ISWC`12 Boston} conference.
+We use therefore an optimized pathfinding algorithm \cite{de2013discovering} implemented in the Everything is Connected Engine (EiCE), firstly introduced with the Everything is Connected (EiC) Demo at the \emph{ISWC`12 Boston} conference.
 Applying these algorithms to Linked Data can facilitate the resolving of complex queries that involve the semantics of the relations between resources. This method makes it is possible not only to discover relevant resources but also to filter them adapted to a specific context. Users can control and define which kinds of connections and types of resources really matter. Each path path between the discovered resources has a semantic meaning can be traced back to the original configuration of the user and
-forms the basis of an explanation rather than a ranking. A major
-contribution in this approach is that it minimizes the size of the candidate pool of nodes in order to optimize queries and increase
+forms the basis of an explanation rather than a ranking. A major contribution in this approach is that it minimizes the size of the candidate pool of nodes in order to optimize queries and increase
 the quality of the resulting paths.
 
 \section{The Approach}
 
-Given events expressed in documents (textual dimension). 
-World wide coverage.
-Expand the context by identifying named entities in the media fragments.
-We find paths between those named entities, to find other related items.
-Out of the resulting expanded context we extract the most important(?) entities and predicates to find related media fragments.
+Given events expressed in documents (textual dimension). Talk about temporal dimension.
+
+Prerequisites: World wide coverage, presence in the web.
+
+\subsection{Named Entity Extraction}
+
+For each news item we perform named-entity recognition over the transcripts by using the NERD~\cite{Rizzo2012b} framework. For the considered videos the language used is English but NERD supports many others. The output of this phase is a collection of entities with a first relevance score from the considered extractors and annotated using the NERD Ontology v0.5\footnote{\url{http://nerd.eurecom.fr/ontology/nerd-v0.5.n3}}. The set of candidate entities will be the base for the entity expansion component.
 
 \subsection{Context through Expansion}
 
+Expand the context by identifying named entities in the media fragments.
+
+
 It can be seen as an "entity expansion" method
+
+Graphic
 
 \subsection{Generating DBpedia paths}
 
 Before we filter the relations between resources, the candidate resources to be included in relations are being pre-ranked. They are pre-ranked according to ``popularity'' and ``rarity'' essential components in the original PageRank algorithm \cite{page1999pagerank} and is used to sort candidate related nodes in the EiCE. The implementation of the EiCE takes the relations in to account by making use of the Jaccard coefficient to measure the dissimilarity and assign random walks based weight able to highly rank more rare resources, guaranteeing that paths between resources prefer specific relations and not general ones \cite{moore2012novel}.
 
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.4\textwidth]{graphmultipatternmatching.png}
-\caption{Pattern matching with multiple results using an iterative pathfinding process.}
-\label{fig:patternmatching}
-\end{figure}
+%\begin{figure}[h!]
+%\centering
+%\includegraphics[width=0.4\textwidth]{graphmultipatternmatching.png}
+%\caption{Pattern matching with multiple results using an iterative pathfinding process.}
+%\label{fig:patternmatching}
+%\end{figure}
 
-We pass on the main start resource, a target and via points. Figure~\ref{fig:patternmatching} shows the iterative process for generating DBPedia paths. An initial state is computed in step \ref{fig:patternmatching}a. There are low weights and high weights, for the example 1 and 2 respectively. The path from start to end is forced through the given via points (\ref{fig:patternmatching}b). This leads to additional visited resource as via points (\ref{fig:patternmatching}c). They occur because to resolve each path, the route is being computed starting in the start resource, target and the via points. The resources where they converge to each other are considered as the new via points. These via points are included in the paths and therefore marked as visited. This is to make sure that in the next iteration paths will go around the visited via (\ref{fig:patternmatching}d). The next paths are being computed over and over (\ref{fig:patternmatching}e) until a treshold number of paths is found , and the context is large enough or when it takes to long to compute the next path (out of range). The final set of optimized paths used to for the context expansion.
+We pass on the main start resource, a target and via points. Figure~\ref{fig:patternmatching} shows the iterative process for generating DBPedia paths. An initial state is computed in step \ref{fig:patternmatching}a. There are low weights and high weights, for the example 1 and 2 respectively. The path from start to end is forced through the given via points (\ref{fig:patternmatching}b). This leads to additional visited resource as via points (\ref{fig:patternmatching}c). They occur because to resolve each path, the route is being computed starting in the start resource, target and the via points. The resources where they converge to each other are considered as the new via points. These via points are included in the paths and therefore marked as visited. This is to make sure that in the next iteration paths will go around the visited via (\ref{fig:patternmatching}d). The next paths are being computed over and over (\ref{fig:patternmatching}e) until a threshold number of paths is found , and the context is large enough or when it takes to long to compute the next path (out of range). The final set of optimized paths used to for the context expansion.
 
 \subsection{Filtering Context Relevant Paths}
 
@@ -119,8 +138,12 @@ Issue: what is the most important information in the path? The via node or the e
 
 
 
+\subsection{Reranking entities and adding properties}
+
+Out of the resulting expanded context we extract the most important(?) entities and predicates to find related media fragments.
 
 
+\subsection{Refining entities via Filtering}
 
 
 \subsection{Results}
@@ -129,6 +152,7 @@ Issue: what is the most important information in the path? The via node or the e
 
 \section{Use Case: Snowden Assylum}
 
+\section{Evaluation}
 
 \section{Conclusions}
 We presented a new approach for context-aware connecting news events. Our preliminary results indicate that by exploring DBpedia paths in named entities occuring in news media. ...
@@ -138,9 +162,7 @@ We presented a new approach for context-aware connecting news events. Our prelim
 \section{Acknowledgments}
 The research activities described in this paper were funded by Ghent University,
 %iMinds (Interdisciplinary institute for Technology) a research institute founded by the Flemish Government,
-the Institute for the Promotion of Innovation by Science and Technology in Flanders (IWT), the Fund for Scientific Research-Flanders (FWO-Flanders), and the European Union.
-
-[EURECOM related acknowledgement]
+the Institute for the Promotion of Innovation by Science and Technology in Flanders (IWT), the Fund for Scientific Research-Flanders (FWO-Flanders), and the European Union's 7th Framework Programme via the project LinkedTV (GA 287911).
 
 %
 % The following two commands are all you need in the
