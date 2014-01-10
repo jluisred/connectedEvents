@@ -102,8 +102,7 @@ The approach described in this paper intends to reconstruct the semantic context
 
 In addition, we assume that the analyzed event has a minimum presence and coverage in the Web in order to ensure that the subsequent data mining techniques can collect an enough quantity of data to reconstruct the event's context. The output of the algorithm is a pair $Context_{Event1}=\left [  \varepsilon , \rho \right ]$  where $\varepsilon$ is a list named entities together with a numeric relevance score ($ \varepsilon =\left \{ E\times \mathbb{R} \right \}$,  being $E$ named entities classified using the NERD ontology\footnote{\url{http://nerd.eurecom.fr/ontology/nerd-v0.5.n3}}) and $\rho$ is a set of predicates $\left [ e_{1},e_{2}, p \right ]$, relating the aforementioned entities ($e_{1}\in E \vee  e_{2}\in E$). 
 
-Our hypothesis states that this knowledge representation of the events can provide a sufficient source of information for satisfying the viewer's information needs and supporting complex multimedia operations such as search and hyperlinking. In the following subsections we further explain the logic for entity expansion as illustrated in Figure~\ref{fig:namedEntityExpansion}.
-
+Our hypothesis states that this knowledge representation of the events can provide a sufficient source of information for satisfying the viewer's information needs and supporting complex multimedia operations such as search and hyperlinking. 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.4\textwidth]{figure/ExpansionDiagram}
@@ -118,6 +117,11 @@ For each news item we perform named-entity recognition over the corresponding su
 \subsection{Context through Expansion}
 
 Expand the context by identifying named entities in the media fragments.
+
+
+In the following subsections we further explain the logic for entity expansion as illustrated in Figure~\ref{fig:namedEntityExpansion}.
+
+
 
 Motivation: Bigger view. 
 
@@ -138,6 +142,17 @@ This is somewhat like what a school child does when learning to write a descript
 Map to the NERD model
 First textual query
 
+
+-----
+The Five Ws is a popular concept for information gathering in journalistic reporting. It captures all aspects of a story or incidence: who, when, what, where, and why. We propose a framework composed of a suite of cooperating visual information displays to represent the Five Ws and demonstrate its use within a healthcare informatics application. 
+
+This is somewhat like what a school child does when learning to write a descriptive sentence of the event. It is taught that one should pay attention to the 5 W’s \cite{LiJia2007}: who, where, what, when and how. In our system, we try to answer 3 of the 5 W’s: what (the event label), where (the scene en- vironment label) and who (a list of the object categories).
+
+Map to the NERD model
+First textual query
+
+------
+
 \subsubsection{Document retrieval}
 
 Temporal reference, is a function of the time of the event. Different nature of the events, different nature of the search engine. we consider. this. 
@@ -148,8 +163,17 @@ The quality of the search
 
 \subsubsection{Entity fusion}
 
-Logic for entity. Cluster. 
-Centroid of the cluster/URL.
+
+Logic for entty. Cluster.  Jaro–Winkler distance
+\cite{Winkler06overviewof}
+
+
+
+Centroid of the cluster/
+
+
+URL.
+
 
 Future: Semantic in wordnet.
 
