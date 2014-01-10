@@ -15,6 +15,7 @@
 \usepackage{url}
 \usepackage{color}
 \usepackage{multirow}
+\usepackage{mathtools}
 
 \begin{document}
 
@@ -99,26 +100,80 @@ the quality of the resulting paths.
 
 \section{The Approach}
 
-Given events expressed in documents (textual dimension). Talk about temporal dimension.
+The approach described in this paper intends to reconstruct the semantic context associated to one particular news video, highlighting the main concepts and entities involved and the way they are related to each other. The complete processing workflow takes as inputs the textual transcript of a multimedia resource depicting the event, and the start and end date for which that particular event has been considered relevant (if the event is still ongoing we consider the current day as the end of the temporal interval). This data is supposed to be available beforehand and provided by the corresponding video providers and platforms.
 
-Prerequisites: World wide coverage, presence in the web.
+In addition, we presuppose that the analyzed event has a minimum presence and coverage in the Web in order to ensure that the subsequent data mining techniques can collect an enough quantity of data to reconstruct the event's context. The output of the algorithm is a pair $Context_{Event1}=\left [  \varepsilon , \rho \right ]$  where $\varepsilon$ is a list named entities together with a numeric relevance score ($ \varepsilon =\left \{ E\times \mathbb{R} \right \}$,  being $E$ named entities classified using the NERD ontology\footnote{\url{http://nerd.eurecom.fr/ontology/nerd-v0.5.n3}}) and $\rho$ is a set of predicates $\left [ e_{1},e_{2}, p \right ]$, relating the aforementioned entities ($e_{1}\in E \vee  e_{2}\in E$). 
+
+Our hypothesis states that this knowledge representation of the events can provide a valid source of information for satisfying the viewer's information needs and empower complex multimedia operations such as search and hyperlinking.
+
+
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.4\textwidth]{figure/contentExpansion.png}
+\caption{Pattern matching with multiple results using an iterative pathfinding process.}
+\label{fig:patternmatching}%\end{figure}
+\end{figure}
+
+
 
 \subsection{Named Entity Extraction}
 
-For each news item we perform named-entity recognition over the transcripts by using the NERD~\cite{Rizzo2012b} framework. For the considered videos the language used is English but NERD supports many others. The output of this phase is a collection of entities with a first relevance score from the considered extractors and annotated using the NERD Ontology v0.5\footnote{\url{http://nerd.eurecom.fr/ontology/nerd-v0.5.n3}}. The set of candidate entities will be the base for the entity expansion component.
+For each news item we perform named-entity recognition over the corresponding subtitles by using the NERD~\cite{Rizzo2012b} framework. The language of the considered videos is English but NERD supports many others so the approach described is also applicable in other languages. The output of this phase is a collection of entities annotated using the NERD Ontology v0.5, that come with a first relevance score obtained from the considered extractors. This set includes a first set of ranked entities that are explicitly mentioned during the video. Even there are still missing entities that can be relevant for the viewer in the context of the current event, this is where other video description approximations~\cite{yunjia2013}  stop. However, for us this will be a first list of concepts to be used as base for the entity expansion component.
 
 \subsection{Context through Expansion}
 
 Expand the context by identifying named entities in the media fragments.
 
-
-It can be seen as an "entity expansion" method
+Motivation: Bigger view. 
 
 Graphic
 
+Output.
+
+\subsubsection{Query Generation}
+
+The who what where method [reference]
+
+The Five Ws is a popular concept for information gathering in journalistic reporting. It captures all aspects of a story or incidence: who, when, what, where, and why. We propose a framework composed of a suite of cooperating visual information displays to represent the Five Ws and demonstrate its use within a healthcare informatics application. 
+
+This is somewhat like what a school child does when learning to write a descriptive sentence of the event. It is taught that one should pay attention to the 5 WÕs \cite{LiJia2007}: who, where, what, when and how. In our system, we try to answer 3 of the 5 WÕs: what (the event label), where (the scene en- vironment label) and who (a list of the object categories).
+
+Map to the NERD model
+First textual query
+
+\subsubsection{Document retrieval}
+
+Temporal reference, is a function of the time of the event. Different nature of the events, different nature of the search engine. we consider. this. 
+
+Google search
+
+The quality of the search
+
+\subsubsection{Entity fusion}
+
+Logic for entty. Cluster. 
+Centroid of the cluster/
+URL.
+
+Future: Semantic in wordnet.
+
+\subsubsection{Entity Ranking}
+
+Considered features for ranking
+
+Formula applied
+
+Output is a list of entities. Normally filtered because there are many.
+
 \subsection{Generating DBpedia paths}
 
+Entities are divided in two groups: main entities, and tail.
+
 Before we filter the relations between resources, the candidate resources to be included in relations are being pre-ranked. They are pre-ranked according to ``popularity'' and ``rarity'' essential components in the original PageRank algorithm \cite{page1999pagerank} and is used to sort candidate related nodes in the EiCE. The implementation of the EiCE takes the relations in to account by making use of the Jaccard coefficient to measure the dissimilarity and assign random walks based weight able to highly rank more rare resources, guaranteeing that paths between resources prefer specific relations and not general ones \cite{moore2012novel}.
+
+
 
 %\begin{figure}[h!]
 %\centering
