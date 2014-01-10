@@ -104,16 +104,14 @@ The approach described in this paper intends to reconstruct the semantic context
 
 In addition, we presuppose that the analyzed event has a minimum presence and coverage in the Web in order to ensure that the subsequent data mining techniques can collect an enough quantity of data to reconstruct the event's context. The output of the algorithm is a pair $Context_{Event1}=\left [  \varepsilon , \rho \right ]$  where $\varepsilon$ is a list named entities together with a numeric relevance score ($ \varepsilon =\left \{ E\times \mathbb{R} \right \}$,  being $E$ named entities classified using the NERD ontology\footnote{\url{http://nerd.eurecom.fr/ontology/nerd-v0.5.n3}}) and $\rho$ is a set of predicates $\left [ e_{1},e_{2}, p \right ]$, relating the aforementioned entities ($e_{1}\in E \vee  e_{2}\in E$). 
 
-Our hypothesis states that this knowledge representation of the events can provide a valid source of information for satisfying the viewer's information needs and empower complex multimedia operations such as search and hyperlinking.
-
-
+Our hypothesis states that this knowledge representation of the events can provide a sufficient source of information for satisfying the viewer's information needs and supporting complex multimedia operations such as search and hyperlinking. In the following subsections we further explain the logic for entity expansion as illustrated in Figure~\ref{fig:namedEntityExpansion}.
 
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.4\textwidth]{figure/contentExpansion.png}
-\caption{Pattern matching with multiple results using an iterative pathfinding process.}
-\label{fig:patternmatching}%\end{figure}
+\includegraphics[width=0.4\textwidth]{figure/ExpansionDiagram}
+\caption{Schema of Named Entity Expansion Algorithm.}
+\label{fig:namedEntityExpansion}%\end{figure}
 \end{figure}
 
 
