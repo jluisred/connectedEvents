@@ -104,7 +104,6 @@ In addition, we assume that the analyzed event has a minimum presence and covera
 
 Our hypothesis states that this knowledge representation of the events can provide a sufficient source of information for satisfying the viewer's information needs and supporting complex multimedia operations such as search and hyperlinking. In the following subsections we further explain the logic for entity expansion as illustrated in Figure~\ref{fig:namedEntityExpansion}.
 
-
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.4\textwidth]{figure/ExpansionDiagram}
@@ -112,11 +111,9 @@ Our hypothesis states that this knowledge representation of the events can provi
 \label{fig:namedEntityExpansion}%\end{figure}
 \end{figure}
 
-
-
 \subsection{Named Entity Extraction}
 
-For each news item we perform named-entity recognition over the corresponding subtitles by using the NERD~\cite{Rizzo2012b} framework. The language of the considered videos is English but NERD supports many others so the approach described is also applicable in other languages. The output of this phase is a collection of entities annotated using the NERD Ontology v0.5, that come with a first relevance score obtained from the considered extractors. This set includes a first set of ranked entities that are explicitly mentioned during the video. Even there are still missing entities that can be relevant for the viewer in the context of the current event, this is where other video description approximations~\cite{yunjia2013}  stop. However, for us this will be a first list of concepts to be used as base for the entity expansion component.
+For each news item we perform named-entity recognition over the corresponding subtitles by using the NERD~\cite{Rizzo2012b} framework. The language of the considered videos is English but NERD supports many other languages so our approach is applicable in other languages. The output of this phase is a collection of entities annotated using the NERD Ontology v0.5, that come with a first relevance score obtained from the considered extractors. This set includes a first set of ranked entities that are explicitly mentioned during the video. Even there are still missing entities that can be relevant for the viewer in the context of the current event, this is where other video description approximations~\cite{yunjia2013} stop. However, for us this will be a first list of concepts to be used as base for the entity expansion component.
 
 \subsection{Context through Expansion}
 
@@ -124,7 +121,7 @@ Expand the context by identifying named entities in the media fragments.
 
 Motivation: Bigger view. 
 
-Graphic
+Graphic.
 
 Output.
 
@@ -132,7 +129,9 @@ Output.
 
 The who what where method [reference]
 
-The Five Ws is a popular concept for information gathering in journalistic reporting. It captures all aspects of a story or incidence: who, when, what, where, and why. We propose a framework composed of a suite of cooperating visual information displays to represent the Five Ws and demonstrate its use within a healthcare informatics application. 
+The Five Ws is a popular concept for information gathering in journalistic reporting.
+It captures all aspects of a story or incidence: who, when, what, where, and why.
+We propose a framework composed of a suite of cooperating visual information displays to represent the Five Ws and demonstrate its use within a healthcare informatics application. 
 
 This is somewhat like what a school child does when learning to write a descriptive sentence of the event. It is taught that one should pay attention to the 5 WÕs \cite{LiJia2007}: who, where, what, when and how. In our system, we try to answer 3 of the 5 WÕs: what (the event label), where (the scene en- vironment label) and who (a list of the object categories).
 
@@ -149,9 +148,8 @@ The quality of the search
 
 \subsubsection{Entity fusion}
 
-Logic for entty. Cluster. 
-Centroid of the cluster/
-URL.
+Logic for entity. Cluster. 
+Centroid of the cluster/URL.
 
 Future: Semantic in wordnet.
 
@@ -169,8 +167,6 @@ Entities are divided in two groups: main entities, and tail.
 
 Before we filter the relations between resources, the candidate resources to be included in relations are being pre-ranked. They are pre-ranked according to ``popularity'' and ``rarity'' essential components in the original PageRank algorithm \cite{page1999pagerank} and is used to sort candidate related nodes in the EiCE. The implementation of the EiCE takes the relations in to account by making use of the Jaccard coefficient to measure the dissimilarity and assign random walks based weight able to highly rank more rare resources, guaranteeing that paths between resources prefer specific relations and not general ones \cite{moore2012novel}.
 
-
-
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.4\textwidth]{graphmultipatternmatching.png}
@@ -178,7 +174,7 @@ Before we filter the relations between resources, the candidate resources to be 
 \label{fig:patternmatching}
 \end{figure}
 
-We pass on the main start resource, a target and via points. Figure~\ref{fig:patternmatching} shows the iterative process for generating DBPedia paths. An initial state is computed in step \ref{fig:patternmatching}a. There are low weights and high weights, for the example 1 and 2 respectively. The path from start to end is forced through the given via points (\ref{fig:patternmatching}b). This leads to additional visited resource as via points (\ref{fig:patternmatching}c). They occur because to resolve each path, the route is being computed starting in the start resource, target and the via points. The resources where they converge to each other are considered as the new via points. These via points are included in the paths and therefore marked as visited. This is to make sure that in the next iteration paths will go around the visited via (\ref{fig:patternmatching}d). The next paths are being computed over and over (\ref{fig:patternmatching}e) until a threshold number of paths is found , and the context is large enough or when it takes to long to compute the next path (out of range). The final set of optimized paths used to for the context expansion.
+We pass on the main start resource, a target and via points. Figure~\ref{fig:patternmatching} shows the iterative process for generating DBPedia paths. An initial state is computed in step \ref{fig:patternmatching}a. There are low weights and high weights, for the example 1 and 2 respectively. Based on the weights of the links te path through the vias is optimized, so a path with the lowest total weight will be selected first, until the vias are added to the exclude list. The path from start to end is forced through the given via points (\ref{fig:patternmatching}b). This leads to additional visited resource as via points (\ref{fig:patternmatching}c). They occur because to resolve each path, the route is being computed starting in the start resource, target and the via points. The resources where they converge to each other are considered as the new via points. These via points are included in the paths and therefore marked as visited. This is to make sure that in the next iteration paths will go around the visited via (\ref{fig:patternmatching}d). The next paths are being computed over and over (\ref{fig:patternmatching}e) until a threshold number of paths is found , and the context is large enough or when it takes to long to compute the next path (out of range). The final set of optimized paths used to for the context expansion.
 
 \subsection{Filtering Context Relevant Paths}
 
@@ -187,19 +183,14 @@ predicates and resources.
 
 Issue: what is the most important information in the path? The via node or the edges (dbpedia properties)?
 
-
-
 \subsection{Reranking entities and adding properties}
 
 Out of the resulting expanded context we extract the most important(?) entities and predicates to find related media fragments.
-
 
 \subsection{Refining entities via Filtering}
 
 
 \subsection{Results}
-
-
 
 \section{Use Case: Snowden Assylum}
 
