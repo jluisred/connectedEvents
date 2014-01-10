@@ -59,14 +59,14 @@ Jos\'e Luis Redondo Garc\'ia\wg
 
 \maketitle
 \begin{abstract}
-
-There are many approaches that tackle the problem of finding relevant entities to a document.
-
-1) there are not mentioned. 2)There are not ranked 3)there are not related.
-
-combine de powerful of non structured resources with structured resources DBpedia.
-
-many applications and users want to leverage these entities to construct and link to other media.
+There exist many approaches tackling the challenge of finding relevant entities to a document, but : 
+(i) there are not mentioned;
+(ii) there are not ranked
+(iii) there are not related.
+%TODO: Can you explain these a bit more?
+In this paper we combine the power of non-structured resources with structured resources of DBpedia. Many applications and users leverage these entities to construct and link to other media.
+We demonstrate that ... by explaining a use case about ...
+%TODO: complete after the use case is written out.
 
 \end{abstract}
 
@@ -82,17 +82,15 @@ many applications and users want to leverage these entities to construct and lin
 \section{Introduction}
 
 Online media is increasing in scale and ubiquity, but it is currently still unstructured and not good connected to media of other forms or from other sources.
-
-First attempts: As extracting named entities out of media is more common, but there are problems
-
+[State of the Art: Named Entity Extraction, Expansion]
+First attempts for extracting named entities out of media, which is a more and more common practice, give promising results but there it introduces some issues.
+%TODO: Go deeper in these issues: probably related to those mentioned in the abstract.
 LinkedTV is an integrated and practical approach towards experiencing Networked Media in the Future Internet. Within LinkedTV we want to connect media based on extracted entities that we link to DBpedia resources.
 
 [More about LinkedTV?]
-
-[State of the Art: Named Entity Extraction, Expansion]
+%TODO: Add here more info about the project
 
 %[State of the Art: Everything is Connected]
-
 We use therefore an optimized pathfinding algorithm \cite{de2013discovering} implemented in the Everything is Connected Engine (EiCE), firstly introduced with the Everything is Connected (EiC) Demo at the \emph{ISWC`12 Boston} conference.
 Applying these algorithms to Linked Data can facilitate the resolving of complex queries that involve the semantics of the relations between resources. This method makes it is possible not only to discover relevant resources but also to filter them adapted to a specific context. Users can control and define which kinds of connections and types of resources really matter. Each path path between the discovered resources has a semantic meaning can be traced back to the original configuration of the user and
 forms the basis of an explanation rather than a ranking. A major contribution in this approach is that it minimizes the size of the candidate pool of nodes in order to optimize queries and increase
@@ -100,9 +98,9 @@ the quality of the resulting paths.
 
 \section{The Approach}
 
-The approach described in this paper intends to reconstruct the semantic context associated to one particular news video, highlighting the main concepts and entities involved and the way they are related to each other. The complete processing workflow takes as inputs the textual transcript of a multimedia resource depicting the event, and the start and end date for which that particular event has been considered relevant (if the event is still ongoing we consider the current day as the end of the temporal interval). This data is supposed to be available beforehand and provided by the corresponding video providers and platforms.
+The approach described in this paper intends to reconstruct the semantic context associated to one particular news video, highlighting the main concepts and entities involved and explaining how they are related to each other. The complete processing workflow takes as input the textual transcript of a multimedia resource depicting the event, as well as the start and end date for which that particular event has been considered relevant. If the event is still ongoing we consider the current day as the end of the temporal interval. The corresponding video providers and platforms make sure this data is available beforehand.
 
-In addition, we presuppose that the analyzed event has a minimum presence and coverage in the Web in order to ensure that the subsequent data mining techniques can collect an enough quantity of data to reconstruct the event's context. The output of the algorithm is a pair $Context_{Event1}=\left [  \varepsilon , \rho \right ]$  where $\varepsilon$ is a list named entities together with a numeric relevance score ($ \varepsilon =\left \{ E\times \mathbb{R} \right \}$,  being $E$ named entities classified using the NERD ontology\footnote{\url{http://nerd.eurecom.fr/ontology/nerd-v0.5.n3}}) and $\rho$ is a set of predicates $\left [ e_{1},e_{2}, p \right ]$, relating the aforementioned entities ($e_{1}\in E \vee  e_{2}\in E$). 
+In addition, we assume that the analyzed event has a minimum presence and coverage in the Web in order to ensure that the subsequent data mining techniques can collect an enough quantity of data to reconstruct the event's context. The output of the algorithm is a pair $Context_{Event1}=\left [  \varepsilon , \rho \right ]$  where $\varepsilon$ is a list named entities together with a numeric relevance score ($ \varepsilon =\left \{ E\times \mathbb{R} \right \}$,  being $E$ named entities classified using the NERD ontology\footnote{\url{http://nerd.eurecom.fr/ontology/nerd-v0.5.n3}}) and $\rho$ is a set of predicates $\left [ e_{1},e_{2}, p \right ]$, relating the aforementioned entities ($e_{1}\in E \vee  e_{2}\in E$). 
 
 Our hypothesis states that this knowledge representation of the events can provide a sufficient source of information for satisfying the viewer's information needs and supporting complex multimedia operations such as search and hyperlinking. In the following subsections we further explain the logic for entity expansion as illustrated in Figure~\ref{fig:namedEntityExpansion}.
 
@@ -173,12 +171,12 @@ Before we filter the relations between resources, the candidate resources to be 
 
 
 
-%\begin{figure}[h!]
-%\centering
-%\includegraphics[width=0.4\textwidth]{graphmultipatternmatching.png}
-%\caption{Pattern matching with multiple results using an iterative pathfinding process.}
-%\label{fig:patternmatching}
-%\end{figure}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.4\textwidth]{graphmultipatternmatching.png}
+\caption{Pattern matching with multiple results using an iterative pathfinding process.}
+\label{fig:patternmatching}
+\end{figure}
 
 We pass on the main start resource, a target and via points. Figure~\ref{fig:patternmatching} shows the iterative process for generating DBPedia paths. An initial state is computed in step \ref{fig:patternmatching}a. There are low weights and high weights, for the example 1 and 2 respectively. The path from start to end is forced through the given via points (\ref{fig:patternmatching}b). This leads to additional visited resource as via points (\ref{fig:patternmatching}c). They occur because to resolve each path, the route is being computed starting in the start resource, target and the via points. The resources where they converge to each other are considered as the new via points. These via points are included in the paths and therefore marked as visited. This is to make sure that in the next iteration paths will go around the visited via (\ref{fig:patternmatching}d). The next paths are being computed over and over (\ref{fig:patternmatching}e) until a threshold number of paths is found , and the context is large enough or when it takes to long to compute the next path (out of range). The final set of optimized paths used to for the context expansion.
 
