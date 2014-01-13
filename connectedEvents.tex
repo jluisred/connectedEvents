@@ -177,11 +177,11 @@ In the middle part of Figure~\ref{fig:namedEntityExpansion} this process is show
 
 In this phase the extra documents previously retrieved are now preprocessed and analyzed in order to extend and rerank the original set of relevant entities and consequently get more insights about the studied event. First, since most of the retrieved resources are Web pages, HTML tags and other annotations are removed, keeping only the main textual information. This plain text is then analyzed by the NERD framework in order to extract the named entities present in them.
 
-In order to calculate the frequency of a certain resource inside the entire corpora, we need to group the different appearances of the same instance and check their cardinality. However, this is not a trivial task since the same entity can appear under different text labels, have typos in the field or different disambiguation URL's pointing to the same resource. For this reason, we have performed a centroid-based cluster operation over the instances of the entities. We have considered the centroid of a cluster the entity with the most frequent disambiguation URL that have also the most repeated label. As distance for comparing pairs of entities we have applied strict string similarity over the URL's, and in case of mismatch, Jaro–Winkler string distance~\cite{Winkler06overviewof} over the labels.The output of this phase is a list of clusters containing different instances of the same entity.
+In order to calculate the frequency of a certain resource inside the entire corpora, we group the different appearances of the same instance and check their cardinality. This is not trivial since the same entity can appear under different text labels, contain typos in the field or have different disambiguation URL's pointing to the same resource. We therefore performed a centroid-based cluster operation over the instances of the entities. We considered the centroid of a cluster as the entity with the most frequent disambiguation URL that have also the most repeated labels. As distance metric for comparing pairs of entities we applied strict string similarity over the URL's, and in case of mismatch, Jaro-Winkler string distance~\cite{Winkler06overviewof} over the labels. The output of this phase is a list of clusters containing different instances of the same entity.
 
 \subsubsection{Entity Ranking}
 
-The final step of the expansion consists of ranking the different named entities obtained so far. In order to create this ordered list a score has been assigned to every entity according to the following features: relative frequency of the entity in the transcripts of the event video, relative frequency of the entity over the extra document, and average relevance for the different instances according to the named entity extractors. The three dimensions are combined via a weighted sum where the relative frequency in the video subtitles has a bigger impact in the final score, followed by the relative frequency on the searched documents, and ending with the average relevance from the extractors that is normally very variable.
+The final step of the expansion consists of ranking the different named entities obtained so far. To create this ordered list we assigned a score to every entity according to the following features: relative frequency of the entity in the transcripts of the event video; relative frequency of the entity over the extra document; and average relevance for the different instances according to the named entity extractors. The three dimensions are combined via a weighted sum where the relative frequency in the video subtitles has a bigger impact in the final score, followed by the relative frequency on the searched documents, and ending with a typically very variable average relevance from the extractors.
 
 The final output of the entity expansion operation is a list of entities (normally filtered by a minimum number of appearances since the method brings a much higher number of candidate entities), together with their ranking score and the frequency in both the main video and in the collected extra documents.
 
@@ -192,21 +192,23 @@ The final output of the entity expansion operation is a list of entities (normal
 \end{split}
 \end{equation}
 
-Entities with higher $relScore_{i}$ in the final classification are the more representative for the context of the original. Also there are other advantages in the final set of results: 
+Entities with a higher $relScore_{i}$ in the final classification are more representative for the context of the original. Also there are other advantages in the final set of results:
 \begin{itemize}
-  \item The entities will be better ranked since the size of the sample is bigger. Those entities that have appeared repeatedly in the extra documents will be promoted while those who barely appear in two or three will have less relevance.
-  \item Entities that originally have not been disambiguated can have now their corresponding URL if any of the similar instances that appear in the additional documents can provide a link to a Web resource. The same occurs with labels that contained errors or were uncompleted. 
-  \item  Finally, some entities that were important in the context of the news item but were not even mentioned in the original transcripts are now included in the list of relevant items since they have been often spotted over the collected documents. 
+  \item The entities will be better ranked since the size of the sample is bigger. Repeatedly appearing entities in the extra documents will be promoted while those barely appearing in two or three 
+  %TODO: documents?
+  will have less relevance.
+  \item Entities that originally have not been disambiguated can now have their corresponding URL if any of the similar instances appearing in the additional documents provide a link to a Web resource. The same occurs with labels containing errors or incomplete labels. 
+  \item  Finally, some entities important in the context of the news item but not mentioned in the original transcripts, are now included in the list of relevant items since they have been often spotted over the collected documents. 
 \end{itemize}
 
 
 \subsection{Refining the Event Context via DBPedia Knowledge}
 
-Once the set of context relevant entities has been expanded, we will use knowledge present in structured sources (DBpedia) for reinforcing the important entities and find relevant predicates between them. 
+Once the set of context relevant entities has been expanded, we will use knowledge of structured sources (e.g. DBpedia) for reinforcing the important entities and finding relevant predicates between them. 
 
 \subsubsection{Generating DBpedia paths}
 
-Before we filter the relations between resources, the candidate resources to be included in relations are being pre-ranked. They are pre-ranked according to ``popularity'' and ``rarity'' essential components in the original PageRank algorithm \cite{page1999pagerank} and is used to sort candidate related nodes in the EiCE. The implementation of the EiCE takes the relations in to account by making use of the Jaccard coefficient to measure the dissimilarity and assign random walks based weight able to highly rank more rare resources, guaranteeing that paths between resources prefer specific relations and not general ones \cite{moore2012novel}.
+Before we filter the relations between resources, the candidate resources to be included in relations are being pre-ranked. They are pre-ranked according to ``popularity'' and ``rarity'' essential components in the original PageRank algorithm \cite{page1999pagerank} and is used to sort candidate related nodes in the EiCE. The implementation of the EiCE takes the relations in to account by making use of the Jaccard coefficient to measure the dissimilarity and assign random walks based weight able to highly rank more rare resources, and guaranteeing that paths between resources prefer specific relations and not general ones \cite{moore2012novel}.
 
 \begin{figure}[h!]
 \centering
@@ -215,18 +217,22 @@ Before we filter the relations between resources, the candidate resources to be 
 \label{fig:patternmatching}
 \end{figure}
 
-We pass on the main start resource, a target and via points. Figure~\ref{fig:patternmatching} shows the iterative process for generating DBPedia paths. An initial state is computed in step \ref{fig:patternmatching}a. There are low weights and high weights, for the example 1 and 2 respectively. Based on the weights of the links te path through the vias is optimized, so a path with the lowest total weight will be selected first, until the vias are added to the exclude list. The path from start to end is forced through the given via points (\ref{fig:patternmatching}b). This leads to additional visited resource as via points (\ref{fig:patternmatching}c). They occur because to resolve each path, the route is being computed starting in the start resource, target and the via points. The resources where they converge to each other are considered as the new via points. These via points are included in the paths and therefore marked as visited. This is to make sure that in the next iteration paths will go around the visited via (\ref{fig:patternmatching}d). The next paths are being computed over and over (\ref{fig:patternmatching}e) until a threshold number of paths is found , and the context is large enough or when it takes to long to compute the next path (out of range). The final set of optimized paths used to for the context expansion.
+We pass on the main start resource, a target and via points. Figure~\ref{fig:patternmatching} shows the iterative process for generating DBpedia paths. An initial state is computed in step \ref{fig:patternmatching}a. There are low weights and high weights
+%, for the example 1 and 2 respectively
+. Based on the weights of the links te path through the vias is optimized, so a path with the lowest total weight will be selected first, until the vias are added to the exclude list. The path from start to end is forced through the given via points (\ref{fig:patternmatching}b). This leads to additional visited resource as via points (\ref{fig:patternmatching}c). They occur because to resolve each path, the route is being computed starting in the start resource, target and the via points. The resources where they converge to each other are considered as the new via points. These via points are included in the paths and therefore marked as visited. This is to make sure that in the next iteration paths will go around the visited via (\ref{fig:patternmatching}d). The next paths are being computed over and over (\ref{fig:patternmatching}e) until a threshold number of paths is found and the context is large enough or when it takes to long to compute the next path (out of range). The final set of optimized paths used to for the context expansion.
 
 \subsubsection{Analyzing Context Relevant Paths}
 
-Entities are divided in two groups: main entities (\textit{MainEntities}, entities with relative score higher than the average), and additional entities (\textit{additionalEntities}, the rest.).
-We applied the DPpedia path finding technique implemented in \url{demo.everythingisconnected.be/relations?uris=} over all the possible permutations of the set $\textit{MainEntities}$
+We divided the entities in two groups: main entities (\textit{MainEntities}, entities with relative score higher than the average), and additional entities (\textit{additionalEntities}, the rest.).
+We applied the DPpedia path finding technique implemented %TODO: refer to section above or footnote maybe?
+%in \url{demo.everythingisconnected.be/relations?uris=} 
+over all the possible permutations of the set $\textit{MainEntities}$
 
-The objective is to analyze the paths returned for finding which are the most frequent classes and predicates between them:  
-The most frequent via nodes will reinforce/ extend the number of entities.
-The edges (dbpedia properties) will determine which are the most relevant properties inside the context of this news item.
+The objective is to analyze the paths returned for finding which are the most frequent classes and predicates between them:
+The most frequent via nodes will reinforce/extend the number of entities.
+The edges (DBpedia properties) will determine which are the most relevant properties inside the context of this news item.
 
-The output of this process is two lists: a re-expanded and re-ranked context and a list of the the most important predicates using to link concepts involved in this news item.
+The output of this process is two lists: a re-expanded and re-ranked context and a list of the most important predicates using to link concepts involved in this news item.
 
 \subsubsection{Reranking entities via Filtering}
 
