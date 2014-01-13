@@ -63,6 +63,8 @@ There exist many approaches tackling the challenge of finding relevant entities 
 (i) there are not mentioned;
 (ii) there are not ranked
 (iii) there are not related.
+
+
 %TODO: Can you explain these a bit more?
 In this paper we combine the power of non-structured resources with structured resources of DBpedia. Many applications and users leverage these entities to construct and link to other media.
 We demonstrate that ... by explaining a use case about ...
@@ -103,6 +105,20 @@ The approach described in this paper intends to reconstruct the semantic context
 In addition, we assume that the analyzed event has a minimum presence and coverage in the Web in order to ensure that the subsequent data mining techniques can collect an enough quantity of data to reconstruct the event's context. The output of the algorithm is a pair $Context_{Event1}=\left [  \varepsilon , \rho \right ]$  where $\varepsilon$ is a list named entities together with a numeric relevance score ($ \varepsilon =\left \{ E\times \mathbb{R} \right \}$,  being $E$ named entities classified using the NERD ontology\footnote{\url{http://nerd.eurecom.fr/ontology/nerd-v0.5.n3}}) and $\rho$ is a set of predicates $\left [ e_{1},e_{2}, p \right ]$, relating the aforementioned entities ($e_{1}\in E \vee  e_{2}\in E$). 
 
 Our hypothesis states that this knowledge representation of the events can provide a sufficient source of information for satisfying the viewer's information needs and supporting complex multimedia operations such as search and hyperlinking. 
+
+
+\subsection{Named Entity Extraction}
+
+For each news item we perform named-entity recognition over the corresponding subtitles by using the NERD~\cite{Rizzo2012b} framework. The language of the considered videos is English but NERD supports many other languages so our approach is applicable in other languages. The output of this phase is a collection of entities annotated using the NERD Ontology v0.5, that come with a first relevance score obtained from the considered extractors. This set includes a first set of ranked entities that are explicitly mentioned during the video. Other entity based video annotation tools~\cite{yunjia2013} stop at this point even when there are still missing entities that can be relevant for the viewer in the context of the current event. We will try to alleviate this problem by extending this first list of concepts via the entity expansion component.
+
+\subsection{Named Entity Expansion from Unstructured Resources}
+
+The set of entities obtained from a traditional name entity extraction operation is normally insufficient and incomplete for expressing the context of a News event. For example, many entities spotted over a particular document are not finally disambiguated because the textual clues around the term do not allow the name entity extractor to calculate it. In other cases some entities are not even mentioned in the transcript but still are relevant for understanding the story behind the depicted entities. This is an inherent problem in information retrieval tasks: a single description about the same resource does not necessarily summarize the whole picture behind it.
+
+The named entity expansion operation relies in the idea of retrieving and analyzing extra documents in the Web where the same event or the same part of the event is also described. By increasing the size off the sample we can increase the completeness of the context and the representativeness of the proposed set of entities. In other words, it is possible to reinforce relevant entities, and find new ones that could be also potentially interesting inside the context of that particular news item. 
+
+The entire logic will be further described in the following subsections and consist mainly in (1) building an appropriate search query out of the original set of entities, (2) retrieving extra documents about the same news event, and (3) analyzing them for providing a more complete and better ranked set of final entities, as illustrated in Figure~\ref{fig:namedEntityExpansion}. 
+
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.4\textwidth]{figure/ExpansionDiagram}
@@ -110,80 +126,40 @@ Our hypothesis states that this knowledge representation of the events can provi
 \label{fig:namedEntityExpansion}%\end{figure}
 \end{figure}
 
-\subsection{Named Entity Extraction}
-
-For each news item we perform named-entity recognition over the corresponding subtitles by using the NERD~\cite{Rizzo2012b} framework. The language of the considered videos is English but NERD supports many other languages so our approach is applicable in other languages. The output of this phase is a collection of entities annotated using the NERD Ontology v0.5, that come with a first relevance score obtained from the considered extractors. This set includes a first set of ranked entities that are explicitly mentioned during the video. Even there are still missing entities that can be relevant for the viewer in the context of the current event, this is where other video description approximations~\cite{yunjia2013} stop. However, for us this will be a first list of concepts to be used as base for the entity expansion component.
-
-\subsection{Context through Expansion}
-
-Expand the context by identifying named entities in the media fragments.
-
-
-In the following subsections we further explain the logic for entity expansion as illustrated in Figure~\ref{fig:namedEntityExpansion}.
-
-
-
-Motivation: Bigger view. 
-
-Graphic.
-
-Output.
-
 \subsubsection{Query Generation}
 
-The who what where method [reference]
+The Five Ws is a popular concept in information gathering in journalistic reporting. It captures the main aspects of a story or incidence: who, when, what, where, and why~\cite{LiJia2007}. In this paper we try to represent the news item in terms of four of those five W's (who is involved in the event, where the event is taking place, what the event is about, and when has happened) in order to generate a query that retrieves documents having to with the same event.This is somewhat like what a normal user would tape in a Web search engine when looking for descriptive documents about the same news item.  
 
-The Five Ws is a popular concept for information gathering in journalistic reporting.
-It captures all aspects of a story or incidence: who, when, what, where, and why.
-We propose a framework composed of a suite of cooperating visual information displays to represent the Five Ws and demonstrate its use within a healthcare informatics application. 
+Firstly the original entities are mapped to the NERD Core ontology, which considers 10 main classes: Thing, Amount, Animal, Event, Function, Organization, Location, Person, Product and Time. From this ten categories we generalize into three: the Who from \url{http://nerd.eurecom.fr/ontology#Person} and \url{http://nerd.eurecom.fr/ontology#Organization}, the Where from \url{http://nerd.eurecom.fr/ontology#Location}, and the What from the rest of NERD types after discarding \url{http://nerd.eurecom.fr/ontology#Time} and \url{http://nerd.eurecom.fr/ontology#Amount} instances. The When or so-called temporal dimension does not need to be computed since it is provided by the video publisher as an inputs for this approach.
 
-This is somewhat like what a school child does when learning to write a descriptive sentence of the event. It is taught that one should pay attention to the 5 W’s \cite{LiJia2007}: who, where, what, when and how. In our system, we try to answer 3 of the 5 W’s: what (the event label), where (the scene en- vironment label) and who (a list of the object categories).
+Having the three set of entities already generated, the next step consist in ranking them in relevance according to a weighted sum of two different dimensions: their frequency in the transcripts and their former relevance scores coming from the NE extractors. We have defined the function $\text{filterEntities}(S)$ for selecting the $n$ entities inside the set of entities $S$ whose relative relevance $R_{rel}\left ( e_{i}, S \right ) = R\left ( e_{i} \right ) / Avg \left ( R\left ( e_{i} \right )  \right )$ falls into the upper quarter of the interval $\left [ max\left ( R_{rel}\left ( e_{i}, S \right )  \right ) -min\left (  R_{rel}\left ( e_{i}, S \right ) \right ) \right ]$. The final query is a pair $\text{Query}_{Event} =\left [ \text{textQuery}, t \right ]$ where \textit{textQuery} is the result of concatenating the labels of the most relevant entities in the sets Who, What, Where in that particular order $\textit{textQuery} = \text{labels}\left ( \text{filterEntities}(Who)  + \text{filterEntities}(What) +\text{filterEntities}(Where)  \right )$, and $t$ the time period dimension. 
+This query generation process is depicted in the upper part of . For future research in the query construction technique we plan to directly use the Web resources themselves and not only their labels. 
 
-Map to the NERD model
-First textual query
+\subsubsection{Document Retrieval}
 
+Once $\text{Query}_{Event}$ is built out of the original set of named entities it will be ready to be injected into a document search engine where additional descriptions about the news event can be found. In this situation, the kind of query generated in the previous step and the search engine chosen should be closely tied in order to maximize the quality of the obtained results. Of course the different behavior of different search engines make some alternatives more suitable than others for certain kinds of events. The way the resultant documents change along the different search engines for a particular kind of event is a research question that will not be studied in this paper.
 
------
-The Five Ws is a popular concept for information gathering in journalistic reporting. It captures all aspects of a story or incidence: who, when, what, where, and why. We propose a framework composed of a suite of cooperating visual information displays to represent the Five Ws and demonstrate its use within a healthcare informatics application. 
+For the work presented in this paper we have resorted to Google Search REST API service available at \url{http://ajax.googleapis.com/ajax/services/search/web?v=1.0} by launching a query with the text \textit{textQuery}. Due to quota restrictions imposed by Google, the maximum number of retrieved document is set to 30. However and according to the evaluation performed in Section~\ref{sec:evaluation} this number is already enough for significantly extending the initial set of entities directly spotted by NERD. 
 
-This is somewhat like what a school child does when learning to write a descriptive sentence of the event. It is taught that one should pay attention to the 5 W’s \cite{LiJia2007}: who, where, what, when and how. In our system, we try to answer 3 of the 5 W’s: what (the event label), where (the scene en- vironment label) and who (a list of the object categories).
+In which concerns to the temporal dimension, we keep only the documents published inside the time period $t+t_{e}$. We increase the original event period in $t_{e}$ is because documents concerning a news event are not always published during the time the action is taking place but some hours or days after. The value of $t_{e}$ depends on many factors like the nature of the event itself (it is a quick appearance in the media, or a deep fact with more repercussion) or the kind of documents the search engine is indexing (from very deep and elaborated documents that need time to be published, to light post generated by users in just some minutes). Based on the simple assumption that that longer event will provoke longer buzzes, we approximated  $t_{e} = t$, meaning that we consider also document published duration of the event. 
 
-Map to the NERD model
-First textual query
+In the middle part of Figure~\ref{fig:namedEntityExpansion} this process is shown. The query is inputted in the search engine for obtaining other documents that elaborate on the the same event mentioned in the original video.Those documents (colored in black in the figure) will be also further processed for increasing the size of the collection and getting extra insights about the the studied news item.
 
-------
+\subsubsection{Entity Clustering}
 
-\subsubsection{Document retrieval}
+In this phase the extra documents previously retrieved are now preprocessed and analyzed in order to extend and rerank the original set of relevant entities and consequently get more insights about the studied event. First, since most of the retrieved resources are Web pages, HTML tags and other annotations are removed, keeping only the main textual information. This plain text is then analyzed by the NERD framework in order to extract the named entities present in them.
 
-Temporal reference, is a function of the time of the event. Different nature of the events, different nature of the search engine. we consider. this. 
-
-Google search
-
-The quality of the search
-
-\subsubsection{Entity fusion}
-
-
-Logic for entty. Cluster.  Jaro–Winkler distance
-\cite{Winkler06overviewof}
-
-
-
-Centroid of the cluster/
-
-
-URL.
-
-
-Future: Semantic in wordnet.
+In order to calculate the frequency of a certain resource inside the entire corpora, we need to group the different appearances of the same instance and check their cardinality. However, this is not a trivial task since the same entity can appear under different text labels, have typos in the field or different disambiguation URL's pointing to the same resource. For this reason, we have performed a centroid-based cluster operation over the instances of the entities. We have considered the centroid of a cluster the entity with the most frequent disambiguation URL that have also the most repeated label. As distance for comparing pairs of entities we have applied strict string similarity over the URL's, and in case of mismatch, Jaro–Winkler string distance~\cite{Winkler06overviewof} over the labels.The output of this phase is a list of clusters containing different instances of the same entity.
 
 \subsubsection{Entity Ranking}
 
-Considered features for ranking
+The final step of the expansion consists of ranking the different named entities obtained so far. In order to create this ordered list a score has been assigned to every entity according to the following features: relative frequency of the entity in the transcripts of the event video, relative frequency of the entity over the extra document, and average relevance for the different instances according to the named entity extractors. The three dimensions are combined via a weighted sum where the relative frequency in the video subtitles has a bigger impact in the final score, followed by the relative frequency on the searched documents, and ending with the average relevance from the extractors that is normally very variable.
 
-Formula applied
+The final output of the entity expansion operation is a list of entities (normally filtered by a minimum number of appearances since the method brings a much higher number of candidate entities), together with their ranking score and the number of appearances in both the main video and in the collected extra documents. Entities scored high in the final classification are more representative of the context which the original video belongs to. 
 
-Output is a list of entities. Normally filtered because there are many.
+$\text{EntityExpansion}\left (subtitles, timePeriod \right )= \left ( \left \{ e_{i}, Freq\left ( subtitles, e_{i} \right ), Freq\left ( extraDocs, e_{i} \right ) \right \} \right )$
+
+In this final set, the most important entities will be better ranked since they have appeared repeatedly in the extra documents. Entities that originally did not have a disambiguation URL can have it now if any of the instances appearing inside the additional documents has obtained one. Finally, entities that were not even mentioned in the original transcripts can be now in the list of relevant items since they have been spotted in the additional documents.
 
 \subsection{Generating DBpedia paths}
 
@@ -219,10 +195,10 @@ Out of the resulting expanded context we extract the most important(?) entities 
 \section{Use Case: Snowden Assylum}
 
 \section{Evaluation}
+\label{sec:evaluation}
 
 \section{Conclusions}
 We presented a new approach for context-aware connecting news events. Our preliminary results indicate that by exploring DBpedia paths in named entities occuring in news media. ...
-%\end{document}  % This is where a 'short' article might terminate
 
 %ACKNOWLEDGMENTS are optional
 \section{Acknowledgments}
