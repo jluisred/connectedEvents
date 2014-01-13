@@ -167,9 +167,9 @@ Entities with higher $relScore_{i}$ in the final classification are the more rep
 \end{itemize}
 
 
-\subsection{Named Entity from Structured Resources}
+\subsection{Refining the Event Context via DBPedia Knowledge}
 
-Once the set of context relevant entities has been expanded, we will use knowledge present in structured sources (DBpedia) for reinforcing the important entities and find relevant predicates between them.
+Once the set of context relevant entities has been expanded, we will use knowledge present in structured sources (DBpedia) for reinforcing the important entities and find relevant predicates between them. 
 
 \subsubsection{Generating DBpedia paths}
 
@@ -195,7 +195,7 @@ The edges (dbpedia properties) will determine which are the most relevant proper
 
 The output of this process is two lists: a re-expanded and re-ranked context and a list of the the most important predicates using to link concepts involved in this news item.
 
-\subsubsection{Refining entities via Filtering}
+\subsubsection{Reranking entities via Filtering}
 
 Get intermediate items using the commonalities function for some top ranked items
 \url{http://demo.everythingisconnected.be/commonalities?between=http://dbpedia.org/resource/Lyon&and=http://dbpedia.org/resource/France&allowed=http://purl.org/dc/terms/spatial}
