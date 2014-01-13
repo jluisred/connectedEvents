@@ -155,15 +155,23 @@ In order to calculate the frequency of a certain resource inside the entire corp
 
 The final step of the expansion consists of ranking the different named entities obtained so far. In order to create this ordered list a score has been assigned to every entity according to the following features: relative frequency of the entity in the transcripts of the event video, relative frequency of the entity over the extra document, and average relevance for the different instances according to the named entity extractors. The three dimensions are combined via a weighted sum where the relative frequency in the video subtitles has a bigger impact in the final score, followed by the relative frequency on the searched documents, and ending with the average relevance from the extractors that is normally very variable.
 
-The final output of the entity expansion operation is a list of entities (normally filtered by a minimum number of appearances since the method brings a much higher number of candidate entities), together with their ranking score and the number of appearances in both the main video and in the collected extra documents. Entities scored high in the final classification are more representative of the context which the original video belongs to. 
+The final output of the entity expansion operation is a list of entities (normally filtered by a minimum number of appearances since the method brings a much higher number of candidate entities), together with their ranking score and the frequency in both the main video and in the collected extra documents.
 
-$\text{EntityExpansion}\left (subtitles, timePeriod \right )= \left ( \left \{ e_{i}, Freq\left ( subtitles, e_{i} \right ), Freq\left ( extraDocs, e_{i} \right ) \right \} \right )$
+$\text{EntityExpansion}\left (subtitles, timePeriod \right )= \left ( \left \{ e_{i},  relScore_{i}, Freq\left ( subtitles, e_{i} \right ), Freq\left ( extraDocs, e_{i} \right ) \right \} \right )$
 
-In this final set, the most important entities will be better ranked since they have appeared repeatedly in the extra documents. Entities that originally did not have a disambiguation URL can have it now if any of the instances appearing inside the additional documents has obtained one. Finally, entities that were not even mentioned in the original transcripts can be now in the list of relevant items since they have been spotted in the additional documents.
+Entities with higher $relScore_{i}$ in the final classification are the more representative for the context of the original. Also there are other advantages in the final set of results: 
+\begin{itemize}
+  \item The entities will be better ranked since the size of the sample is bigger. Those entities that have appeared repeatedly in the extra documents will be promoted while those who barely appear in two or three will have less relevance.
+  \item Entities that originally have not been disambiguated can have now their corresponding URL if any of the similar instances that appear in the additional documents can provide a link to a Web resource. The same occurs with labels that contained errors or were uncompleted. 
+  \item  Finally, some entities that were important in the context of the news item but were not even mentioned in the original transcripts are now included in the list of relevant items since they have been often spotted over the collected documents. 
+\end{itemize}
 
-\subsection{Generating DBpedia paths}
 
-Entities are divided in two groups: main entities, and tail.
+\subsection{Named Entity from Structured Resources}
+
+Once the set of context relevant entities has been expanded, we will use knowledge present in structured sources (DBpedia) for reinforcing the important entities and find relevant predicates between them.
+
+\subsubsection{Generating DBpedia paths}
 
 Before we filter the relations between resources, the candidate resources to be included in relations are being pre-ranked. They are pre-ranked according to ``popularity'' and ``rarity'' essential components in the original PageRank algorithm \cite{page1999pagerank} and is used to sort candidate related nodes in the EiCE. The implementation of the EiCE takes the relations in to account by making use of the Jaccard coefficient to measure the dissimilarity and assign random walks based weight able to highly rank more rare resources, guaranteeing that paths between resources prefer specific relations and not general ones \cite{moore2012novel}.
 
@@ -176,25 +184,154 @@ Before we filter the relations between resources, the candidate resources to be 
 
 We pass on the main start resource, a target and via points. Figure~\ref{fig:patternmatching} shows the iterative process for generating DBPedia paths. An initial state is computed in step \ref{fig:patternmatching}a. There are low weights and high weights, for the example 1 and 2 respectively. Based on the weights of the links te path through the vias is optimized, so a path with the lowest total weight will be selected first, until the vias are added to the exclude list. The path from start to end is forced through the given via points (\ref{fig:patternmatching}b). This leads to additional visited resource as via points (\ref{fig:patternmatching}c). They occur because to resolve each path, the route is being computed starting in the start resource, target and the via points. The resources where they converge to each other are considered as the new via points. These via points are included in the paths and therefore marked as visited. This is to make sure that in the next iteration paths will go around the visited via (\ref{fig:patternmatching}d). The next paths are being computed over and over (\ref{fig:patternmatching}e) until a threshold number of paths is found , and the context is large enough or when it takes to long to compute the next path (out of range). The final set of optimized paths used to for the context expansion.
 
-\subsection{Filtering Context Relevant Paths}
+\subsubsection{Analyzing Context Relevant Paths}
 
-We use the current API calls with the entities we have detected and investigate what the frequent paths returned are. We count(?) the most frequently(?) occurring:
-predicates and resources.
+Entities are divided in two groups: main entities (\textit{MainEntities}, entities with relative score higher than the average), and additional entities (\textit{additionalEntities}, the rest.).
+We applied the DPpedia path finding technique implemented in \url{demo.everythingisconnected.be/relations?uris=} over all the possible permutations of the set $\textit{MainEntities}$
 
-Issue: what is the most important information in the path? The via node or the edges (dbpedia properties)?
+The objective is to analyze the paths returned for finding which are the most frequent classes and predicates between them:  
+The most frequent via nodes will reinforce/ extend the number of entities.
+The edges (dbpedia properties) will determine which are the most relevant properties inside the context of this news item.
 
-\subsection{Reranking entities and adding properties}
+The output of this process is two lists: a re-expanded and re-ranked context and a list of the the most important predicates using to link concepts involved in this news item.
 
-Out of the resulting expanded context we extract the most important(?) entities and predicates to find related media fragments.
+\subsubsection{Refining entities via Filtering}
 
-\subsection{Refining entities via Filtering}
-
-
-\subsection{Results}
+Get intermediate items using the commonalities function for some top ranked items
+\url{http://demo.everythingisconnected.be/commonalities?between=http://dbpedia.org/resource/Lyon&and=http://dbpedia.org/resource/France&allowed=http://purl.org/dc/terms/spatial}
+or via a SPARQL query which in this case can be quite performant as well.
 
 \section{Use Case: Snowden Assylum}
 
+Based on the video \url{}. Small excerpt of the story behind: Snowden talks from a Russian airport about his request to have asylum in a country after the extradition from U.S.
+
+Time period:  2013/07/06- 2013/07/17
+\subsection {Named Entity Extraction}
+
+Russia	0.809216	Mixed	Country	Location 
+
+Edward Snowden	0.717369	Mixed	Person 
+
+South America	0.56586	Mixed	Continent	Location	
+
+president Putin	0.459811	positive	Person	
+
+president	0.401138	negative	JobTitle		
+
+Federal Migration Service	0.380782	positive	Organization	
+
+Moscow	0.352101	Mixed	City	
+
+CIA	0.334887	neutral	Organization	
+	
+Bolivia	0.324607	neutral	Country	Location
+
+Obama	0.321901	negative	Person
+
+Missing entities: 
+\begin{itemize}
+  \item  The lawyer, behind the case (only displayed in OCR but never mentioned.)
+  \item  The name of the airport. (There are two airport in Moscow, we don't know which one it is)
+  \item  Why there are so many entities concerning South America countries?
+\end{itemize}
+
+\subsection {Named Entity Expansion}
+
+Based on the execution: 
+\url{curl -X POST --data-binary @snowden.txt "http://localhost:8006/api/rankedentities?startdate=2013-07-16&enddate=2013-08-15&limit=50" --header "Content-Type:text/xml" -v >> snowden_textrazor_50_130716_130815.json2}
+
+   ====  Russia  ====  
+0.5715187775678866  0.725645  7  197  4176  http://nerd.eurecom.fr/ontology\#Location http://en.wikipedia.org/wiki/Russia
+
+   ====  Edward Snowden  ====  
+0.4857142857142857  0.5  2  242  73  http://nerd.eurecom.fr/ontology\#Person  DBpedia:Person;Freebase:/people/person  
+
+   ====  asylum  ====  
+0.2976304037780401  0.388932  4  84  259  http://nerd.eurecom.fr/ontology\#Thing  null  http://en.wikipedia.org/wiki/Right\_of\_asylum
+
+   ====  America  ====  
+0.2611293709563164  0.532124  5  50  4034  http://nerd.eurecom.fr/ontology\#Location  http://en.wikipedia.org/wiki/United\_States
+
+   ====  Vladimir Putin  ====  
+0.21937027792207794  1.0  1  99  217  http://nerd.eurecom.fr/ontology\#Person http://en.wikipedia.org/wiki/Vladimir\_Putin
+
+   ====  Barack Obama  ====  
+0.18996458087367177  0.718052  1  89  234  http://nerd.eurecom.fr/ontology\#Person  http://en.wikipedia.org/wiki/Barack\_Obama
+
+   ====  MOSCOW  ====  
+0.1732730106257379  0.560296  1  85  0  http://nerd.eurecom.fr/ontology\#Location http://en.wikipedia.org/wiki/Moscow
+
+   ====  extradition  ====  
+0.11783583872491146  0.582043  2  14  1246  http://nerd.eurecom.fr/ontology\#Thing  null  http://en.wikipedia.org/wiki/Extradition
+
+   ====  United States  ====  
+0.0986840453364817  0.659101  1  40  --  http://nerd.eurecom.fr/ontology\#Location http://en.wikipedia.org/wiki/United\_States
+
+   ====  human-rights  ====  
+0.07678041133412042  0.543733  2  10  3535  http://nerd.eurecom.fr/ontology\#Organization http://en.wikipedia.org/wiki/Human\_rights
+
+   ====  Anatoly Kucherena  ====  
+0.06942148760330578  0.5  0  42  --  http://nerd.eurecom.fr/ontology\#Person --
+
+   ====  Kremlin  ====  
+0.06620044675324676  0.114493  1  11  446  http://nerd.eurecom.fr/ontology\#Location  Freebase:/location/location  http://en.wikipedia.org/wiki/Kremlin
+
+   ====  Sheremetyevo  ====  
+0.03966942148760331  0.356817  0  24  3535  http://nerd.eurecom.fr/ontology\#Location http://en.wikipedia.org/wiki/Sheremetyevo\_International\_Airport
+
+Re- ranked entitites:
+\begin{itemize}
+  \item  Assylum, the main subject behind this news item.
+  \item  Anatoly Kucherena is the lawyer involved in the defense of Edward Snowden.
+  \item  The Name of the airport is: 
+  \item  Other important entities like "human-rights" and "extradition" are now present. 
+\end{itemize}
+
+\subsection {Named Entity Expansion}
+
+
+
 \section{Evaluation}
+
+We compare the approach with a set of entities defined by an expert
+
+Entities
+1.     Edward Joseph Snowden (M)
+2.     Political Asylum (M)
+3.     CIA (M)
+4.     Sheremetyevo Airport (NM)
+5.     Anatoly Kucherena (NM)
+6.     Russia (M)
+7.     Department of State (NM)
+
+
+Edward Joseph Snowden: (M)
+o   Public figure. He is the “who” of the news.
+o   The subject of the main sentence.
+ 
+Political Asylum (M)
+o   This is related to the “what” of the news. This is what he requested, the direct object.
+ 
+CIA (M)
+o   Background information on related to Snowden, the main subject of the news, “ex CIA employee”.
+o   An actor in the news in a wider sense, not this news in particular, but Snowden’s history.
+ 
+Sheremetyevo Airport (NM)
+o   Not mentioned by name, specific location of the news.
+o   Mentioned as “the Moscow airport”
+ 
+Anatoly Kucherena (NM)
+o   Secondary actor and speaker in the video.
+o   Information about an interviewee or person expressing his opinion.
+ 
+Rusia (M)
+o   The location, but also an actor, the indirect object of the main sentence “to whom”.
+ 
+US Department of State (NM)
+o   Involved organization. Not mentioned but related to speaker.
+o   Appears in speakers’ title bar.
+
+
 \label{sec:evaluation}
 
 \section{Conclusions}
