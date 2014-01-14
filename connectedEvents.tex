@@ -61,16 +61,12 @@ Jos\'e Luis Redondo Garc\'ia\wg
 
 \maketitle
 \begin{abstract}
-There exist many approaches tackling the challenge of finding relevant entities to a document, but : 
-(i) there are not mentioned;
-(ii) there are not ranked
-(iii) there are not related.
-
-
-%TODO: Can you explain these a bit more?
-In this paper we combine the power of non-structured resources with structured resources of DBpedia. Many applications and users leverage these entities to construct and link to other media.
-We demonstrate that ... by explaining a use case about ...
-%TODO: complete after the use case is written out.
+There exist many approaches tackling the challenge of finding relevant entities to a news event context, but these approaches lack: 
+(i) mentioning sufficient amount of possible entities;
+(ii) ranking or motivating the final selected entities;
+(iii) exposing relations among recognized entities.
+In this paper, we combine the power of non-structured resources with structured resources of DBpedia. Many applications and users leverage these entities to construct and link to other media.
+We demonstrate that we can harvest a highly precise context starting from named entities recognized in the tv fragment by explaining a use case about LinkedTV fragments showing news events.
 
 \end{abstract}
 
@@ -224,7 +220,8 @@ We pass on the main start resource, a target and via points. Figure~\ref{fig:pat
 \subsubsection{Analyzing Context Relevant Paths}
 
 We divided the entities in two groups: main entities (\textit{MainEntities}, entities with relative score higher than the average), and additional entities (\textit{additionalEntities}, the rest.).
-We applied the DPpedia path finding technique implemented %TODO: refer to section above or footnote maybe?
+We applied the DPpedia path finding technique implemented 
+%TODO: refer to section above or footnote maybe?
 %in \url{demo.everythingisconnected.be/relations?uris=} 
 over all the possible permutations of the set $\textit{MainEntities}$
 
