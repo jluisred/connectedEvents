@@ -81,41 +81,41 @@ We demonstrate that we can harvest a highly precise context starting from named 
 
 \section{Introduction}
 
-Online media is increasing in scale and ubiquity, but it is currently still unstructured and not good connected to media of other forms or from other sources.
-[State of the Art: Named Entity Extraction, Expansion]
+Online media increases in scale and ubiquity, but it is currently still unstructured and badly connected to media of other formats or from other sources.
+%[State of the Art: Named Entity Extraction, Expansion]
 First attempts for extracting named entities out of media, which is a more and more common practice, give promising results but there it introduces some issues.
 %TODO: Go deeper in these issues: probably related to those mentioned in the abstract.
-LinkedTV is an integrated and practical approach towards experiencing Networked Media in the Future Internet. Within LinkedTV we want to connect media based on extracted entities that we link to DBpedia resources.
 
-[More about LinkedTV?]
+%[About LinkedTV?]
+LinkedTV is an integrated and practical approach towards experiencing Networked Media in the Future Internet. Within LinkedTV we want to connect media based on extracted entities that we link to DBpedia resources.
 %TODO: Add here more info about the project
 
 %[State of the Art: Everything is Connected]
-We use therefore an optimized pathfinding algorithm \cite{de2013discovering} implemented in the Everything is Connected Engine (EiCE), firstly introduced with the Everything is Connected (EiC) Demo at the \emph{ISWC`12 Boston} conference.
+We use therefore an optimized pathfinding algorithm \cite{de2013discovering} implemented in the Everything is Connected Engine (EiCE), firstly introduced with the Everything is Connected (EiC) Demo at the \emph{ISWC`12 Boston} conference \cite{Sande12}.
 Applying these algorithms to Linked Data can facilitate the resolving of complex queries that involve the semantics of the relations between resources. This method makes it is possible not only to discover relevant resources but also to filter them adapted to a specific context. Users can control and define which kinds of connections and types of resources really matter. Each path path between the discovered resources has a semantic meaning can be traced back to the original configuration of the user and
 forms the basis of an explanation rather than a ranking. A major contribution in this approach is that it minimizes the size of the candidate pool of nodes in order to optimize queries and increase
 the quality of the resulting paths.
 
-\section{The Approach}
+\section{Approach}
 
-The approach described in this paper intends to reconstruct the semantic context associated to one particular news video, highlighting the main concepts and entities involved and explaining how they are related to each other. The complete processing workflow takes as input the textual transcript of a multimedia resource depicting the event, as well as the start and end date for which that particular event has been considered relevant. If the event is still ongoing we consider the current day as the end of the temporal interval. The corresponding video providers and platforms make sure this data is available beforehand.
+To reconstruct the semantic context associated to one particular news video, we intend to highlight the main concepts and entities involved and explain how they are related to each other. The complete processing workflow takes as input the textual transcript of a multimedia resource depicting the event, as well as the start and end date for which that particular event has been considered relevant. If the event is still ongoing we consider the current day as the end of the temporal interval. Corresponding video providers and platforms make sure this data is available beforehand.
 
-In addition, we assume that the analyzed event has a minimum presence and coverage in the Web in order to ensure that the subsequent data mining techniques can collect an enough quantity of data to reconstruct the event's context. The output of the algorithm is a pair $Context_{Event1}=\left [  \varepsilon , \rho \right ]$  where $\varepsilon$ is a list named entities together with a numeric relevance score ($ \varepsilon =\left \{ E\times \mathbb{R} \right \}$,  being $E$ named entities classified using the NERD ontology\footnote{\url{http://nerd.eurecom.fr/ontology/nerd-v0.5.n3}}) and $\rho$ is a set of predicates $\left [ e_{1},e_{2}, p \right ]$, relating the aforementioned entities ($e_{1}\in E \vee  e_{2}\in E$). 
+We assume additionally that the analyzed event has a minimal presence and coverage on the Web to ensure that the subsequent data mining techniques can collect sufficient data to reconstruct the event's context. The output of the algorithm is a pair $Context_{Event1}=\left [  \varepsilon , \rho \right ]$  where $\varepsilon$ is a list named entities together with a numeric relevance score ($ \varepsilon =\left \{ E\times \mathbb{R} \right \}$,  being $E$ named entities classified using the NERD ontology\footnote{\url{http://nerd.eurecom.fr/ontology/nerd-v0.5.n3}}) and $\rho$ is a set of predicates $\left [ e_{1},e_{2}, p \right ]$, relating the aforementioned entities ($e_{1}\in E \vee  e_{2}\in E$). 
 
 Our hypothesis states that this knowledge representation of the events can provide a sufficient source of information for satisfying the viewer's information needs and supporting complex multimedia operations such as search and hyperlinking. 
 
 
 \subsection{Named Entity Extraction}
 
-For each news item we perform named-entity recognition over the corresponding subtitles by using the NERD~\cite{Rizzo2012b} framework. The language of the considered videos is English but NERD supports many other languages so our approach is applicable in other languages. The output of this phase is a collection of entities annotated using the NERD Ontology v0.5, that come with a first relevance score obtained from the considered extractors. This set includes a first set of ranked entities that are explicitly mentioned during the video. Other entity based video annotation tools~\cite{yunjia2013} stop at this point even when there are still missing entities that can be relevant for the viewer in the context of the current event. We will try to alleviate this problem by extending this first list of concepts via the entity expansion component.
+For each news item we perform named-entity recognition over the corresponding subtitles by using the NERD~\cite{Rizzo2012b} framework. The language of the considered videos is English but NERD supports many other languages so our approach is applicable in other languages. The output of this phase is a collection of entities annotated using the NERD Ontology v0.5, that come with a first relevance score obtained from the considered extractors. This set includes a first set of ranked entities that are explicitly mentioned during the video. Other entity based video annotation tools~\cite{yunjia2013} stop at this point even when there are still missing entities that can be relevant for the viewer in the context of the current event. We alleviate this problem by extending this first list of concepts via the entity expansion component.
 
 \subsection{Named Entity Expansion from Unstructured Resources}
 
 The set of entities obtained from a traditional name entity extraction operation is normally insufficient and incomplete for expressing the context of a News event. For example, many entities spotted over a particular document are not finally disambiguated because the textual clues around the term do not allow the name entity extractor to calculate it. In other cases some entities are not even mentioned in the transcript but still are relevant for understanding the story behind the depicted entities. This is an inherent problem in information retrieval tasks: a single description about the same resource does not necessarily summarize the whole picture behind it.
 
-The named entity expansion operation relies in the idea of retrieving and analyzing extra documents in the Web where the same event or the same part of the event is also described. By increasing the size off the sample we can increase the completeness of the context and the representativeness of the proposed set of entities. In other words, it is possible to reinforce relevant entities, and find new ones that could be also potentially interesting inside the context of that particular news item. 
+The named entity expansion operation relies in the idea of retrieving and analyzing extra documents in the Web where the same event or the same part of the event is also described. By increasing the size of the sample we increase the completeness of the context and the representativeness of the proposed set of entities. In other words, it is possible to reinforce relevant entities, and find new ones potentially interesting inside the context of that particular news item. 
 
-The entire logic will be further described in the following subsections and consist mainly in (1) building an appropriate search query out of the original set of entities, (2) retrieving extra documents about the same news event, and (3) analyzing them for providing a more complete and better ranked set of final entities, as illustrated in Figure~\ref{fig:namedEntityExpansion}. 
+The entire logic will be further described in the following subsections and consist mainly in (1) building an appropriate search query out of the original set of entities, (2) retrieving extra documents about the same news event, and (3) analyzing them for providing a more complete and better ranked set of final entities, as illustrated in Figure~\ref{fig:namedEntityExpansion}.
 
 \begin{figure}[h!]
 \centering
@@ -388,7 +388,14 @@ o   Appears in speakers’ title bar.
 \label{sec:evaluation}
 
 \section{Conclusions}
-We presented a new approach for context-aware connecting news events. Our preliminary results indicate that by exploring DBpedia paths in named entities occuring in news media. ...
+We presented a new approach for context-aware connecting news events. Our approach is designed to harvest highly precise contexts starting from named entities recognized in a TV fragment about the news event. Firstly we extracted named entities out of the corresponding subtitles and expanded those by collecting related documents to the news event. The entities obtained from the first pass typical are insufficient. Secondly we applied a second pass named entity extraction on these documents. We then ranked all the entities obtained at that stage and filter out those least occurring or identified as unimportant. Finally we refined the remaining entities by reinforcing them and finding important predicates between them. Ultimately this leaded to a re-ranking of the entities belonging to this news event.
+
+Our preliminary results indicate that by exploring DBpedia paths in named entities occuring in news media. ...
+
+\section{Future Work}
+%Explain how we are going to use predicates.
+
+%Mention refinements using TF/IDF weights.
 
 %ACKNOWLEDGMENTS are optional
 \section{Acknowledgments}
