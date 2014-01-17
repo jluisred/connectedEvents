@@ -19,6 +19,8 @@
 \usepackage{graphicx}
 \usepackage{fancyvrb}
 \usepackage{amsmath}
+\usepackage{graphicx}
+
 \begin{document}
 
 %\title{Context-aware Connections between News Events}
@@ -66,7 +68,7 @@ There exist many approaches tackling the challenge of finding relevant entities 
 (ii) ranking or motivating the final selected entities;
 (iii) exposing relations among recognized entities.
 In this paper, we combine the power of non-structured resources with structured resources of DBpedia. Many applications and users leverage these entities to construct and link to other media.
-We demonstrate that we can harvest a highly precise context starting from named entities recognized in the tv fragment by explaining a use case about LinkedTV fragments showing news events.
+We demonstrate that we can harvest a highly precise context starting from named entities recognized in the TV fragment by explaining a use case about LinkedTV fragments showing news events.
 
 \end{abstract}
 
@@ -83,12 +85,14 @@ We demonstrate that we can harvest a highly precise context starting from named 
 
 Online media increases in scale and ubiquity, but it is currently still unstructured and badly connected to media of other formats or from other sources.
 %[State of the Art: Named Entity Extraction, Expansion]
-First attempts for extracting named entities out of media, which is a more and more common practice, give promising results but there it introduces some issues.
-%TODO: Go deeper in these issues: probably related to those mentioned in the abstract.
-
 %[About LinkedTV?]
-LinkedTV is an integrated and practical approach towards experiencing Networked Media in the Future Internet. Within LinkedTV we want to connect media based on extracted entities that we link to DBpedia resources.
-%TODO: Add here more info about the project
+LinkedTV is an integrated and practical approach towards experiencing Networked Media in the Future Internet. This project aims to make multimedia content and Web information seamlessly interconnected. Technologically speaking, this vision requires systems to be able to represent multimedia information as is done today in the Web of Data: described at different granularities and interlinked other resources. 
+
+The amount of videos shared on the Web is constantly increasing. From a Semantic Web point of view those video segments need to be annotated with structured information before being linked to others. Based in this idea, new possibilities of innovative video services based on the semantic descriptions of the video content and media fragments are appearing. One of the main use cases in LinkedTV is the analysis of News videos where one or various events and their corresponding related issues are depicted. This problem has been traditionally addressed by applying audiovisual techniques, like in \cite{ballan2011event}.
+
+But extracting semantic and structured content from a video is far from being an easy practice. The Named Entity Recognition (NER) task has been developed as an essential component of the Information Extraction field. Initially, these techniques focused on identifying atomic information unit in a text, named entities, later on classified into predefined categories (also called context types) by classification techniques, and linked to real world objects using web identifiers (Named Entity Disambiguation). Nowadays there are various tools which provide such computation, like AlchemyAPI\footnote{\url{http://www.alchemyapi.com/}} or DBpedia Spotlight\footnote{\url{http://spotlight.dbpedia.org/}}. By applying these techniques over video subtitles (or timed text) it is possible to align the insights of a video where the time where they appear. 
+
+Approaches like Katsiouli \textit{et al.}~\cite{katsiouli2007} have demonstrated that, with the help of domain ontologies, applying named entity recognition techniques on video subtitles achieves decent results in task like video classification. For the Linked Data community, it is a first step to increase the volume of interconnected data. However from an exploitation point of view those promising techniques still introduce some issues. By the one hand, subtitles are not always complete enough to be the only textual source to rely on. The context around a particular event can be broader than what is currently said about it in a video. On the other hand, a plain list of name entities can fail to characterize what is described in the multimedia content: sometimes we also need to know how important they seem to be regarding the event and how they are connected or related between each other. In this paper we focus present an approach for deeper annotating a news event video by alleviating the lack of textual resources that limits the application of semantic analysis and relying on structured resources (DBpedia).
 
 %[State of the Art: Everything is Connected]
 We use therefore an optimized pathfinding algorithm \cite{de2013discovering} implemented in the Everything is Connected Engine (EiCE), firstly introduced with the Everything is Connected (EiC) Demo at the \emph{ISWC`12 Boston} conference \cite{Sande12}.
@@ -190,7 +194,7 @@ The final output of the entity expansion operation is a list of entities (normal
 
 Entities with a higher $relScore_{i}$ in the final classification are more representative for the context of the original. Also there are other advantages in the final set of results:
 \begin{itemize}
-  \item The entities will be better ranked since the size of the sample is bigger. Repeatedly appearing entities in the extra documents will be promoted while those barely appearing in two or three 
+  \item The entities will be better ranked since the size of the sample is bigger. Entities appearing repeatedly in the extra documents will be promoted while those barely appearing in two or three documents will be at the end of the list.
   %TODO: documents?
   will have less relevance.
   \item Entities that originally have not been disambiguated can now have their corresponding URL if any of the similar instances appearing in the additional documents provide a link to a Web resource. The same occurs with labels containing errors or incomplete labels. 
@@ -198,11 +202,12 @@ Entities with a higher $relScore_{i}$ in the final classification are more repre
 \end{itemize}
 
 
-\subsection{Refining the Event Context via DBPedia Knowledge}
+\subsection{Refining Event Context via DBPedia Knowledge}
 
 Once the set of context relevant entities has been expanded, we will use knowledge of structured sources (e.g. DBpedia) for reinforcing the important entities and finding relevant predicates between them. 
 
 \subsubsection{Generating DBpedia paths}
+\label{sec:introduction}
 
 Before we filter the relations between resources, the candidate resources to be included in relations are being pre-ranked. They are pre-ranked according to ``popularity'' and ``rarity'' essential components in the original PageRank algorithm \cite{page1999pagerank} and is used to sort candidate related nodes in the EiCE. The implementation of the EiCE takes the relations in to account by making use of the Jaccard coefficient to measure the dissimilarity and assign random walks based weight able to highly rank more rare resources, and guaranteeing that paths between resources prefer specific relations and not general ones \cite{moore2012novel}.
 
@@ -219,178 +224,161 @@ We pass on the main start resource, a target and via points. Figure~\ref{fig:pat
 
 \subsubsection{Analyzing Context Relevant Paths}
 
-We divided the entities in two groups: main entities (\textit{MainEntities}, entities with relative score higher than the average), and additional entities (\textit{additionalEntities}, the rest.).
-We applied the DPpedia path finding technique implemented 
-%TODO: refer to section above or footnote maybe?
+In this step the DPpedia path finding technique implemented in ~\ref{sec:evaluation} will be applied over the set of entities obtained via entity expansion. However, this list is too big and broad. Before, we need to establish a division between the main entities (\textit{MainEntities}, entities with relative score higher than the average), and the additional entities (\textit{additionalEntities}, the rest of entities in $E_{Expansion}\left (subtitles, timePeriod \right )$). 
+
 %in \url{demo.everythingisconnected.be/relations?uris=} 
-over all the possible permutations of the set $\textit{MainEntities}$
+Afterwards, we calculate paths between all the possible pairs inside the set\textit{MainEntities} following the REST methods exposed at \url{demo.everythingisconnected.be/relations?uris=}. Once all the possible paths have been retrieved, we perform various analysis for detecting which are the most frequent classes and predicates:
+\begin{itemize}
+  \item  We detect the most frequent nodes ($F_{nodes} = f_{max}(n_{i})$ in $Paths (mainEntities)$).
+  \item  We detect the most frequent predicates ($F_{prop} = f_{max}(p_{i})$ in $Paths (mainEntities)$). The edges (DBpedia properties) will determine which are the most relevant properties inside the context of this news item.
+  \item  We estimate the connectivity between nodes (Adjacency Matrix $M_{i,j}$ where the distance between two entities $e+{i}$ and $e+{j}$ is the average of the lengths of the paths that link those entities $m_{i,j} = \\ Avg (lenght(Paths(e_{i}, e_{j})))$)
+\end{itemize}
 
-The objective is to analyze the paths returned for finding which are the most frequent classes and predicates between them:
-The most frequent via nodes will reinforce/extend the number of entities.
-The edges (DBpedia properties) will determine which are the most relevant properties inside the context of this news item.
+The output of this process two different lists and a matrix: a re-expanded and re-ranked list of entities generated out of the expansion set, a list of the most important predicates involved in the paths between the aforementioned entities, and the adjacency matrix.
 
-The output of this process is two lists: a re-expanded and re-ranked context and a list of the most important predicates using to link concepts involved in this news item.
+\begin{equation}
+\begin{split}
+\{ E_{Expansion}, F_{nodes}, F_{prop}, M_{i,j} \} \\
+\end{split}
+\end{equation}
 
 \subsubsection{Reranking entities via Filtering}
 
-Get intermediate items using the commonalities function for some top ranked items
-\url{http://demo.everythingisconnected.be/commonalities?between=http://dbpedia.org/resource/Lyon&and=http://dbpedia.org/resource/France&allowed=http://purl.org/dc/terms/spatial}
-or via a SPARQL query which in this case can be quite performant as well.
+Use the frequency measures obtained previously in order to rerank entities. Get intermediate items using the commonalities function for some top ranked items. Output final set of entities and adjacency matrix.
+
+\begin{itemize}
+  \item  Most frequent via nodes will reinforce entities already existing in $E_{Expansion}$.
+  \item  Most frequent properties will feed Commonalities function over each entity in $mainEntities$
+  \item  Most frequent entities in Commonalities will promote already existing in $E_{Expansion}$.
+  \item  Most frequent via nodes will reinforce entities already existing in $E_{Expansion}$.
+  \item  Most frequent via nodes will include new entities inside $E_{Expansion}$.
+  \item  Final  $E_{Expansion}$.
+
+The final output of the approach is the set of context entities rerank according to DBPedia insights, and the final matrix of Adjacency:
+\begin{equation}
+\begin{split}
+\{ Entities_{Extension + DBpedia}, M_{i,j} \} \\
+\end{split}
+\end{equation}
+\end{itemize}
+
+%\url{http://demo.everythingisconnected.be/commonalities?between=http://dbpedia.org/resource/Lyon&and=http://dbpedia.org/resource/France&allowed=http://purl.org/dc/terms/spatial}
 
 \section{Use Case: Snowden Assylum}
 
-Based on the video \url{}. Small excerpt of the story behind: Snowden talks from a Russian airport about his request to have asylum in a country after the extradition from U.S.
+We have applied the explained approach over the video \url{http://www.bbc.co.uk/news/world-europe-23339199} from the BBC News Europe site. The main  story in this media content is the request of  asylum made by Edward Snowden to the Russian government. In an airport in Moscow, he publicy express  his desire to obtain political help while he can find a safe way to reach the Latin American countries offering to harbor him. The time period for which this particular part of the event is relevant goes from 2013/07/06 to 2013/07/17.
 
-Time period:  2013/07/06- 2013/07/17
 \subsection {Named Entity Extraction}
 
-\begin{Verbatim}[fontsize=\tiny] 
-Russia		0.809216	Mixed	Country	Location 
+In a first step, Name Entity Extraction techniques are applied over the video transcript by using NERD. Below we show the different entities directly extracted with this procedure.
 
-Edward Snowden	0.717369	Mixed	Person 
-
-South America	0.56586	Mixed	Continent	Location	
-
-president Putin	0.459811	positive	Person	
-
-president	0.401138	negative	JobTitle		
-
-Federal Migration Service	0.380782	positive	Organization	
-
-Moscow	0.352101	Mixed	City	
-
-CIA	0.334887	neutral	Organization	
-	
-Bolivia	0.324607	neutral	Country	Location
-
-Obama	0.321901	negative	Person
-\end{Verbatim}
-
-Missing entities: 
-\begin{itemize}
-  \item  The lawyer, behind the case (only displayed in OCR but never mentioned.)
-  \item  The name of the airport. (There are two airport in Moscow, we don't know which one it is)
-  \item  Why there are so many entities concerning South America countries?
-\end{itemize}
+\resizebox{8.5cm}{!} {
+\begin{tabular}{ c | c | c | c | c }
+  \hline     
+ Label & Relevance & Sentiment & Type & URI  \\ \hline  
+Russia & 0.809216 & Mixed & Location & http://en.wikipedia.org/wiki/Russia \\
+Edward Snowden & 0.717369 & Mixed & Person & http://en.wikipedia.org/wiki//Edward\_Snowden \\
+South America & 0.56586 & Mixed & Location & http://en.wikipedia.org/wiki/South\_America \\
+president Putin & 0.459811 & positive & Person & http://en.wikipedia.org/wiki/Vladimir\_Putin \\
+president & 0.401138 & negative & JobTitle & http://en.wikipedia.org/wiki/President \\
+Moscow & 0.352101 & Mixed & City & http://en.wikipedia.org/wiki/Moscow \\
+CIA & 0.334887 & neutral & Organization & http://en.wikipedia.org/wiki/CIA \\
+Bolivia & 0.324607 & neutral & Location & http://en.wikipedia.org/wiki/Bolivia \\
+Obama & 0.321901 & negative & Person & http://en.wikipedia.org/wiki/Barack\_Obama \\
+  \hline  
+\end {tabular} 
+  }
 
 \subsection {Named Entity Expansion}
 
-Based on the execution:
+In the second step, the original set of entities is expanded and the items are rerank according to the procedure explained in 
 
-\url{curl -X POST --data-binary @snowden.txt "http://localhost:8006/api/rankedentities?startdate=2013-07-16&enddate=2013-08-15&limit=50" --header "Content-Type:text/xml" -v >> snowden_textrazor_50_130716_130815.json2}
+%\url{curl -X POST --data-binary @snowden.txt "http://localhost:8006/api/rankedentities?startdate=2013-07-16&enddate=2013-08-15&limit=50" --header "Content-Type:text/xml" -v >> snowden_textrazor_50_130716_130815.json2}
 
-\begin{Verbatim}[fontsize=\tiny] 
-   ====  Russia  ====  
-0.5715187775678866  0.725645  7  197  4176  http://nerd.eurecom.fr/ontology\#Location
- http://en.wikipedia.org/wiki/Russia
+\resizebox{9cm}{!} {
+\begin{tabular}{ c | c | c | c | c | l }
+  \hline     
+  	Label & Relevance & $F_{video}$& $F_{Docu}$ & Type & URI \\ \hline                  
+  	Russia & 0.571518 & 7 & 197 & Location & http://en.wikipedia.org/wiki/Russia \\ 
+  	Edward\_Snowden & 0.485714 & 2 & 242 & Person & http://en.wikipedia.org/wiki/Edward\_Snowden \\
+  	Asylum & 0.297630 & 4 & 84 & Thing & http://en.wikipedia.org/wiki/Right\_of\_asylum\\
+  	United States & 0.261129 & 5 & 50 & Location & http://en.wikipedia.org/wiki/United\_States \\
+  	Vladimir Putin & 0.2193704 & 1 & 99 & Person & http://en.wikipedia.org/wiki/Vladimir\_Putin \\
+	Barack Obama & 0.1899647 & 1 & 89 & Person & http://en.wikipedia.org/wiki/Barack\_Obama \\
+	MOSCOW & 0.173273 & 1 & 85 & Location & http://en.wikipedia.org/wiki/Moscow \\
+	extradition & 0.1178356 & 2 & 14 & Thing & http://en.wikipedia.org/wiki/Extradition \\
+	CIA & 0.116887 & 1 & 45 & Organization & http://en.wikipedia.org/wiki/CIA \\
+	human-rights & 0.0767802 & 2 & 10 & Organization & http://en.wikipedia.org/wiki/Human\_rights \\
+	Anatoly Kucherena & 0.0694218 & 0 & 42 & Person & -- \\
+	Kremlin & 0.0662006 & 1 & 11 & Location & http://en.wikipedia.org/wiki/Kremlin \\
+	Sheremetyevo & 0.0396691 & 0 & 24 & Location & http://en.wikipedia.org/wiki/Sheremetyevo\\
 
-   ====  Edward Snowden  ====  
-0.4857142857142857  0.5  2  242  73  http://nerd.eurecom.fr/ontology\#Person
-  DBpedia:Person;Freebase:/people/person  
-
-   ====  asylum  ====  
-0.2976304037780401  0.388932  4  84  259  http://nerd.eurecom.fr/ontology\#Thing  null 
-http://en.wikipedia.org/wiki/Right\_of\_asylum
-
-   ====  America  ====  
-0.2611293709563164  0.532124  5  50  4034  http://nerd.eurecom.fr/ontology\#Location 
-http://en.wikipedia.org/wiki/United\_States
-
-   ====  Vladimir Putin  ====  
-0.21937027792207794  1.0  1  99  217  http://nerd.eurecom.fr/ontology\#Person
-http://en.wikipedia.org/wiki/Vladimir\_Putin
-
-   ====  Barack Obama  ====  
-0.18996458087367177  0.718052  1  89  234  http://nerd.eurecom.fr/ontology\#Person 
-http://en.wikipedia.org/wiki/Barack\_Obama
-
-   ====  MOSCOW  ====  
-0.1732730106257379  0.560296  1  85  0  http://nerd.eurecom.fr/ontology\#Location
-http://en.wikipedia.org/wiki/Moscow
-
-   ====  extradition  ====  
-0.11783583872491146  0.582043  2  14  1246  http://nerd.eurecom.fr/ontology\#Thing  null
-http://en.wikipedia.org/wiki/Extradition
-
-   ====  United States  ====  
-0.0986840453364817  0.659101  1  40  --  http://nerd.eurecom.fr/ontology\#Location
-http://en.wikipedia.org/wiki/United\_States
-
-   ====  human-rights  ====  
-0.07678041133412042  0.543733  2  10  3535  http://nerd.eurecom.fr/ontology\#Organization
-http://en.wikipedia.org/wiki/Human\_rights
-
-   ====  Anatoly Kucherena  ====  
-0.06942148760330578  0.5  0  42  --  http://nerd.eurecom.fr/ontology\#Person --
-
-   ====  Kremlin  ====  
-0.06620044675324676  0.114493  1  11  446  http://nerd.eurecom.fr/ontology\#Location
-Freebase:/location/location  http://en.wikipedia.org/wiki/Kremlin
-
-   ====  Sheremetyevo  ====  
-0.03966942148760331  0.356817  0  24  3535  http://nerd.eurecom.fr/ontology\#Location
-http://en.wikipedia.org/wiki/Sheremetyevo\_International\_Airport
-\end{Verbatim}
-
-Re- ranked entitites:
-\begin{itemize}
-  \item  Assylum, the main subject behind this news item.
-  \item  Anatoly Kucherena is the lawyer involved in the defense of Edward Snowden.
-  \item  The Name of the airport is: 
-  \item  Other important entities like "human-rights" and "extradition" are now present. 
-\end{itemize}
+  \hline  
+\end {tabular} 
+  }
 
 \subsection {Named Entity Expansion}
-
-
 
 \section{Evaluation}
+\label{sec:evaluation}
 
-We compare the approach with a set of entities defined by an expert
+There result obtained by this approach will be evaluated against a set of entities provided by an expert. 
+We plan to extend this evaluation to a larger corpora and include a more exhaustive evaluation in following publications in the same line.
+This is the list of entities provided by the expert, together with some insights about the concept and its relations with the main topic in the video:
 
-Entities
-1.     Edward Joseph Snowden (M)
-2.     Political Asylum (M)
-3.     CIA (M)
-4.     Sheremetyevo Airport (NM)
-5.     Anatoly Kucherena (NM)
-6.     Russia (M)
-7.     Department of State (NM)
-
-
+\begin{Verbatim}[fontsize=\tiny] 
 Edward Joseph Snowden: (M)
-o   Public figure. He is the “who” of the news.
+o   Public figure. He is the "who" of the news.
 o   The subject of the main sentence.
  
 Political Asylum (M)
 o   This is related to the “what” of the news. This is what he requested, the direct object.
  
 CIA (M)
-o   Background information on related to Snowden, the main subject of the news, “ex CIA employee”.
+o   Background information on related to Snowden, the main subject of the news, "ex CIA employee".
 o   An actor in the news in a wider sense, not this news in particular, but Snowden’s history.
  
 Sheremetyevo Airport (NM)
-o   Not mentioned by name, specific location of the news.
-o   Mentioned as “the Moscow airport”
+o   Specific location of the news.
+o   Mentioned as "the Moscow airport"
  
 Anatoly Kucherena (NM)
 o   Secondary actor and speaker in the video.
-o   Information about an interviewee or person expressing his opinion.
+o   Information about an interview or person expressing his opinion.
  
 Rusia (M)
-o   The location, but also an actor, the indirect object of the main sentence “to whom”.
+o   The location, but also an actor, the indirect object of the main sentence "to whom".
  
 US Department of State (NM)
 o   Involved organization. Not mentioned but related to speaker.
-o   Appears in speakers’ title bar.
 
+\end{Verbatim}
 
-\label{sec:evaluation}
+Evaluating against traditional Named Entity Extraction: Precision \& Rec: there are 3 entities out of 7 spotted. 12 Entities in total
+\begin{itemize}
+  \item  The lawyer, behind the case, Anatoly Kucherena, is never mentioned in the 
+  \item  The name of the airport. (There are two airport in Moscow, we don't know which one it is)
+\end{itemize}
+
+Evaluating against \textit{MainEntities} in $E_{Expansion}$: Precision \& Rec: there are 6 entities out of 7 spotted. 15 Entities in total
+\begin{itemize}
+  \item  Assylum, the main subject behind this news item, has been correctly detected
+  \item  Anatoly Kucherena is the lawyer involved in the defense of Edward Snowden, has been correctly detected even there is no disambiguation URL.
+  \item  The Name of the airport, Sheremetyevo, has been finally disambiguated. In the original transcript it was not specified in which of the two airports in Moscow Snowden was giving the press conference.
+  \item  Other important entities like "human-rights" and "extradition" are now present, helping to complete the context of the new.
+\end{itemize}
+
+Evaluating against the final DBPedia $E_{Expansion + DBpedia}$: No differences for the  \textit{MainEntities} in which refers to Precision \& recall. However, there are improvements in which concerns:
+
+\begin{itemize}
+  \item  The ranking order inside  \textit{MainEntities} is now better. For example the entity "Sheremetyevo" is now scored higher, which is taking into account that it is the specific location where the action is taking place.
+  \item  There are new entities that were not detected via entity expansion, like the prime Minister of Russia, Igor Shuvalov, that are also relevant inside the matter.
+  \item  The matrix of Adjacency opens room for many other context studies, like topic entity clustering that could help to give extra insight about the studied event.
 
 \section{Conclusions}
-We presented a new approach for context-aware connecting news events. Our approach is designed to harvest highly precise contexts starting from named entities recognized in a TV fragment about the news event. Firstly we extracted named entities out of the corresponding subtitles and expanded those by collecting related documents to the news event. The entities obtained from the first pass typical are insufficient. Secondly we applied a second pass named entity extraction on these documents. We then ranked all the entities obtained at that stage and filter out those least occurring or identified as unimportant. Finally we refined the remaining entities by reinforcing them and finding important predicates between them. Ultimately this leaded to a re-ranking of the entities belonging to this news event.
+We presented a new approach for context-aware annotating news events. Our approach is designed to harvest highly precise contexts starting from named entities recognized in a TV fragment about the news event. Firstly we extracted named entities out of the corresponding subtitles and expanded those by collecting related documents to the news event. The entities obtained from the first pass typical are insufficient. Secondly we applied a second pass named entity extraction on these documents. We then ranked all the entities obtained at that stage and filter out those least occurring or identified as unimportant. Finally we refined the remaining entities by reinforcing them and finding important predicates between them. Ultimately this leaded to a re-ranking of the entities belonging to this news event.
 
-Our preliminary results indicate that by exploring DBpedia paths in named entities occuring in news media. ...
+Our preliminary results indicate that by exploring DBpedia paths in named entities occuring in news media.
 
 \section{Future Work}
 %Explain how we are going to use predicates.
