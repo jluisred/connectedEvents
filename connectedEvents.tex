@@ -2,7 +2,7 @@
 % WORKS WITH V3.2SP OF ACM_PROC_ARTICLE-SP.CLS
 % APRIL 2009
 
-\documentclass{acm_proc_article-sp}
+\documentclass{sig-alternate}
 
 \newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
 \def\sharedaffiliation{\end{tabular}\newline\begin{tabular}{c}}
@@ -63,7 +63,7 @@ Jos\'e Luis Redondo Garc\'ia\wg
 
 \maketitle
 \begin{abstract}
-There exist many approaches tackling the challenge of finding relevant entities to a news event context, but these approaches lack: 
+There exist many approaches to tackle the challenge of finding relevant entities to a news event context, but these approaches lack: 
 (i) mentioning sufficient amount of possible entities;
 (ii) ranking or motivating the final selected entities;
 (iii) exposing relations among recognized entities.
@@ -77,41 +77,43 @@ We demonstrate that we can harvest a highly precise context starting from named 
 %A category including the fourth, optional field follows...
 %\category{D.2.8}{Software Engineering}{Metrics}[complexity measures, performance measures]
 
-%\terms{Theory}
+%\terms{Theory}\textsl{}
 
 %\keywords{ACM proceedings, \LaTeX, text tagging} % NOT required for Proceedings
 
 \section{Introduction}
 
-Online media increases in scale and ubiquity, but it is currently still unstructured and badly connected to media of other formats or from other sources.
+Online media keeps increasing in scale and ubiquity, but it is currently still unstructured and badly connected to media of other formats or from other sources.
 %[State of the Art: Named Entity Extraction, Expansion]
 %[About LinkedTV?]
-LinkedTV is an integrated and practical approach towards experiencing Networked Media in the Future Internet. This project aims to make multimedia content and Web information seamlessly interconnected. Technologically speaking, this vision requires systems to be able to represent multimedia information as is done today in the Web of Data: described at different granularities and interlinked other resources. 
+LinkedTV is an integrated and practical approach towards experiencing Networked Media in the Future Internet. This project aims to make multimedia content and Web information seamlessly interconnected. Technologically speaking, this vision requires systems to be able to represent multimedia information as is done today in the Web of Data: described at different granularities and interlinked with other resources. 
+%Task like video 
+The amount of videos shared on the Web is constantly increasing. From a Semantic Web point of view those video segments need to be annotated with structured information before being linked to others. New possibilities of innovative video services based on the semantic descriptions of the video content and media fragments appear based on this idea. One of the main use cases in LinkedTV is analyzing News videos where various events and their corresponding related issues are depicted. This problem is traditionally addressed by applying audiovisual techniques, like in \cite{ballan2011event}.
 
-The amount of videos shared on the Web is constantly increasing. From a Semantic Web point of view those video segments need to be annotated with structured information before being linked to others. Based in this idea, new possibilities of innovative video services based on the semantic descriptions of the video content and media fragments are appearing. One of the main use cases in LinkedTV is the analysis of News videos where one or various events and their corresponding related issues are depicted. This problem has been traditionally addressed by applying audiovisual techniques, like in \cite{ballan2011event}.
+Extracting semantic and structured content from a video is complex. Named Entity Recognition (NER) techniques were developed as an essential component of the Information Extraction field. Initially, these techniques focused on: identifying atomic information units in texts, named entities; later on classifying entities into predefined categories (also called context types) by classification techniques; and linking to real world objects using web identifiers (Named Entity Disambiguation). Various tools provide such computations, like AlchemyAPI\footnote{\fontsize{8pt}{1em}\selectfont \url{http://www.alchemyapi.com/}} or DBpedia Spotlight\footnote{\fontsize{8pt}{1em}\selectfont \url{http://spotlight.dbpedia.org/}}. It is possible to align the insights of a video with the time when they appear by applying these techniques over video subtitles (or timed text). 
 
-But extracting semantic and structured content from a video is far from being an easy practice. The Named Entity Recognition (NER) task has been developed as an essential component of the Information Extraction field. Initially, these techniques focused on identifying atomic information unit in a text, named entities, later on classified into predefined categories (also called context types) by classification techniques, and linked to real world objects using web identifiers (Named Entity Disambiguation). Nowadays there are various tools which provide such computation, like AlchemyAPI\footnote{\url{http://www.alchemyapi.com/}} or DBpedia Spotlight\footnote{\url{http://spotlight.dbpedia.org/}}. By applying these techniques over video subtitles (or timed text) it is possible to align the insights of a video where the time where they appear. 
+Approaches like Katsiouli \textit{et al.}~\cite{katsiouli2007} demonstrated that applying named entity recognition techniques in combination wtih domain ontologies on video subtitles achieves decent results in task like video classification. 
 
-Approaches like Katsiouli \textit{et al.}~\cite{katsiouli2007} have demonstrated that, with the help of domain ontologies, applying named entity recognition techniques on video subtitles achieves decent results in task like video classification. For the Linked Data community, it is a first step to increase the volume of interconnected data. However from an exploitation point of view those promising techniques still introduce some issues. By the one hand, subtitles are not always complete enough to be the only textual source to rely on. The context around a particular event can be broader than what is currently said about it in a video. On the other hand, a plain list of name entities can fail to characterize what is described in the multimedia content: sometimes we also need to know how important they seem to be regarding the event and how they are connected or related between each other. In this paper we focus present an approach for deeper annotating a news event video by alleviating the lack of textual resources that limits the application of semantic analysis and relying on structured resources (DBpedia).
+For the Linked Data community, it is a first step to increase the volume of interconnected data. However from an exploitation point of view those promising techniques still introduce some issues. By the one hand, subtitles are not always complete enough to be the only textual source to rely on. The context around a particular event can be broader than what is currently said about it in a video. On the other hand, a plain list of name entities can fail to characterize what is described in the multimedia content: sometimes we also need to know how important they seem to be regarding the event and how they are connected or related between each other. In this paper we focus present an approach for deeper annotating a news event video by alleviating the lack of textual resources that limits the application of semantic analysis and relying on structured resources (DBpedia).
 
 %[State of the Art: Everything is Connected]
 We use therefore an optimized pathfinding algorithm \cite{de2013discovering} implemented in the Everything is Connected Engine (EiCE), firstly introduced with the Everything is Connected (EiC) Demo at the \emph{ISWC`12 Boston} conference \cite{Sande12}.
-Applying these algorithms to Linked Data can facilitate the resolving of complex queries that involve the semantics of the relations between resources. This method makes it is possible not only to discover relevant resources but also to filter them adapted to a specific context. Users can control and define which kinds of connections and types of resources really matter. Each path path between the discovered resources has a semantic meaning can be traced back to the original configuration of the user and
-forms the basis of an explanation rather than a ranking. A major contribution in this approach is that it minimizes the size of the candidate pool of nodes in order to optimize queries and increase
-the quality of the resulting paths.
+Applying these algorithms to Linked Data facilitates resolving complex queries that involve the semantics of the relations between resources, discovering relevant resources and context-sensitive filtering resources. Users control and define which kinds of relations and types of resources really matter. Each path between the discovered resources has a semantic meaning can be traced back to the original configuration of the user and forms the basis of an explanation rather than a ranking. A major contribution in this approach is that it minimizes the size of the candidate pool of resources in order to optimize queries and increase the quality of the resulting paths.
 
 \section{Approach}
 
-To reconstruct the semantic context associated to one particular news video, we intend to highlight the main concepts and entities involved and explain how they are related to each other. The complete processing workflow takes as input the textual transcript of a multimedia resource depicting the event, as well as the start and end date for which that particular event has been considered relevant. If the event is still ongoing we consider the current day as the end of the temporal interval. Corresponding video providers and platforms make sure this data is available beforehand.
+To reconstruct the semantic context associated to one particular news video, we highlight the main concepts and entities involved and explain how they are related to each other. The complete processing workflow takes as input the textual transcript of a multimedia resource depicting the event, as well as the start and end date for which that particular event has been considered relevant. If the event is still ongoing we consider the current day as the end of the temporal interval. 
+Corresponding video providers and platforms make sure this data is available beforehand.
+%TODO: Do you mean the textual transcript before processing?
 
-We assume additionally that the analyzed event has a minimal presence and coverage on the Web to ensure that the subsequent data mining techniques can collect sufficient data to reconstruct the event's context. The output of the algorithm is a pair $Context_{Event1}=\left [  \varepsilon , \rho \right ]$  where $\varepsilon$ is a list named entities together with a numeric relevance score ($ \varepsilon =\left \{ E\times \mathbb{R} \right \}$,  being $E$ named entities classified using the NERD ontology\footnote{\url{http://nerd.eurecom.fr/ontology/nerd-v0.5.n3}}) and $\rho$ is a set of predicates $\left [ e_{1},e_{2}, p \right ]$, relating the aforementioned entities ($e_{1}\in E \vee  e_{2}\in E$). 
+We assume additionally that the analyzed event has a minimal presence and coverage on the Web to ensure that the subsequent data mining techniques can collect sufficient data to reconstruct the event's context. The output of the algorithm is a pair $Context_{Event1}=\left [  \varepsilon , \rho \right ]$  where $\varepsilon$ is a list named entities together with a numeric relevance score ($ \varepsilon =\left \{ E\times \mathbb{R} \right \}$,  being $E$ named entities classified using the NERD ontology\footnote{\fontsize{8pt}{1em}\selectfont \url{http://nerd.eurecom.fr/ontology/nerd-v0.5.n3}}) and $\rho$ is a set of predicates $\left [ e_{1},e_{2}, p \right ]$, relating the aforementioned entities ($e_{1}\in E \vee  e_{2}\in E$). 
 
-Our hypothesis states that this knowledge representation of the events can provide a sufficient source of information for satisfying the viewer's information needs and supporting complex multimedia operations such as search and hyperlinking. 
+Our hypothesis states that this knowledge representation of the events provides a sufficient source of information for satisfying the viewer's information needs and supporting complex multimedia operations such as search and hyperlinking. 
 
 
 \subsection{Named Entity Extraction}
 
-For each news item we perform named-entity recognition over the corresponding subtitles by using the NERD~\cite{Rizzo2012b} framework. The language of the considered videos is English but NERD supports many other languages so our approach is applicable in other languages. The output of this phase is a collection of entities annotated using the NERD Ontology v0.5, that come with a first relevance score obtained from the considered extractors. This set includes a first set of ranked entities that are explicitly mentioned during the video. Other entity based video annotation tools~\cite{yunjia2013} stop at this point even when there are still missing entities that can be relevant for the viewer in the context of the current event. We alleviate this problem by extending this first list of concepts via the entity expansion component.
+For each news item we perform named-entity recognition over the corresponding subtitles by using the NERD~\cite{Rizzo2012b} framework. The language of the considered videos is English but NERD supports many other languages so our approach is applicable to other languages. The output of this phase is a collection of entities annotated using the NERD Ontology v0.5, that come with a first relevance score obtained from the considered extractors. This set includes a first set of ranked entities that are explicitly mentioned during the video. Other entity based video annotation tools~\cite{yunjia2013} stop at this point even when entities are still missing that can be relevant for the viewer in the context of the current event. We alleviate this problem by extending this first list of concepts via the entity expansion component.
 
 \subsection{Named Entity Expansion from Unstructured Resources}
 
@@ -130,11 +132,11 @@ The entire logic will be further described in the following subsections and cons
 
 \subsubsection{Query Generation}
 
-The Five Ws is a popular concept in information gathering in journalistic reporting. It captures the main aspects of a story or incidence: who, when, what, where, and why~\cite{LiJia2007}. In this paper we try to represent the news item in terms of four of those five W's (who is involved in the event, where the event is taking place, what the event is about, and when has happened) in order to generate a query that retrieves documents having to with the same event.This is somewhat like what a normal user would tape in a Web search engine when looking for descriptive documents about the same news item.  
+The Five Ws is a popular concept in information gathering in journalistic reporting. It captures the main aspects of a story or incidence: who, when, what, where, and why~\cite{LiJia2007}. We try to represent the news item in terms of four of those five W's (who is involved in the event, where the event is taking place, what the event is about, and when has happened) in order to generate a query that retrieves documents having to with the same event.This is somewhat like what a normal user would tape in a Web search engine when looking for descriptive documents about the same news item.  
 
 Firstly the original entities are mapped to the NERD Core ontology, which considers 10 main classes: Thing, Amount, Animal, Event, Function, Organization, Location, Person, Product and Time. From this ten categories we generalize into three: the Who from \url{http://nerd.eurecom.fr/ontology#Person} and \url{http://nerd.eurecom.fr/ontology#Organization}, the Where from \url{http://nerd.eurecom.fr/ontology#Location}, and the What from the rest of NERD types after discarding \url{http://nerd.eurecom.fr/ontology#Time} and \url{http://nerd.eurecom.fr/ontology#Amount} instances. The When or so-called temporal dimension does not need to be computed since it is provided by the video publisher as an inputs for this approach.
 
-Having the three set of entities already generated, the next step consist in ranking them in relevance according to a weighted sum of two different dimensions: their frequency in the transcripts and their former relevance scores coming from the NE extractors. We have defined the function $\text{filterEntities}(S)$ for selecting the $n$ entities inside the set of entities $S$ whose relative relevance
+After generating the three sets of entities, the next step consist in ranking them in relevance according to a weighted sum of two different dimensions: their frequency in the transcripts and their former relevance scores coming from the named entity extractors. We have defined the function $\text{filterEntities}(S)$ for selecting the $n$ entities inside the set of entities $S$ whose relative relevance
 
 \begin{equation}
 R_{rel}\left ( e_{i}, S \right ) = R\left ( e_{i} \right ) / Avg \left ( R\left ( e_{i} \right )  \right )
@@ -165,9 +167,9 @@ This query generation process is depicted in the upper part of . For future rese
 
 \subsubsection{Document Retrieval}
 
-Once $\text{Query}_{Event}$ is built out of the original set of named entities it will be ready to be injected into a document search engine where additional descriptions about the news event can be found. In this situation, the kind of query generated in the previous step and the search engine chosen should be closely tied in order to maximize the quality of the obtained results. Of course the different behavior of different search engines make some alternatives more suitable than others for certain kinds of events. The way the resultant documents change along the different search engines for a particular kind of event is a research question that will not be studied in this paper.
+Once $\text{Query}_{Event}$ is built out of the original set of named entities it will be ready to be injected into a document search engine where additional descriptions about the news event can be found. In this situation, the kind of query generated in the previous step and the search engine chosen should be closely tied in order to maximize the quality of the obtained results. Of course the different behavior of search engines make some alternatives more suitable than others for certain kinds of events. The way the resulting documents change among the search engines for a particular kind of event is a research question that will not be studied in this paper.
 
-For the work presented in this paper we have resorted to Google Search REST API service\footnote{Available at http://ajax.googleapis.com/ajax/services/search/web?v=1.0}  by launching a query with the text \textit{textQuery}. Due to quota restrictions imposed by Google, the maximum number of retrieved document is set to 30. However and according to the evaluation performed in Section~\ref{sec:evaluation} this number is already enough for significantly extending the initial set of entities directly spotted by NERD. 
+For the work presented in this paper we have resorted to Google Search REST API service\footnote{\fontsize{8pt}{1em}\selectfont  \url{http://ajax.googleapis.com/ajax/services/search/web?v=1.0}}  by launching a query with the text \textit{textQuery}. Due to quota restrictions imposed by Google, the maximum number of retrieved document is set to 30. However and according to the evaluation performed in Section~\ref{sec:evaluation} this number is already enough for significantly extending the initial set of entities directly spotted by NERD. 
 
 In which concerns to the temporal dimension, we keep only the documents published inside the time period $t+t_{e}$. We increase the original event period in $t_{e}$ is because documents concerning a news event are not always published during the time the action is taking place but some hours or days after. The value of $t_{e}$ depends on many factors like the nature of the event itself (it is a quick appearance in the media, or a deep fact with more repercussion) or the kind of documents the search engine is indexing (from very deep and elaborated documents that need time to be published, to light post generated by users in just some minutes). Based on the simple assumption that that longer event will provoke longer buzzes, we approximated  $t_{e} = t$, meaning that we consider also document published duration of the event. 
 
@@ -175,7 +177,7 @@ In the middle part of Figure~\ref{fig:namedEntityExpansion} this process is show
 
 \subsubsection{Entity Clustering}
 
-In this phase the extra documents previously retrieved are now preprocessed and analyzed in order to extend and rerank the original set of relevant entities and consequently get more insights about the studied event. First, since most of the retrieved resources are Web pages, HTML tags and other annotations are removed, keeping only the main textual information. This plain text is then analyzed by the NERD framework in order to extract the named entities present in them.
+In this phase the extra documents previously retrieved are now preprocessed and analyzed in order to extend and re-rank the original set of relevant entities and consequently get more insights about the studied event. First, since most of the retrieved resources are Web pages, HTML tags and other annotations are removed, keeping only the main textual information. This plain text is then analyzed by the NERD framework in order to extract the named entities present in them.
 
 In order to calculate the frequency of a certain resource inside the entire corpora, we group the different appearances of the same instance and check their cardinality. This is not trivial since the same entity can appear under different text labels, contain typos in the field or have different disambiguation URL's pointing to the same resource. We therefore performed a centroid-based cluster operation over the instances of the entities. We considered the centroid of a cluster as the entity with the most frequent disambiguation URL that have also the most repeated labels. As distance metric for comparing pairs of entities we applied strict string similarity over the URL's, and in case of mismatch, Jaro-Winkler string distance~\cite{Winkler06overviewof} over the labels. The output of this phase is a list of clusters containing different instances of the same entity.
 
@@ -202,14 +204,14 @@ Entities with a higher $relScore_{i}$ in the final classification are more repre
 \end{itemize}
 
 
-\subsection{Refining Event Context via DBPedia Knowledge}
+\subsection{Refining Event Context via DBpedia Knowledge}
 
 Once the set of context relevant entities has been expanded, we will use knowledge of structured sources (e.g. DBpedia) for reinforcing the important entities and finding relevant predicates between them. 
 
 \subsubsection{Generating DBpedia paths}
 \label{sec:introduction}
 
-Before we filter the relations between resources, the candidate resources to be included in relations are being pre-ranked. They are pre-ranked according to ``popularity'' and ``rarity'' essential components in the original PageRank algorithm \cite{page1999pagerank} and is used to sort candidate related nodes in the EiCE. The implementation of the EiCE takes the relations in to account by making use of the Jaccard coefficient to measure the dissimilarity and assign random walks based weight able to highly rank more rare resources, and guaranteeing that paths between resources prefer specific relations and not general ones \cite{moore2012novel}.
+Before we filter the relations between resources to reinforce important entities, the candidate resources to be included in relations are being pre-ranked. They are pre-ranked according to ``popularity'' and ``rarity'' essential components in the original PageRank algorithm \cite{page1999pagerank} and is used to sort candidate related nodes in the EiCE. The implementation of the EiCE takes the relations in to account by making use of the Jaccard coefficient to measure the dissimilarity and assign random walks based weight able to highly rank more rare resources, and guaranteeing that paths between resources prefer specific relations and not general ones \cite{moore2012novel}.
 
 \begin{figure}[h!]
 \centering
@@ -218,16 +220,18 @@ Before we filter the relations between resources, the candidate resources to be 
 \label{fig:patternmatching}
 \end{figure}
 
-We pass on the main start resource, a target and via points. Figure~\ref{fig:patternmatching} shows the iterative process for generating DBpedia paths. An initial state is computed in step \ref{fig:patternmatching}a. There are low weights and high weights
+We pass on the main start resource, the target and via points. Figure~\ref{fig:patternmatching} shows the iterative process for generating the DBpedia paths. An initial state is computed in step \ref{fig:patternmatching}a. There are low weights and high weights
 %, for the example 1 and 2 respectively
-. Based on the weights of the links te path through the vias is optimized, so a path with the lowest total weight will be selected first, until the vias are added to the exclude list. The path from start to end is forced through the given via points (\ref{fig:patternmatching}b). This leads to additional visited resource as via points (\ref{fig:patternmatching}c). They occur because to resolve each path, the route is being computed starting in the start resource, target and the via points. The resources where they converge to each other are considered as the new via points. These via points are included in the paths and therefore marked as visited. This is to make sure that in the next iteration paths will go around the visited via (\ref{fig:patternmatching}d). The next paths are being computed over and over (\ref{fig:patternmatching}e) until a threshold number of paths is found and the context is large enough or when it takes to long to compute the next path (out of range). The final set of optimized paths used to for the context expansion.
+. Based on the weights of the links each path through the vias is optimized, so a path with the lowest total weight will be selected first, until the vias are added to the exclude list. The path from start to end is forced through the given via points (\ref{fig:patternmatching}b). This leads to additional visited resource as via points (\ref{fig:patternmatching}c). They occur because to resolve each path, the route is being computed starting in the start resource, target and the via points. The resources where they converge to each other are considered as the new via points. These via points are included in the paths and therefore marked as visited. This is to make sure that in the next iteration paths will go around the visited via (\ref{fig:patternmatching}d). The next paths are being computed over and over (\ref{fig:patternmatching}e) until a threshold number of paths is found and the context is large enough or when it takes to long to compute the next path (out of range). The final set of optimized paths used to for the context expansion.
 
 \subsubsection{Analyzing Context Relevant Paths}
 
 In this step the DPpedia path finding technique implemented in ~\ref{sec:evaluation} will be applied over the set of entities obtained via entity expansion. However, this list is too big and broad. Before, we need to establish a division between the main entities (\textit{MainEntities}, entities with relative score higher than the average), and the additional entities (\textit{additionalEntities}, the rest of entities in $E_{Expansion}\left (subtitles, timePeriod \right )$). 
 
 %in \url{demo.everythingisconnected.be/relations?uris=} 
-Afterwards, we calculate paths between all the possible pairs inside the set\textit{MainEntities} following the REST methods exposed at \url{demo.everythingisconnected.be/relations?uris=}. Once all the possible paths have been retrieved, we perform various analysis for detecting which are the most frequent classes and predicates:
+Afterwards, we calculate paths between all the possible pairs inside the set\textit{MainEntities}.
+%following the REST methods exposed at \footnote{\url{demo.everythingisconnected.be/relations?uris=}}.
+Once all the possible paths have been retrieved, we perform various analysis for detecting which are the most frequent classes and predicates:
 \begin{itemize}
   \item  We detect the most frequent nodes ($F_{nodes} = f_{max}(n_{i})$ in $Paths (mainEntities)$).
   \item  We detect the most frequent predicates ($F_{prop} = f_{max}(p_{i})$ in $Paths (mainEntities)$). The edges (DBpedia properties) will determine which are the most relevant properties inside the context of this news item.
@@ -254,7 +258,8 @@ Use the frequency measures obtained previously in order to rerank entities. Get 
   \item  Most frequent via nodes will include new entities inside $E_{Expansion}$.
   \item  Final  $E_{Expansion}$.
 
-The final output of the approach is the set of context entities rerank according to DBPedia insights, and the final matrix of Adjacency:
+The final output of the approach is a set of context entities re-ranked according to the DBpedia insights, and the final adjacency matrix:
+
 \begin{equation}
 \begin{split}
 \{ Entities_{Extension + DBpedia}, M_{i,j} \} \\
@@ -266,7 +271,7 @@ The final output of the approach is the set of context entities rerank according
 
 \section{Use Case: Snowden Assylum}
 
-We have applied the explained approach over the video \url{http://www.bbc.co.uk/news/world-europe-23339199} from the BBC News Europe site. The main  story in this media content is the request of  asylum made by Edward Snowden to the Russian government. In an airport in Moscow, he publicy express  his desire to obtain political help while he can find a safe way to reach the Latin American countries offering to harbor him. The time period for which this particular part of the event is relevant goes from 2013/07/06 to 2013/07/17.
+We have applied the explained approach over the video \url{http://www.bbc.co.uk/news/world-europe-23339199} from the BBC News Europe site. The main story in this media content is the request of  asylum made by Edward Snowden to the Russian government. In an airport in Moscow, he publicly express his desire to obtain political help while he can find a safe way to reach the Latin American countries offering to harbor him. The time period for which this particular part of the event is relevant goes from 2013-07-06 to 2013-07-17.
 
 \subsection {Named Entity Extraction}
 
@@ -291,7 +296,7 @@ Obama & 0.321901 & negative & Person & http://en.wikipedia.org/wiki/Barack\_Obam
 
 \subsection {Named Entity Expansion}
 
-In the second step, the original set of entities is expanded and the items are rerank according to the procedure explained in 
+In the second step, the original set of entities is expanded and the items are re-ranked according to the explained procedure.
 
 %\url{curl -X POST --data-binary @snowden.txt "http://localhost:8006/api/rankedentities?startdate=2013-07-16&enddate=2013-08-15&limit=50" --header "Content-Type:text/xml" -v >> snowden_textrazor_50_130716_130815.json2}
 
@@ -356,34 +361,37 @@ o   Involved organization. Not mentioned but related to speaker.
 
 Evaluating against traditional Named Entity Extraction: Precision \& Rec: there are 3 entities out of 7 spotted. 12 Entities in total
 \begin{itemize}
-  \item  The lawyer, behind the case, Anatoly Kucherena, is never mentioned in the 
+  \item  The lawyer, behind the case, Anatoly Kucherena, is never mentioned.
+  %TODO: in the ?
   \item  The name of the airport. (There are two airport in Moscow, we don't know which one it is)
 \end{itemize}
 
 Evaluating against \textit{MainEntities} in $E_{Expansion}$: Precision \& Rec: there are 6 entities out of 7 spotted. 15 Entities in total
 \begin{itemize}
   \item  Assylum, the main subject behind this news item, has been correctly detected
-  \item  Anatoly Kucherena is the lawyer involved in the defense of Edward Snowden, has been correctly detected even there is no disambiguation URL.
+  \item  Anatoly Kucherena is the lawyer involved in the defense of Edward Snowden, has been correctly detected, but without disambiguation URL.
   \item  The Name of the airport, Sheremetyevo, has been finally disambiguated. In the original transcript it was not specified in which of the two airports in Moscow Snowden was giving the press conference.
   \item  Other important entities like "human-rights" and "extradition" are now present, helping to complete the context of the new.
 \end{itemize}
 
-Evaluating against the final DBPedia $E_{Expansion + DBpedia}$: No differences for the  \textit{MainEntities} in which refers to Precision \& recall. However, there are improvements in which concerns:
+Evaluating against the final DBpedia $E_{Expansion + DBpedia}$: No differences for the \textit{MainEntities} in which refers to Precision \& recall. However, there are improvements in which concerns:
 
 \begin{itemize}
   \item  The ranking order inside  \textit{MainEntities} is now better. For example the entity "Sheremetyevo" is now scored higher, which is taking into account that it is the specific location where the action is taking place.
   \item  There are new entities that were not detected via entity expansion, like the prime Minister of Russia, Igor Shuvalov, that are also relevant inside the matter.
-  \item  The matrix of Adjacency opens room for many other context studies, like topic entity clustering that could help to give extra insight about the studied event.
+  \item  The adjacency matrix opens room for many other context studies, like topic entity clustering that could help to give extra insight about the studied event.
+\end{itemize}
 
 \section{Conclusions}
 We presented a new approach for context-aware annotating news events. Our approach is designed to harvest highly precise contexts starting from named entities recognized in a TV fragment about the news event. Firstly we extracted named entities out of the corresponding subtitles and expanded those by collecting related documents to the news event. The entities obtained from the first pass typical are insufficient. Secondly we applied a second pass named entity extraction on these documents. We then ranked all the entities obtained at that stage and filter out those least occurring or identified as unimportant. Finally we refined the remaining entities by reinforcing them and finding important predicates between them. Ultimately this leaded to a re-ranking of the entities belonging to this news event.
 
-Our preliminary results indicate that by exploring DBpedia paths in named entities occuring in news media.
+Our preliminary results indicate that we can expand the initial set of found entities with more relevant entities not detected by the named entity recognition. Reinforcing the entities by exploring DBpedia paths along the found named entities occurring in news media leads to a more accurate ranking of important entities but does not introduce any new important relevant entities that were initially missing as such. It did however bring up more related entities useful for additional information in the broader context of an event.
 
 \section{Future Work}
 %Explain how we are going to use predicates.
-
 %Mention refinements using TF/IDF weights.
+Interesting next steps would include looking at the predicates and checking if more important predicates (e.g. according to tf-idf weights) lead to other important relevant entities or if they could motivate the selection of entities.
+The adjacency matrix we introduced we will use for more in depth context studies to find out extra insight about the studied event. Finally we will extend the evaluation with other use cases to see if the detected trend concerning the entity expansion and reinforced ranking can be affirmed.
 
 %ACKNOWLEDGMENTS are optional
 \section{Acknowledgments}
