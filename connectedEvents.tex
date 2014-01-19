@@ -121,7 +121,7 @@ The set of entities obtained from a traditional named entity extraction operatio
 
 The named entity expansion operation relies on the idea of retrieving and analyzing extra documents in the Web where the same event or the same part of the event is also described. By increasing the size of the sample we increase the completeness of the context and the representativeness of the proposed set of entities. In other words, it is possible to reinforce relevant entities, and to find new ones potentially interesting inside the context of that particular news item. 
 
-The entire logic will be further described in the following subsections and mainly consist of (1) building an appropriate search query from the original set of entities, (2) retrieving extra documents about the same news event, and (3) analyzing them for providing a more complete and better ranked set of final entities, as illustrated in Figure~\ref{fig:namedEntityExpansion}.
+The entire logic will further be described in the following subsections and mainly consist of (1) building an appropriate search query from the original set of entities, (2) retrieving extra documents about the same news event, and (3) analyzing them for providing a more complete and better ranked set of final entities, as illustrated in Figure~\ref{fig:namedEntityExpansion}.
 
 \begin{figure}[h!]
 \centering
@@ -132,11 +132,12 @@ The entire logic will be further described in the following subsections and main
 
 \subsubsection{Query Generation}
 
-The \emph{Five W's} is a popular concept of information gathering in journalistic reporting. It captures the main aspects of a story or incident: who, when, what, where, and why~\cite{LiJia2007}. We try to represent the news item in terms of four of those five W's (who is involved in the event, where the event is taking place, what the event is about, and when has happened) in order to generate a query that retrieves documents having to with the same event.This is somewhat like what a normal user would tape in a Web search engine when looking for descriptive documents about the same news item.  
+The \emph{Five W's} is a popular concept of information gathering in journalistic reporting. It captures the main aspects of a story or incident: who, when, what, where, and why~\cite{LiJia2007}. We try to represent the news item in terms of four of those five W's (who is involved in the event, where the event is taking place, what the event is about, and when has happened) in order to generate a query that retrieves documents associated to the same event. This is like a normal user would type in a Web search engine when looking for descriptive documents about the same news event.
 
-Firstly the original entities are mapped to the NERD Core ontology, which considers 10 main classes: Thing, Amount, Animal, Event, Function, Organization, Location, Person, Product and Time. From this ten categories we generalize into three: the Who from \url{http://nerd.eurecom.fr/ontology#Person} and \url{http://nerd.eurecom.fr/ontology#Organization}, the Where from \url{http://nerd.eurecom.fr/ontology#Location}, and the What from the rest of NERD types after discarding \url{http://nerd.eurecom.fr/ontology#Time} and \url{http://nerd.eurecom.fr/ontology#Amount} instances. The When or so-called temporal dimension does not need to be computed since it is provided by the video publisher as an inputs for this approach.
+Firstly the original entities are mapped to the NERD Core ontology, which considers 10 main classes: Thing, Amount, Animal, Event, Function, Organization, Location, Person, Product and Time. From these ten categories we generalize three classes: the Who from \url{http://nerd.eurecom.fr/ontology#Person} and \url{http://nerd.eurecom.fr/ontology#Organization}, the Where from \url{http://nerd.eurecom.fr/ontology#Location}, and the What from the rest of NERD types after discarding \url{http://nerd.eurecom.fr/ontology#Time} and \url{http://nerd.eurecom.fr/ontology#Amount} \\ instances. The When or so-called temporal dimension does not need to be computed since it is provided by the video publisher as an inputs for this approach.
 
-After generating the three sets of entities, the next step consist in ranking them in relevance according to a weighted sum of two different dimensions: their frequency in the transcripts and their former relevance scores coming from the named entity extractors. We have defined the function $\text{filterEntities}(S)$ for selecting the $n$ entities inside the set of entities $S$ whose relative relevance
+After generating the three sets of entities, the next step consist in ranking them in relevance according to a weighted sum of two different dimensions: their frequency in the transcripts and their former relevance scores coming from the named entity extractors. We have defined the function \emph{filterEntities(S)}
+for selecting the $n$ entities inside the set of entities $S$ whose relative relevance
 
 \begin{equation}
 R_{rel}\left ( e_{i}, S \right ) = R\left ( e_{i} \right ) / Avg \left ( R\left ( e_{i} \right )  \right )
@@ -167,11 +168,11 @@ This query generation process is depicted in the upper part of . For future rese
 
 \subsubsection{Document Retrieval}
 
-Once $\text{Query}_{Event}$ is built out of the original set of named entities it will be ready to be injected into a document search engine where additional descriptions about the news event can be found. In this situation, the kind of query generated in the previous step and the search engine chosen should be closely tied in order to maximize the quality of the obtained results. Of course the different behavior of search engines make some alternatives more suitable than others for certain kinds of events. The way the resulting documents change among the search engines for a particular kind of event is a research question that will not be studied in this paper.
+Once $\text{Query}_{Event}$ is built out of the original set of named entities it will be ready to be injected into a document search engine where additional descriptions about the news event can be found. In this situation, the kind of query generated in the previous step and the search engine chosen should be closely tied in order to maximize the quality of the obtained results. Of course the different behavior of search engines make some alternatives more suitable than others for certain kinds of events. The way the resulting documents change in the search engines for a particular kind of event is a research question that will not be studied in this paper.
 
-For the work presented in this paper we have resorted to Google Search REST API service\footnote{\fontsize{8pt}{1em}\selectfont  \url{http://ajax.googleapis.com/ajax/services/search/web?v=1.0}}  by launching a query with the text \textit{textQuery}. Due to quota restrictions imposed by Google, the maximum number of retrieved document is set to 30. However and according to the evaluation performed in Section~\ref{sec:evaluation} this number is already enough for significantly extending the initial set of entities directly spotted by NERD. 
+In this paper we have resorted to Google Search REST API service\footnote{\fontsize{8pt}{1em}\selectfont  \url{http://ajax.googleapis.com/ajax/services/search/web?v=1.0}}  by launching a query with the text \textit{textQuery}. Due to quota restrictions imposed by Google, the maximum number of retrieved document is set to 30. However and according to the evaluation performed in Section~\ref{sec:evaluation}, this is enough for significantly extending the initial set of entities directly spotted by NERD. 
 
-In which concerns to the temporal dimension, we keep only the documents published inside the time period $t+t_{e}$. We increase the original event period in $t_{e}$ is because documents concerning a news event are not always published during the time the action is taking place but some hours or days after. The value of $t_{e}$ depends on many factors like the nature of the event itself (it is a quick appearance in the media, or a deep fact with more repercussion) or the kind of documents the search engine is indexing (from very deep and elaborated documents that need time to be published, to light post generated by users in just some minutes). Based on the simple assumption that that longer event will provoke longer buzzes, we approximated  $t_{e} = t$, meaning that we consider also document published duration of the event. 
+Concerning the temporal dimension, we only keep the documents published in the time period $t+t_{e}$. We increase the original event period in $t_{e}$ because documents concerning a news event are not always published during the time of the action is taking place but some hours or days after. The value of $t_{e}$ depends on many factors like the nature of the event itself (it is a quick appearance in the media, or a deep fact with more repercussion) or the kind of documents the search engine is indexing (from very deep and elaborated documents that need time to be published, to light post generated by users in just some minutes). Based on the simple assumption that that longer event will provoke longer buzzes, we approximated  $t_{e} = t$, meaning that we consider also document published duration of the event. 
 
 In the middle part of Figure~\ref{fig:namedEntityExpansion} this process is shown. The query is inputted in the search engine for obtaining other documents that elaborate on the the same event mentioned in the original video.Those documents (colored in black in the figure) will be also further processed for increasing the size of the collection and getting extra insights about the the studied news item.
 
@@ -271,13 +272,13 @@ The final output of the approach is a set of context entities re-ranked accordin
 
 \section{Use Case: Snowden Assylum}
 
-We have applied the explained approach over the video \url{http://www.bbc.co.uk/news/world-europe-23339199} from the BBC News Europe site. The main story in this media content is the request of  asylum made by Edward Snowden to the Russian government. In an airport in Moscow, he publicly express his desire to obtain political help while he can find a safe way to reach the Latin American countries offering to harbor him. The time period for which this particular part of the event is relevant goes from 2013-07-06 to 2013-07-17.
+We have applied the explained approach to the video \url{http://www.bbc.co.uk/news/world-europe-23339199} from the BBC News Europe site. The main story in this media content is the request of  asylum made by Edward Snowden to the Russian government. In an airport in Moscow, he publicly express his desire to obtain political help while he can find a safe way to reach the Latin American countries that offer to harbor him. The time period for which this particular part of the event is relevant goes from 2013-07-06 to 2013-07-17.
 
 \subsection {Named Entity Extraction}
 
 In a first step, Name Entity Extraction techniques are applied over the video transcript by using NERD. Below we show the different entities directly extracted with this procedure.
 
-\resizebox{8.5cm}{!} {
+\resizebox{8cm}{!} {
 \begin{tabular}{ c | c | c | c | c }
   \hline     
  Label & Relevance & Sentiment & Type & URI  \\ \hline  
@@ -300,7 +301,7 @@ In the second step, the original set of entities is expanded and the items are r
 
 %\url{curl -X POST --data-binary @snowden.txt "http://localhost:8006/api/rankedentities?startdate=2013-07-16&enddate=2013-08-15&limit=50" --header "Content-Type:text/xml" -v >> snowden_textrazor_50_130716_130815.json2}
 
-\resizebox{9cm}{!} {
+\resizebox{8cm}{!} {
 \begin{tabular}{ c | c | c | c | c | l }
   \hline     
   	Label & Relevance & $F_{video}$& $F_{Docu}$ & Type & URI \\ \hline                  
@@ -322,13 +323,11 @@ In the second step, the original set of entities is expanded and the items are r
 \end {tabular} 
   }
 
-\subsection {Named Entity Expansion}
-
 \section{Evaluation}
 \label{sec:evaluation}
 
-There result obtained by this approach will be evaluated against a set of entities provided by an expert. 
-We plan to extend this evaluation to a larger corpora and include a more exhaustive evaluation in following publications in the same line.
+The result obtained by this approach will be evaluated against a set of entities provided by an expert. 
+We plan to extend this evaluation to a larger corpora and include a more exhaustive evaluation in following publications.
 This is the list of entities provided by the expert, together with some insights about the concept and its relations with the main topic in the video:
 
 \begin{Verbatim}[fontsize=\tiny] 
@@ -367,6 +366,7 @@ Evaluating against traditional Named Entity Extraction: Precision \& Rec: there 
 \end{itemize}
 
 Evaluating against \textit{MainEntities} in $E_{Expansion}$: Precision \& Rec: there are 6 entities out of 7 spotted. 15 Entities in total
+
 \begin{itemize}
   \item  Assylum, the main subject behind this news item, has been correctly detected
   \item  Anatoly Kucherena is the lawyer involved in the defense of Edward Snowden, has been correctly detected, but without disambiguation URL.
@@ -383,9 +383,9 @@ Evaluating against the final DBpedia $E_{Expansion + DBpedia}$: No differences f
 \end{itemize}
 
 \section{Conclusions}
-We presented a new approach for context-aware annotating news events. Our approach is designed to harvest highly precise contexts starting from named entities recognized in a TV fragment about the news event. Firstly we extracted named entities out of the corresponding subtitles and expanded those by collecting related documents to the news event. The entities obtained from the first pass typical are insufficient. Secondly we applied a second pass named entity extraction on these documents. We then ranked all the entities obtained at that stage and filter out those least occurring or identified as unimportant. Finally we refined the remaining entities by reinforcing them and finding important predicates between them. Ultimately this leaded to a re-ranking of the entities belonging to this news event.
+We presented a new approach for context-aware annotating news events. Our approach is designed to harvest highly precise contexts starting from named entities recognized in a TV fragment about a news event. Firstly we extracted named entities from the corresponding subtitles and expanded these by collecting related documents to the news event. The entities obtained from the first pass are typical insufficient. Secondly we applied a second pass named entity extraction on these documents. We then ranked all the entities obtained and filter out those least occurring or identified as unimportant. Finally we refined the remaining entities by reinforcing them and finding important predicates between them. Ultimately this leaded to a re-ranking of the entities belonging to this news event.
 
-Our preliminary results indicate that we can expand the initial set of found entities with more relevant entities not detected by the named entity recognition. Reinforcing the entities by exploring DBpedia paths along the found named entities occurring in news media leads to a more accurate ranking of important entities but does not introduce any new important relevant entities that were initially missing as such. It did however bring up more related entities useful for additional information in the broader context of an event.
+Our preliminary results indicate that we can expand the initial set of recognized entities with more relevant entities not detected by the named entity recognition. Reinforcing the entities by exploring DBpedia paths along the found named entities occurring in news media leads to a more accurate ranking of important entities but does not introduce any new important relevant entities that were initially missing as such. It did however bring forward more related entities useful for additional information in the broader context of an event.
 
 \section{Future Work}
 %Explain how we are going to use predicates.
