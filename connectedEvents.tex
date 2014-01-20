@@ -279,7 +279,8 @@ We have applied the explained approach to the video \url{http://www.bbc.co.uk/ne
 
 In a first step, Name Entity Extraction techniques are applied over the video transcript by using NERD. Below we show the different entities directly extracted with this procedure.
 
-\resizebox{8cm}{!} {
+\begin{table}[tbp]
+  \resizebox{8.5cm}{!} {
 \begin{tabular}{ c | c | c | c | c }
   \hline     
  Label & Relevance & Sentiment & Type & URI  \\ \hline  
@@ -295,6 +296,8 @@ Obama & 0.321901 & negative & Person & http://en.wikipedia.org/wiki/Barack\_Obam
   \hline  
 \end {tabular} 
   }
+\caption{Result from Named Entity Extraction in NERD}
+\end{table}
 
 \subsection {Named Entity Expansion}
 
@@ -302,7 +305,8 @@ In the second step, the original set of entities is expanded and the items are r
 
 %\url{curl -X POST --data-binary @snowden.txt "http://localhost:8006/api/rankedentities?startdate=2013-07-16&enddate=2013-08-15&limit=50" --header "Content-Type:text/xml" -v >> snowden_textrazor_50_130716_130815.json2}
 
-\resizebox{8cm}{!} {
+\begin{table}[tbp]
+  \resizebox{8.5cm}{!} {
 \begin{tabular}{ c | c | c | c | c | l }
   \hline     
   	Label & Relevance & $F_{video}$& $F_{Docu}$ & Type & URI \\ \hline                  
@@ -319,10 +323,52 @@ In the second step, the original set of entities is expanded and the items are r
 	Anatoly Kucherena & 0.0694218 & 0 & 42 & Person & -- \\
 	Kremlin & 0.0662006 & 1 & 11 & Location & http://en.wikipedia.org/wiki/Kremlin \\
 	Sheremetyevo & 0.0396691 & 0 & 24 & Location & http://en.wikipedia.org/wiki/Sheremetyevo\\
+  \hline  
+\end {tabular} 
+  }
+\caption{Top entities obtained via Named Entity Expansion}
+\end{table}
+
+\subsection{Reranking entities via Filtering}
+
+%Working on this part:
+The entities reranked according to DPPedia paths: 
+
+\begin{table}[tbp]
+  \resizebox{8.5cm}{!} {
+\begin{tabular}{ c | c | c | c | l }
+  \hline     
+  	Label & $F_{video}$& $F_{Docu}$ & Type & URI \\ \hline                  
+  	Russia & 7 & 197 & Location & http://en.wikipedia.org/wiki/Russia \\ 
+  	Edward\_Snowden & 2 & 242 & Person & http://en.wikipedia.org/wiki/Edward\_Snowden \\
+  	Asylum  & 4 & 84 & Thing & http://en.wikipedia.org/wiki/Right\_of\_asylum\\
+	CIA & 1 & 45 & Organization & http://en.wikipedia.org/wiki/CIA \\
+  	Vladimir Putin  & 1 & 99 & Person & http://en.wikipedia.org/wiki/Vladimir\_Putin \\
+	Barack Obama  & 1 & 89 & Person & http://en.wikipedia.org/wiki/Barack\_Obama \\
+	United States  & 5 & 50 & Location & http://en.wikipedia.org/wiki/United\_States \\
+	MOSCOW & 1 & 85 & Location & http://en.wikipedia.org/wiki/Moscow \\
+	Sheremetyevo  & 0 & 24 & Location & http://en.wikipedia.org/wiki/Sheremetyevo\\
+	extradition & 2 & 14 & Thing & http://en.wikipedia.org/wiki/Extradition \\
+	Kremlin & 1 & 11 & Location & http://en.wikipedia.org/wiki/Kremlin \\
+	human-rights  & 2 & 10 & Organization & http://en.wikipedia.org/wiki/Human\_rights \\
+	Anatoly Kucherena  & 0 & 42 & Person & -- \\
 
   \hline  
 \end {tabular} 
   }
+\caption{Top entities reranked via DBPedia Knowledge}
+\end{table}
+
+This is the adjacency matrix representing the grade of connection between the different pairs in $mainEntities$.
+$
+ M_{i,j}  =
+ \begin{pmatrix}
+  e_{1,1} & a_{1,2} & \cdots & e_{1,14} \\
+  e_{2,1} & e_{2,2} & \cdots & e_{2,14} \\
+  \vdots  & \vdots  & \ddots & \vdots  \\
+  e_{m,1} & e_{m,2} & \cdots & e_{14,14}
+ \end{pmatrix}
+ $
 
 \section{Evaluation}
 \label{sec:evaluation}
@@ -384,10 +430,18 @@ Evaluating against the final DBpedia $E_{Expansion + DBpedia}$: No differences f
 \end{itemize}
 
 \section{Conclusions}
-We presented a new approach for context-aware annotating news events. Our approach is designed to harvest highly precise contexts starting from named entities recognized in a TV fragment about a news event. Firstly we extracted named entities from the corresponding subtitles and expanded these by collecting related documents to the news event. The entities obtained from the first pass are typical insufficient. Secondly we applied a second pass named entity extraction on these documents. We then ranked all the entities obtained and filter out those least occurring or identified as unimportant. Finally we refined the remaining entities by reinforcing them and finding important predicates between them. Ultimately this leaded to a re-ranking of the entities belonging to this news event.
+We presented a new approach for context-aware annotating news events. Our approach is designed to harvest highly precise contexts starting from named entities recognized in a TV fragment about a news event. 
+%I think two sentences below can be merged together, common idea of: Named Entity Extraction + Expansion via extraction of additional documents based on the 4W's dimensions.
+Firstly we extracted named entities from the corresponding subtitles and expanded these by collecting related documents to the news event. 
+%This should be mentioning before talking about the expansion, maybe.
+The entities obtained from this first pass are typical insufficient. 
+%Here you mean named entity expansion?
+Secondly we applied a second pass named entity extraction on these documents. 
+We then ranked all the entities obtained and filter out those least occurring or identified as less important. 
+%First Mention DBPedia here instead in the next paragraph? 
+Finally we refined the remaining entities by reinforcing them and finding important predicates between them. Ultimately this leaded to a re-ranking of the entities belonging to this news event. %The idea of connection or adjacency probably here too.
 
-Our preliminary results indicate that we can expand the initial set of recognized entities with more relevant entities not detected by the named entity recognition. Reinforcing the entities by exploring DBpedia paths along the found named entities occurring in news media leads to a more accurate ranking of important entities but does not introduce any new important relevant entities that were initially missing as such. It did however bring forward more related entities useful for additional information on the broader context of an event.
-
+Our preliminary results indicate that we can expand the initial set of recognized entities with more relevant entities not detected by the named entity recognition. Reinforcing the entities by exploring DBpedia paths along the found named entities occurring in news media leads to a more accurate ranking of important entities but does not introduce any new important relevant entities that were initially missing as such. It did however bring forward more related entities useful for additional information in the broader context of an event.
 \section{Future Work}
 %Explain how we are going to use predicates.
 %Mention refinements using TF/IDF weights.
