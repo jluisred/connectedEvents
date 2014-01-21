@@ -1,19 +1,18 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   Describing and Contextualizing Events in TV News Show   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % THIS IS SIGPROC-SP.TEX - VERSION 3.1
 % WORKS WITH V3.2SP OF ACM_PROC_ARTICLE-SP.CLS
 % APRIL 2009
-
 \documentclass{sig-alternate}
 
 \newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
-\def\sharedaffiliation{\end{tabular}\newline\begin{tabular}{c}}
-
-\def\wu{\superscript{1}}
-\def\wg{\superscript{2}}
-
-
 
 \usepackage{url}
+\usepackage{textcomp}
 \usepackage{color}
+\usepackage{listings}
 \usepackage{multirow}
 \usepackage{mathtools}
 \usepackage{graphicx}
@@ -21,55 +20,79 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 
+% listing styles
+\lstset{numbers=left, numberstyle=\tiny,basicstyle=\ttfamily\scriptsize, tabsize=2, keywordstyle=\underbar, stringstyle=\small, backgroundcolor=\color[gray]{0.94}, framexleftmargin=2pt}
+\lstdefinestyle{rdfa}{numberblanklines=true, morekeywords={}}
+
+% Turtle box
+\definecolor{olivegreen}{rgb}{0.2,0.8,0.5}
+\definecolor{grey}{rgb}{0.5,0.5,0.5}
+\lstdefinelanguage{ttl}{
+sensitive=true,
+morecomment=[l][\color{grey}]{@},
+morecomment=[l][\color{olivegreen}]{\#},
+morestring=[b][\color{blue}]\",
+keywordstyle=\color{cyan},
+morekeywords={version,owl,rdf,rdfs,xml,xsd,dbpedia,dbo,str,sso,scms,fr,ld}
+}
+\lstset{
+        basicstyle=\ttfamily\scriptsize,
+        upquote=true,
+        showspaces=false,
+        showstringspaces=false,
+        showtabs=false,
+        tabsize=2,
+        frame=none,
+        breaklines,
+        numbers=none,
+        framexleftmargin=2mm,
+        xleftmargin=2mm,
+}
+
+\newcommand{\hilight}[1]{\colorbox{yellow}{#1}}
+\newcommand{\todo}[1]{\colorbox{red}{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%  Beginning of document  %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{document}
 
-%\title{Context-aware Connections between News Events}
-\title{Describing and Contextualizing News Events in TV}
-%\subtitle{Exploring DBpedia paths between named entities belonging to different event contexts}
+\title{Describing and Contextualizing Events in TV News Show}
 
-\numberofauthors{5} 
-
+\numberofauthors{5}
 \author{
-\alignauthor
-Laurens De Vocht\wu
-       \affaddr{\email{\texttt{laurens.devocht@ugent.be}}}
+\alignauthor Jos\'e Luis Redondo Garc\'ia\\
+	\affaddr{EURECOM}\\
+	\affaddr{Biot, France}\\
+	\email{redondo@eurecom.fr}
+\alignauthor Laurens De Vocht\\
+    \affaddr{Ghent University - iMinds}\\
+    \affaddr{Ghent, Belgium}\\
+    \email{laurens.devocht@ugent.be}
+\alignauthor Rapha\"el Troncy\\
+	\affaddr{EURECOM}\\
+	\affaddr{Biot, France}\\
+	\email{raphael.troncy@eurecom.fr}	\\
 \and
-\alignauthor
-Erik Mannens\wu
-       \affaddr{\email{\texttt{erik.mannens@ugent.be}}}
-\and
-\alignauthor
-Rik Van de Walle\wu
-       \affaddr{\email{\texttt{rik.vandewalle@ugent.be}}}
-% 3rd. author
-\and
-\alignauthor 
-Rapha\"el Troncy\wg
-	\affaddr{\email{\texttt{raphael.troncy@eurecom.fr}}}
-\and
-\alignauthor 
-Jos\'e Luis Redondo Garc\'ia\wg
-	\affaddr{\email{\texttt{redondo@eurecom.fr}}}
-\sharedaffiliation
-\begin{tabular}{ccc}
-    \affaddr{{\wu}Ghent University - iMinds - Multimedia Lab{\ }} & & 
-    \affaddr{{\wg}EURECOM{\ }} \\
-    %\affaddr{Gaston Crommenlaan 8/201} & \affaddr{} \\
-    \affaddr{Ghent, Belgium} & &
-    \affaddr{Biot, France} \\
-\end{tabular}
+\alignauthor Erik Mannens\\
+    \affaddr{Ghent University - iMinds}\\
+    \affaddr{Ghent, Belgium}\\
+    \email{erik.mannens@ugent.be}
+\alignauthor Rik Van de Walle\\
+    \affaddr{Ghent University - iMinds}\\
+    \affaddr{Ghent, Belgium}\\
+    \email{rik.vandewalle@ugent.be}
 }
-%USED SHARED AFFILIATIONS TO SAVE SPACE
 
 \maketitle
-\begin{abstract}
-There are many approaches to tackle the challenge of finding relevant entities in a news event context, but these approaches lack: 
-(i) mentioning sufficient amount of possible entities;
-(ii) ranking or motivating the final selected entities;
-(iii) exposing relations among recognized entities.
-In this paper, we combine the power of non-structured resources with structured resources of DBpedia. Many applications and users leverage these entities to construct and link to other media.
-We demonstrate that we can harvest a highly precise context starting from named entities recognized in the TV fragment by explaining a use case about LinkedTV fragments showing news events.
 
+%%%%%%%%%%%%%%%%%%
+%%%  Abstract  %%%
+%%%%%%%%%%%%%%%%%%
+
+\begin{abstract}
+Describing multimedia content in general and TV programs in particular is hard problem. Relying on subtitles to extract named entities that can be used to index fragments of a program is a common approach. However, this approach is limited to what is being said in a program and written in a subtitle lacking therefore a broader context. Furthermore, this type of index is restricted to a flat list of entities. In this paper, we combine the power of non-structured documents with structured data coming from DBpedia to generate a much richer, context aware metadata of a TV program. We demonstrate that we can harvest a highly precise context starting from named entities recognized in a TV fragment and we evaluate our approach on a TV news show.
 \end{abstract}
 
 % A category with the (minimum) three required fields
@@ -86,13 +109,13 @@ We demonstrate that we can harvest a highly precise context starting from named 
 %Online media keeps increasing in scale and ubiquity, but it is currently still unstructured and badly connected to media of other formats or from other sources.
 %[State of the Art: Named Entity Extraction, Expansion]
 %[About LinkedTV?]
-LinkedTV is an integrated and practical approach towards experiencing Networked Media in the future Internet. This project aims to make multimedia content and Web information seamlessly interconnected. Technologically speaking, this vision requires systems to be able to represent multimedia information as is done in the Web of Data: described at different granularities and interlinked with other resources. 
-%Task like video 
+LinkedTV is an integrated and practical approach towards experiencing Networked Media in the future Internet. This project aims to make multimedia content and Web information seamlessly interconnected. Technologically speaking, this vision requires systems to be able to represent multimedia information as is done in the Web of Data: described at different granularities and interlinked with other resources.
+%Task like video
 The amount of videos shared on the Web is constantly increasing. From a Semantic Web point of view those video segments need to be annotated with structured information before being linked to other video segments. New possibilities of innovative video services based on the semantic descriptions of the video content and media fragments appear based on this idea. One of the main use cases in LinkedTV is analyzing News videos where various events and their corresponding related topics are depicted. This problem is traditionally addressed by applying audiovisual techniques, like in \cite{ballan2011event}.
 
-Extracting semantic and structured content from a video is complex. Named Entity Recognition (NER) techniques were developed as an essential component of the Information Extraction domain. Initially, these techniques focused on: identifying atomic information units in texts, named entities; classifying entities into predefined categories (also called context types) by classification techniques and linking to real world objects using web identifiers (Named Entity Disambiguation). Various tools provide such computations, like AlchemyAPI\footnote{\fontsize{8pt}{1em}\selectfont \url{http://www.alchemyapi.com/}} or DBpedia Spotlight\footnote{\fontsize{8pt}{1em}\selectfont \url{http://spotlight.dbpedia.org/}}. It is possible to align the insights of a video with the time when they appear by applying these techniques over video subtitles (or timed text). 
+Extracting semantic and structured content from a video is complex. Named Entity Recognition (NER) techniques were developed as an essential component of the Information Extraction domain. Initially, these techniques focused on: identifying atomic information units in texts, named entities; classifying entities into predefined categories (also called context types) by classification techniques and linking to real world objects using web identifiers (Named Entity Disambiguation). Various tools provide such computations, like AlchemyAPI\footnote{\fontsize{8pt}{1em}\selectfont \url{http://www.alchemyapi.com/}} or DBpedia Spotlight\footnote{\fontsize{8pt}{1em}\selectfont \url{http://spotlight.dbpedia.org/}}. It is possible to align the insights of a video with the time when they appear by applying these techniques over video subtitles (or timed text).
 
-Approaches like Katsiouli et al.~\cite{katsiouli2007} demonstrated that applying named entity recognition techniques in combination wtih domain ontologies on video subtitles achieves decent results in tasks like video classification. 
+Approaches like Katsiouli et al.~\cite{katsiouli2007} demonstrated that applying named entity recognition techniques in combination wtih domain ontologies on video subtitles achieves decent results in tasks like video classification.
 
 For the Linked Data community, it is a first step to increase the volume of interconnected data. However from an exploitation point of view those promising techniques still introduce some issues. On the one hand, subtitles are not always complete enough to be the only textual source to rely on. The context around a particular event can be broader than what is transcribed from the video. On the other hand, a plain list of name entities can fail to characterize what is described in the multimedia content: sometimes we also need to know how important they seem to be regarding the event and how they related to each other. In this paper we present an approach for deeper annotating a news event video by alleviating the lack of textual resources that limits the application of semantic analysis and relying on structured resources (DBpedia).
 
@@ -103,13 +126,13 @@ Applying these algorithms to Linked Data facilitates: resolving complex queries 
 
 \section{Approach}
 
-To reconstruct the semantic context associated with one particular news video, we highlight the main concepts and entities involved and explain how they are related to each other. The complete processing workflow takes as input the textual transcript of a multimedia resource depicting the event, as well as the start and end date for which that particular event has been considered relevant. If the event is still ongoing we consider the current day as the end of the temporal interval. 
+To reconstruct the semantic context associated with one particular news video, we highlight the main concepts and entities involved and explain how they are related to each other. The complete processing workflow takes as input the textual transcript of a multimedia resource depicting the event, as well as the start and end date for which that particular event has been considered relevant. If the event is still ongoing we consider the current day as the end of the temporal interval.
 Corresponding video providers and platforms make sure this data is available in advance.
 %TODO: Do you mean the textual transcript before processing?
 
-We assume additionally that the analyzed event has a minimal presence and coverage on the Web to ensure that the subsequent data mining techniques can collect sufficient data to reconstruct the event's context. The output of the algorithm is a pair $Context_{Event1}=\left [  \varepsilon , \rho \right ]$  where $\varepsilon$ is a list named entities together with a numeric relevance score ($ \varepsilon =\left \{ E\times \mathbb{R} \right \}$,  being $E$ named entities classified using the NERD ontology\footnote{\fontsize{8pt}{1em}\selectfont \url{http://nerd.eurecom.fr/ontology/nerd-v0.5.n3}}) and $\rho$ is a set of predicates $\left [ e_{1},e_{2}, p \right ]$, relating the aforementioned entities ($e_{1}\in E \vee  e_{2}\in E$). 
+We assume additionally that the analyzed event has a minimal presence and coverage on the Web to ensure that the subsequent data mining techniques can collect sufficient data to reconstruct the event's context. The output of the algorithm is a pair $Context_{Event1}=\left [  \varepsilon , \rho \right ]$  where $\varepsilon$ is a list named entities together with a numeric relevance score ($ \varepsilon =\left \{ E\times \mathbb{R} \right \}$,  being $E$ named entities classified using the NERD ontology\footnote{\fontsize{8pt}{1em}\selectfont \url{http://nerd.eurecom.fr/ontology/nerd-v0.5.n3}}) and $\rho$ is a set of predicates $\left [ e_{1},e_{2}, p \right ]$, relating the aforementioned entities ($e_{1}\in E \vee  e_{2}\in E$).
 
-Our hypothesis states that this knowledge representation of the events provides a sufficient source of information for satisfying the viewer's information needs and supporting complex multimedia operations such as search and hyperlinking. 
+Our hypothesis states that this knowledge representation of the events provides a sufficient source of information for satisfying the viewer's information needs and supporting complex multimedia operations such as search and hyperlinking.
 
 
 \subsection{Named Entity Extraction}
@@ -120,7 +143,7 @@ For each news item we perform named-entity recognition over the corresponding su
 
 The set of entities obtained from a traditional named entity extraction operation is normally insufficient and incomplete for expressing the context of a News event. For example, many entities spotted over a particular document are not finally disambiguated because the textual clues around the term do not allow the name entity extractor to calculate it. In other cases some entities are not even mentioned in the transcript but still are relevant for understanding the story behind the depicted entities. This is an inherent problem in information retrieval tasks: a single description about the same resource does not necessarily summarize the whole picture behind it.
 
-The named entity expansion operation relies on the idea of retrieving and analyzing extra documents in the Web where the same event or the same part of the event is also described. By increasing the size of the sample we increase the completeness of the context and the representativeness of the proposed set of entities. In other words, it is possible to reinforce relevant entities, and to find new ones potentially interesting inside the context of that particular news item. 
+The named entity expansion operation relies on the idea of retrieving and analyzing extra documents in the Web where the same event or the same part of the event is also described. By increasing the size of the sample we increase the completeness of the context and the representativeness of the proposed set of entities. In other words, it is possible to reinforce relevant entities, and to find new ones potentially interesting inside the context of that particular news item.
 
 The entire logic will further be described in the following subsections and mainly consist of (1) building an appropriate search query from the original set of entities, (2) retrieving extra documents about the same news event, and (3) analyzing them for providing a more complete and better ranked set of final entities, as illustrated in Figure~\ref{fig:namedEntityExpansion}.
 
@@ -144,7 +167,7 @@ for selecting the $n$ entities inside the set of entities $S$ whose relative rel
 R_{rel}\left ( e_{i}, S \right ) = R\left ( e_{i} \right ) / Avg \left ( R\left ( e_{i} \right )  \right )
 \end{equation}
 
-falls into the upper quarter of the interval 
+falls into the upper quarter of the interval
 
 \begin{equation}
 \left [ max\left ( R_{rel}\left ( e_{i}, S \right )  \right ) -min\left (  R_{rel}\left ( e_{i}, S \right ) \right ) \right ]
@@ -164,16 +187,16 @@ where \textit{textQuery} is the result of concatenating the labels of the most r
 \end{split}
 \end{equation}
 
-and $t$ the time period dimension. 
-This query generation process is depicted in the upper part of . For future research in the query construction technique we plan to directly use the Web resources themselves and not only their labels. 
+and $t$ the time period dimension.
+This query generation process is depicted in the upper part of . For future research in the query construction technique we plan to directly use the Web resources themselves and not only their labels.
 
 \subsubsection{Document Retrieval}
 
 Once $\text{Query}_{Event}$ is built out of the original set of named entities it will be ready to be injected into a document search engine where additional descriptions about the news event can be found. In this situation, the kind of query generated in the previous step and the search engine chosen should be closely tied in order to maximize the quality of the obtained results. Of course the different behavior of search engines make some alternatives more suitable than others for certain kinds of events. The way the resulting documents change in the search engines for a particular kind of event is a research question that will not be studied in this paper.
 
-In this paper we have resorted to Google Search REST API service\footnote{\fontsize{8pt}{1em}\selectfont  \url{http://ajax.googleapis.com/ajax/services/search/web?v=1.0}}  by launching a query with the text \textit{textQuery}. Due to quota restrictions imposed by Google, the maximum number of retrieved document is set to 30. However and according to the evaluation performed in Section~\ref{sec:evaluation}, this is enough for significantly extending the initial set of entities directly spotted by NERD. 
+In this paper we have resorted to Google Search REST API service\footnote{\fontsize{8pt}{1em}\selectfont  \url{http://ajax.googleapis.com/ajax/services/search/web?v=1.0}}  by launching a query with the text \textit{textQuery}. Due to quota restrictions imposed by Google, the maximum number of retrieved document is set to 30. However and according to the evaluation performed in Section~\ref{sec:evaluation}, this is enough for significantly extending the initial set of entities directly spotted by NERD.
 
-Concerning the temporal dimension, we only keep the documents published in the time period $t+t_{e}$. We increase the original event period in $t_{e}$ because documents concerning a news event are not always published during the time of the action is taking place but some hours or days after. The value of $t_{e}$ depends on many factors like the nature of the event itself (it is a quick appearance in the media, or a deep fact with more repercussion) or the kind of documents the search engine is indexing (from very deep and elaborated documents that need time to be published, to light post generated by users in just some minutes). Based on the simple assumption that that longer event will provoke longer buzzes, we approximated  $t_{e} = t$, meaning that we consider also document published duration of the event. 
+Concerning the temporal dimension, we only keep the documents published in the time period $t+t_{e}$. We increase the original event period in $t_{e}$ because documents concerning a news event are not always published during the time of the action is taking place but some hours or days after. The value of $t_{e}$ depends on many factors like the nature of the event itself (it is a quick appearance in the media, or a deep fact with more repercussion) or the kind of documents the search engine is indexing (from very deep and elaborated documents that need time to be published, to light post generated by users in just some minutes). Based on the simple assumption that that longer event will provoke longer buzzes, we approximated  $t_{e} = t$, meaning that we consider also document published duration of the event.
 
 The middle part of Figure~\ref{fig:namedEntityExpansion} shows this process. The query is inputted in the search engine to obtain other documents that elaborate on the same event mentioned in the original video.Those documents (colored in black in the figure) will be further processed to increase the size of the collection and to get extra insights about into studied news item.
 
@@ -202,14 +225,14 @@ Entities with a higher $relScore_{i}$ in the final classification are more repre
 \begin{itemize}
   \item The entities will be better ranked since the size of the sample is bigger. Entities appearing repeatedly in the extra documents will be promoted while those barely appearing in two or three documents will be at the end of the list.
   %TODO: documents? will have less relevance.
-  \item Entities that originally have not been disambiguated can now have their corresponding URL if any of the similar instances appearing in the additional documents provide a link to a Web resource. The same occurs with labels containing errors or incomplete labels. 
-  \item  Finally, some entities important in the context of the news item but not mentioned in the original transcripts, are now included in the list of relevant items since they have often been spotted over the collected documents. 
+  \item Entities that originally have not been disambiguated can now have their corresponding URL if any of the similar instances appearing in the additional documents provide a link to a Web resource. The same occurs with labels containing errors or incomplete labels.
+  \item  Finally, some entities important in the context of the news item but not mentioned in the original transcripts, are now included in the list of relevant items since they have often been spotted over the collected documents.
 \end{itemize}
 
 
 \subsection{Refining Event Context via DBpedia Knowledge}
 
-Once the set of context relevant entities has been expanded, we will use knowledge of structured sources (e.g. DBpedia) to reinforce the important entities and finding relevant predicates between them. 
+Once the set of context relevant entities has been expanded, we will use knowledge of structured sources (e.g. DBpedia) to reinforce the important entities and finding relevant predicates between them.
 
 \subsubsection{Generating DBpedia paths}
 \label{sec:introduction}
@@ -229,9 +252,9 @@ We pass on the main start resource, the target and via points. Figure~\ref{fig:p
 
 \subsubsection{Analyzing Context Relevant Paths}
 
-In this step the DPpedia path finding technique implemented in ~\ref{sec:evaluation} will be applied over the set of entities obtained via entity expansion. However, this list is too big and broad. Before, we need to establish a division between the main entities (\textit{MainEntities}, entities with relative score higher than the average), and the additional entities (\textit{additionalEntities}, the rest of entities in $E_{Expansion}\left (subtitles, timePeriod \right )$). 
+In this step the DPpedia path finding technique implemented in ~\ref{sec:evaluation} will be applied over the set of entities obtained via entity expansion. However, this list is too big and broad. Before, we need to establish a division between the main entities (\textit{MainEntities}, entities with relative score higher than the average), and the additional entities (\textit{additionalEntities}, the rest of entities in $E_{Expansion}\left (subtitles, timePeriod \right )$).
 
-%in \url{demo.everythingisconnected.be/relations?uris=} 
+%in \url{demo.everythingisconnected.be/relations?uris=}
 Afterwards, we calculate paths between all the possible pairs inside the set\textit{MainEntities}.
 %following the REST methods exposed at \footnote{\url{demo.everythingisconnected.be/relations?uris=}}.
 Once all the possible paths have been retrieved, we perform various analysis for detecting which are the most frequent classes and predicates:
@@ -283,8 +306,8 @@ In a first step, Name Entity Extraction techniques are applied over the video tr
 \begin{table}[tbp]
   \resizebox{8.5cm}{!} {
 \begin{tabular}{ c | c | c | c | c }
-  \hline     
- Label & Relevance & Sentiment & Type & URI  \\ \hline  
+  \hline
+ Label & Relevance & Sentiment & Type & URI  \\ \hline
 Russia & 0.809216 & Mixed & Location & http://en.wikipedia.org/wiki/Russia \\
 Edward Snowden & 0.717369 & Mixed & Person & http://en.wikipedia.org/wiki//Edward\_Snowden \\
 South America & 0.56586 & Mixed & Location & http://en.wikipedia.org/wiki/South\_America \\
@@ -294,8 +317,8 @@ Moscow & 0.352101 & Mixed & City & http://en.wikipedia.org/wiki/Moscow \\
 CIA & 0.334887 & neutral & Organization & http://en.wikipedia.org/wiki/CIA \\
 Bolivia & 0.324607 & neutral & Location & http://en.wikipedia.org/wiki/Bolivia \\
 Obama & 0.321901 & negative & Person & http://en.wikipedia.org/wiki/Barack\_Obama \\
-  \hline  
-\end {tabular} 
+  \hline
+\end {tabular}
   }
 \caption{Result from Named Entity Extraction in NERD}
 \end{table}
@@ -309,9 +332,9 @@ In the second step, the original set of entities is expanded and the items are r
 \begin{table}[tbp]
   \resizebox{8.5cm}{!} {
 \begin{tabular}{ c | c | c | c | c | l }
-  \hline     
-  	Label & Relevance & $F_{video}$& $F_{Docu}$ & Type & URI \\ \hline                  
-  	Russia & 0.571518 & 7 & 197 & Location & http://en.wikipedia.org/wiki/Russia \\ 
+  \hline
+  	Label & Relevance & $F_{video}$& $F_{Docu}$ & Type & URI \\ \hline
+  	Russia & 0.571518 & 7 & 197 & Location & http://en.wikipedia.org/wiki/Russia \\
   	Edward\_Snowden & 0.485714 & 2 & 242 & Person & http://en.wikipedia.org/wiki/Edward\_Snowden \\
   	Asylum & 0.297630 & 4 & 84 & Thing & http://en.wikipedia.org/wiki/Right\_of\_asylum\\
   	United States & 0.261129 & 5 & 50 & Location & http://en.wikipedia.org/wiki/United\_States \\
@@ -324,8 +347,8 @@ In the second step, the original set of entities is expanded and the items are r
 	Anatoly Kucherena & 0.0694218 & 0 & 42 & Person & -- \\
 	Kremlin & 0.0662006 & 1 & 11 & Location & http://en.wikipedia.org/wiki/Kremlin \\
 	Sheremetyevo & 0.0396691 & 0 & 24 & Location & http://en.wikipedia.org/wiki/Sheremetyevo\\
-  \hline  
-\end {tabular} 
+  \hline
+\end {tabular}
   }
 \caption{Top entities obtained via Named Entity Expansion}
 \end{table}
@@ -333,14 +356,14 @@ In the second step, the original set of entities is expanded and the items are r
 \subsection{Reranking entities via Filtering}
 
 %Working on this part:
-The entities reranked according to DPPedia paths: 
+The entities reranked according to DPPedia paths:
 
 \begin{table}[tbp]
   \resizebox{8.5cm}{!} {
 \begin{tabular}{ c | c | c | c | l }
-  \hline     
-  	Label & $F_{video}$& $F_{Docu}$ & Type & URI \\ \hline                  
-  	Russia & 7 & 197 & Location & http://en.wikipedia.org/wiki/Russia \\ 
+  \hline
+  	Label & $F_{video}$& $F_{Docu}$ & Type & URI \\ \hline
+  	Russia & 7 & 197 & Location & http://en.wikipedia.org/wiki/Russia \\
   	Edward\_Snowden & 2 & 242 & Person & http://en.wikipedia.org/wiki/Edward\_Snowden \\
   	Asylum  & 4 & 84 & Thing & http://en.wikipedia.org/wiki/Right\_of\_asylum\\
 	CIA & 1 & 45 & Organization & http://en.wikipedia.org/wiki/CIA \\
@@ -354,8 +377,8 @@ The entities reranked according to DPPedia paths:
 	human-rights  & 2 & 10 & Organization & http://en.wikipedia.org/wiki/Human\_rights \\
 	Anatoly Kucherena  & 0 & 42 & Person & -- \\
 
-  \hline  
-\end {tabular} 
+  \hline
+\end {tabular}
   }
 \caption{Top entities reranked via DBPedia Knowledge}
 \end{table}
@@ -374,33 +397,33 @@ $
 \section{Evaluation}
 \label{sec:evaluation}
 
-The result obtained by this approach will be evaluated against a set of entities provided by an expert. 
+The result obtained by this approach will be evaluated against a set of entities provided by an expert.
 We plan to extend this evaluation to a larger corpora and include a more exhaustive evaluation in following publications.
 This is the list of entities provided by the expert, together with some insights about the concept and its relations with the main topic in the video:
 
-\begin{Verbatim}[fontsize=\tiny] 
+\begin{Verbatim}[fontsize=\tiny]
 Edward Joseph Snowden: (M)
 o   Public figure. He is the "who" of the news.
 o   The subject of the main sentence.
- 
+
 Political Asylum (M)
 o   This is related to the “what” of the news. This is what he requested, the direct object.
- 
+
 CIA (M)
 o   Background information on related to Snowden, the main subject of the news, "ex CIA employee".
 o   An actor in the news in a wider sense, not this news in particular, but Snowden’s history.
- 
+
 Sheremetyevo Airport (NM)
 o   Specific location of the news.
 o   Mentioned as "the Moscow airport"
- 
+
 Anatoly Kucherena (NM)
 o   Secondary actor and speaker in the video.
 o   Information about an interview or person expressing his opinion.
- 
+
 Rusia (M)
 o   The location, but also an actor, the indirect object of the main sentence "to whom".
- 
+
 US Department of State (NM)
 o   Involved organization. Not mentioned but related to speaker.
 
@@ -431,13 +454,13 @@ Evaluating against the final DBpedia $E_{Expansion + DBpedia}$: No differences f
 \end{itemize}
 
 \section{Conclusions}
-We presented a new approach for context-aware annotating news events. Our approach is designed to harvest highly precise contexts starting from named entities recognized in a TV fragment about a news event. 
+We presented a new approach for context-aware annotating news events. Our approach is designed to harvest highly precise contexts starting from named entities recognized in a TV fragment about a news event.
 %I think two sentences below can be merged together, common idea of: Named Entity Extraction + Expansion via extraction of additional documents based on the 4W's dimensions.
-Firstly we extracted named entities from the corresponding subtitles. Because the entities obtained from this first pass are typical insufficient, we expanded them by collecting related documents to the news event based on the 4W's dimensions. 
-%This should be mentioning before talking about the expansion, maybe. 
+Firstly we extracted named entities from the corresponding subtitles. Because the entities obtained from this first pass are typical insufficient, we expanded them by collecting related documents to the news event based on the 4W's dimensions.
+%This should be mentioning before talking about the expansion, maybe.
 %Here you mean named entity expansion? OK
-Secondly we applied a second pass named entity expansion on these documents. 
-We then ranked all the entities obtained and filter out those least occurring or identified as less important based on DBpedia paths between the entities. 
+Secondly we applied a second pass named entity expansion on these documents.
+We then ranked all the entities obtained and filter out those least occurring or identified as less important based on DBpedia paths between the entities.
 %First Mention DBPedia here instead in the next paragraph? OK
 Finally we refined the remaining entities by reinforcing them and finding important predicates between them. Ultimately this leaded to a re-ranking of the entities belonging to this news event.
 %The idea of connection or adjacency probably here too.
@@ -470,4 +493,4 @@ the Institute for the Promotion of Innovation by Science and Technology in Fland
 % ACM needs 'a single self-contained file'!
 %
 
-\end{document}
+\end{document} 
