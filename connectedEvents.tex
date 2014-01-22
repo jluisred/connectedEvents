@@ -295,162 +295,208 @@ The final output of the approach is a set of context entities re-ranked accordin
 
 %\url{http://demo.everythingisconnected.be/commonalities?between=http://dbpedia.org/resource/Lyon&and=http://dbpedia.org/resource/France&allowed=http://purl.org/dc/terms/spatial}
 
+
 \section{Use Case: Snowden Assylum}
 
-We have applied the explained approach to the video \url{http://www.bbc.co.uk/news/world-europe-23339199} from the BBC News Europe site. The main story in this media content is the request of  asylum made by Edward Snowden to the Russian government. In an airport in Moscow, he publicly express his desire to obtain political help while he can find a safe way to reach the Latin American countries that offer a safe harbor. The time period for which this particular part of the event is relevant goes from 2013-07-06 to 2013-07-17.
+We have applied the proposed method over a real scenario corresponding to the news video \url{http://www.bbc.co.uk/news/world-europe-23339199}, from the BBC News Europe Web site. The main story behind this media content is the request of asylum made by Edward Snowden to the Russian government. In an airport in Moscow, he publicly express his desire to obtain political help while he can find a safe way to reach the Latin American countries that offer a safe harbor. The time period for which this particular event is relevant goes from 2013-07-06 to 2013-07-17.
 
 \subsection {Named Entity Extraction}
 
-In a first step, Name Entity Extraction techniques are applied over the video transcript by using NERD. Below we show the different entities directly extracted with this procedure.
+In a first step, Name Entity Extraction techniques are applied over the video transcript by using NERD. Below we show the list of entities directly extracted via this procedure, which conform a first approximation to the context of the news media item.
 
 \begin{table}[tbp]
   \resizebox{8.5cm}{!} {
 \begin{tabular}{ c | c | c | c | c }
-  \hline
- Label & Relevance & Sentiment & Type & URI  \\ \hline
-Russia & 0.809216 & Mixed & Location & http://en.wikipedia.org/wiki/Russia \\
-Edward Snowden & 0.717369 & Mixed & Person & http://en.wikipedia.org/wiki//Edward\_Snowden \\
-South America & 0.56586 & Mixed & Location & http://en.wikipedia.org/wiki/South\_America \\
-president Putin & 0.459811 & positive & Person & http://en.wikipedia.org/wiki/Vladimir\_Putin \\
-president & 0.401138 & negative & JobTitle & http://en.wikipedia.org/wiki/President \\
-Moscow & 0.352101 & Mixed & City & http://en.wikipedia.org/wiki/Moscow \\
-CIA & 0.334887 & neutral & Organization & http://en.wikipedia.org/wiki/CIA \\
-Bolivia & 0.324607 & neutral & Location & http://en.wikipedia.org/wiki/Bolivia \\
-Obama & 0.321901 & negative & Person & http://en.wikipedia.org/wiki/Barack\_Obama \\
-  \hline
-\end {tabular}
+  \hline     
+ Label & Relevance & Sentiment & Type & URI  \\ \hline  
+Russia & 0.809216 & Mixed & Location & DBpedia:Russia \\
+Edward Snowden & 0.717369 & Mixed & Person & DBpedia:/Edward\_Snowden \\
+South America & 0.56586 & Mixed & Location & DBpedia:South\_America \\
+president Putin & 0.459811 & positive & Person & DBpedia:Vladimir\_Putin \\
+president & 0.401138 & negative & JobTitle & DBpedia:President \\
+Moscow & 0.352101 & Mixed & City & DBpedia:Moscow \\
+CIA & 0.334887 & neutral & Organization & DBpedia:CIA \\
+Bolivia & 0.324607 & neutral & Location & DBpedia:Bolivia \\
+Obama & 0.321901 & negative & Person & DBpedia:Barack\_Obama \\
+  \hline  
+\end {tabular} 
   }
 \caption{Result from Named Entity Extraction in NERD}
 \end{table}
 
 \subsection {Named Entity Expansion}
 
-In the second step, the original set of entities is expanded and the items are re-ranked according to the explained procedure.
+In a second step, the original set of entities is expanded as described in Section~\ref{sec:expansion}. The query generated for retrieving extra documents about the event has been "Edward Snowden asylum Russia" and has been bounded to the period from 2013-07-06 to 2013-07-28. After the extra documents are retrieved, the different instances are re-ranked according to their frequency along the entire corpora. 
 
 %\url{curl -X POST --data-binary @snowden.txt "http://localhost:8006/api/rankedentities?startdate=2013-07-16&enddate=2013-08-15&limit=50" --header "Content-Type:text/xml" -v >> snowden_textrazor_50_130716_130815.json2}
 
 \begin{table}[tbp]
   \resizebox{8.5cm}{!} {
 \begin{tabular}{ c | c | c | c | c | l }
-  \hline
-  	Label & Relevance & $F_{video}$& $F_{Docu}$ & Type & URI \\ \hline
-  	Russia & 0.571518 & 7 & 197 & Location & http://en.wikipedia.org/wiki/Russia \\
-  	Edward\_Snowden & 0.485714 & 2 & 242 & Person & http://en.wikipedia.org/wiki/Edward\_Snowden \\
-  	Asylum & 0.297630 & 4 & 84 & Thing & http://en.wikipedia.org/wiki/Right\_of\_asylum\\
-  	United States & 0.261129 & 5 & 50 & Location & http://en.wikipedia.org/wiki/United\_States \\
-  	Vladimir Putin & 0.2193704 & 1 & 99 & Person & http://en.wikipedia.org/wiki/Vladimir\_Putin \\
-	Barack Obama & 0.1899647 & 1 & 89 & Person & http://en.wikipedia.org/wiki/Barack\_Obama \\
-	MOSCOW & 0.173273 & 1 & 85 & Location & http://en.wikipedia.org/wiki/Moscow \\
-	extradition & 0.1178356 & 2 & 14 & Thing & http://en.wikipedia.org/wiki/Extradition \\
-	CIA & 0.116887 & 1 & 45 & Organization & http://en.wikipedia.org/wiki/CIA \\
-	human-rights & 0.0767802 & 2 & 10 & Organization & http://en.wikipedia.org/wiki/Human\_rights \\
-	Anatoly Kucherena & 0.0694218 & 0 & 42 & Person & -- \\
-	Kremlin & 0.0662006 & 1 & 11 & Location & http://en.wikipedia.org/wiki/Kremlin \\
-	Sheremetyevo & 0.0396691 & 0 & 24 & Location & http://en.wikipedia.org/wiki/Sheremetyevo\\
-  \hline
-\end {tabular}
+  \hline     
+Label & Relevance & $F_{video}$& $F_{Docu}$ & Type & URI \\ \hline                  
+Russia & 1.0 & 7 & 264 & Location & DBpedia:Russia \\
+Edward Snowden & 0.80479 & 2 & 227 & Person & http://dbpedia.org/resource/Edward\_Snowden \\
+US & 0.61643 & 5 & 160 & Location & DBpedia:United\_States \\
+Vladimir Putin & 0.39383 & 1 & 111 & Person & DBpedia:Vladimir\_Putin \\
+asylum & 0.32876 & 4 & 80 & Thing & DBpedia:Right\_of\_asylum \\
+Barack Obama & 0.31506 & 1 & 88 & Person & DBpedia:Barack\_Obama \\
+Moscow, Russia & 0.30479 & 1 & 85 & Location & DBpedia:Moscow \\
+American president & 0.19178 & 2 & 48 & Thing & DBpedia:President\_of\_the\_United\_States \\
+Central Intelligence Agency & 0.19178 & 0 & 56 & Location & DBpedia:Central\_Intelligence\_Agency \\
+Anatoly Kucherena & 0.147260 & 0 & 43 & Person & -- \\
+extradition & 0.116438 & 2 & 26 & Thing & DBpedia:Extradition \\
+White House & 0.10616 & 0 & 31 & Location & DBpedia:White\_House \\
+Sheremetyevo & 0.0890 & 0 & 26 & Location & DBpedia:Sheremetyevo\_International\_Airport \\
+WikiLeaks & 0.08219 & 0 & 24 & Organization & DBpedia:WikiLeaks \\
+Washington's & 0.075342 & 0 & 22 & Location & DBpedia:Washington,\_D.C. \\
+  \hline  
+\end {tabular} 
   }
 \caption{Top entities obtained via Named Entity Expansion}
 \end{table}
 
-\subsection{Reranking entities via Filtering}
+The final result after the expansion operation is a bigger list of instances (over 100 distinct entities). In some cases, the previously spotted entities (like http://en.wikipedia.org/wiki/Extradition) have been promoted in the hierarchy while others (like http://en.wikipedia.org/wiki/Right\_of\_asylum\\) have been discovered in the new documents. For this use case, we have taken only a fixed number of top entities ($mainEntities = 15$). Those entities will be used as input to the third step of context refining.
 
-%Working on this part:
-The entities reranked according to DPPedia paths:
+\subsection{Refining Event Context via DBpedia Knowledge}
+
+Given the set of $mainEntities$ obtained from the Named Entity Expansion operation, we study how close two graph nodes $e_{i}$, and $e_{i}$ are connected according to the normalized average length of all the intermediate paths between them in DBPedia. The results are expressed in the form of an adjacency matrix, which allows to visually analyze the grade of connection between a particular pair of entitites inside $mainEntities$ .
+
+\resizebox{8.5cm}{!} {
+$
+M_{i,j}  =
+ \begin{pmatrix}
+- & 0.4 & 0.6 & 1.0 & 0 & 0.2 & 1.0 & 0.6 & 0 & 0 & 0 & 0.7 & 1.0 & 0 & 0 \\
+0.4 & - & 0.9 & 0.6 & 1.0 & 0.8 & 0.1 & 0.8 & 0.4 & 0 & 0 & 0.7 & 0.6 & 0 & 0.7 \\
+0.6 & 0.9 & - & 0.8 & 0.7 & 1.0 & 0.5 & 1.0 & 0.8 & 0 & 0 & 0.9 & 0.5 & 0 & 0.9 \\
+1.0 & 0.6 & 0.8 & - & 0 & 0.4 & 0.9 & 0 & 0 & 0 & 0 & 0 & 0.9 & 0 & 0.2 \\
+0 & 1.0 & 0.7 & 0 & - & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0.2 & 0.8 & 1.0 & 0.4 & 0 & - & 0.3 & 0.9 & 0.3 & 0 & 0 & 1.0 & 0 & 0 & 0.8 \\
+1.0 & 0.1 & 0.5 & 0.9 & 0 & 0.3 & - & 0.8 & 0.4 & 0 & 0 & 0.7 & 0.9 & 0 & 0.7 \\
+0.6 & 0.8 & 1.0 & 0 & 0 & 0.9 & 0.8 & - & 0 & 0 & 0 & 1.0 & 0 & 0 & 0.8 \\
+0 & 0.4 & 0.8 & 0 & 0 & 0.3 & 0.4 & 0 & - & 0 & 0 & 0 & 0 & 0 & 0.3 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & - & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & - & 0 & 0 & 0 & 0 &  \\
+0.7 & 0.7 & 0.9 & 0 & 0 & 1.0 & 0.7 & 1.0 & 0 & 0 & 0 & - & 0 & 0 & 0.7 \\
+1.0 & 0.6 & 0.5 & 0.9 & 0 & 0 & 0.9 & 0 & 0 & 0 & 0 & 0 & - & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & - & 0 \\
+0.4 & 0.7 & 0.9 & 0.2 & 0 & 0.8 & 0.7 & 0.8 & 0.3 & 0 & 0 & 0.7 & 0 & 0 & - 
+ \end{pmatrix}
+ $
+ }
+This matrix allows to identify different aspects and insights about the $mainEntities$ analyzed. First, the upper left quarter of the matrix, corresponding to the connectivity between the top 8 entities from $E_{Expansion}$ is more dense in connections, which means that the concepts are semantically closer. This reinforce the results obtained in the previous step since it explicitly reflect the idea of a coherence in the proposed context.   
+At the same time, other entities like \textit{WikiLeaks} have a lower number of connection to the rest of element in the context and are pushed into the background of the $mainEntities$ set. For the same reason, entities like \textit{Sheremetyevo} are promoted based on its relationship with entities like \textit{Russia}, \textit{Moscow}, or \textit{Vladimir Putin }. However, this logic can lead to wrong considerations if applied in some entities where the disambiguation URL's is missing, like \textit{Anatoly Kucherena}, but this problem lies in the absence of some DPpedia resources and falls apart the scope of our approach. This intuitive measure, notated in Table~\ref{table:dbpediaRank} as $Conectivity$, is calculated as the sum of the distances from one entity to the rest. This score is then a weighted factor over the former expansion relevance in order to rerank the entities. 
+
+In addition, we study the frequency of the different middle nodes and properties inside the  set of items that conform the paths for calculating $M_{i,j}$. The most repeated ones are listed in Table~\ref{table:frequentNodesProp}. In the case of the nodes we can observe various interesting findings: on the one hand we get the location \textit{Wilmington}, the city where Edward Snowden was born and he still has family, and important russian-american political figures like \textit{Chap Petersen} or \textit{Igor Panarin}. On the other hand, some entities already spotted in the expansion phase are reinforced, like for example \textit{Russia} or \textit{Washington D.C}. Finally, the absolute frequency of properties reveals also meaningful clues: the first three predicates, and also the fifth and the seventh have clearly to see with spacial dimension, while the forth, sixth and eighth are related with political matters, which clearly makes sense since an asylum request implies a territorial and political conflict. 
+
+\begin{table}[tbp]
+  \resizebox{8.5cm}{!} { 
+\begin{tabular}{ | c | c | c | c |}
+  \hline
+    \multicolumn{2}{|c|}{Nodes} &
+    \multicolumn{2}{c|}{Properties} \\
+  \hline
+  URL & Frequence & URL & Frequence \\ \hline          
+DBpedia:Wilmington,\_North\_Carolina & 14 & http://dbpedia.org/ontology/country & 44 \\
+DBpedia:United\_States & 38 & http://dbpedia.org/ontology/birthPlace & 64 \\
+DBpedia:Russia & 12 & http://purl.org/dc/terms/spatial & 42 \\
+DBpedia:conference/AIPR/2008 & 11 & http://dbpedia.org/ontology/almaMater & 26 \\
+DBpedia:Washington,\_D.C. & 10 & http://dbpedia.org/ontology/location & 21 \\
+DBpedia:Igor\_Panarin & 8 & http://dbpedia.org/ontology/profession & 20 \\
+DBpedia:Chap\_Petersen & 8 & http://dbpedia.org/ontology/nationality & 14 \\
+DBpedia:North\_Carolina & 8 & http://dbpedia.org/property/leaderTitle & 14 \\      
+DBpedia:Independent\_(politician) & 8 & http://dbpedia.org/ontology/occupation & 14 \\
+  \hline
+\end{tabular}
+  }
+\caption{Top frequent middle nodes and properties inside DBpedia paths}
+\label{table:frequentNodesProp}
+\end{table}
+
+The $Conectivity$ scores are combined together with the frequency of intermediate nodes in the paths ($F_{inPaths}$) and the former relevance indexes from the entity extension $Rel_{extension}$, for elaborating a new ranked list of entities that intends to effectively represent the context of a news event.
 
 \begin{table}[tbp]
   \resizebox{8.5cm}{!} {
-\begin{tabular}{ c | c | c | c | l }
-  \hline
-  	Label & $F_{video}$& $F_{Docu}$ & Type & URI \\ \hline
-  	Russia & 7 & 197 & Location & http://en.wikipedia.org/wiki/Russia \\
-  	Edward\_Snowden & 2 & 242 & Person & http://en.wikipedia.org/wiki/Edward\_Snowden \\
-  	Asylum  & 4 & 84 & Thing & http://en.wikipedia.org/wiki/Right\_of\_asylum\\
-	CIA & 1 & 45 & Organization & http://en.wikipedia.org/wiki/CIA \\
-  	Vladimir Putin  & 1 & 99 & Person & http://en.wikipedia.org/wiki/Vladimir\_Putin \\
-	Barack Obama  & 1 & 89 & Person & http://en.wikipedia.org/wiki/Barack\_Obama \\
-	United States  & 5 & 50 & Location & http://en.wikipedia.org/wiki/United\_States \\
-	MOSCOW & 1 & 85 & Location & http://en.wikipedia.org/wiki/Moscow \\
-	Sheremetyevo  & 0 & 24 & Location & http://en.wikipedia.org/wiki/Sheremetyevo\\
-	extradition & 2 & 14 & Thing & http://en.wikipedia.org/wiki/Extradition \\
-	Kremlin & 1 & 11 & Location & http://en.wikipedia.org/wiki/Kremlin \\
-	human-rights  & 2 & 10 & Organization & http://en.wikipedia.org/wiki/Human\_rights \\
-	Anatoly Kucherena  & 0 & 42 & Person & -- \\
-
-  \hline
-\end {tabular}
+\begin{tabular}{ c | c | c | c | c | l }
+  \hline     
+Label 						&$Rel_{Final}$ 	& $Rel_{extension}$ &$Conectivity$ 	& $F_{inPaths}$ & URI \\ \hline 
+Russia 						& 1.0 			& 1.0 				& 6.10 			& 12 			& DBpedia:Russia \\
+Edward Snowden 				& 0.79469 		& 0.80479 			& 7.60 			& - 			& http://dbpedia.org/resource/Edward\_Snowden \\
+US 							& 0.77188 		& 0.61643 			& 9.40 			& 38 			& DBpedia:United\_States \\
+Vladimir Putin 				& 0.38383 		& 0.39383 			& 5.50 			& -				& DBpedia:Vladimir\_Putin \\
+Barack Obama 				& 0.37231 		& 0.31506 			& 6.69			& -				& DBpedia:Barack\_Obama \\
+Washington's 				& 0.21544 		& 0.07532 			& 6.10			& 10			& DBpedia:Washington,\_D.C. \\
+Moscow, Russia 				& 0.35991 		& 0.30479 			& 6.90			& -				& DBpedia:Moscow \\
+asylum 						& 0.25036 		& 0.32876 			& 1.70			& -				& DBpedia:Right\_of\_asylum \\vv
+American president 			& 0.21571 		& 0.19178 			& 6.60			& -				& DBpedia:President\_of\_the\_United\_States \\
+White House 				& 0.12096 		& 0.10616 			& 6.30			& -				& DBpedia:White\_House \\
+Sheremetyevo 				& 0.11905 		& 0.0890 			& 3.90			& -				& DBpedia:Sheremetyevo\_International\_Airport \\
+Central Intelligence Agency 	& 0.09171 		& 0.19178 			& 2.80			& -				& DBpedia:Central\_Intelligence\_Agency \\
+Anatoly Kucherena 			& 0.08780 		& 0.147260 			& 0.00 			& -				& -- \\
+extradition 				& 0.06693 		& 0.116438 			& 0.00			& -				& DBpedia:Extradition \\
+WikiLeaks					& 0.04432 		& 0.08219 			& 0.00			& -			 	& DBpedia:WikiLeaks \\
+  \hline  
+\end {tabular} 
   }
-\caption{Top entities reranked via DBPedia Knowledge}
+\caption{Top entities reranked via DBpedia clues}
+\label{table:dbpediaRank}
 \end{table}
 
-This is the adjacency matrix representing the grade of connection between the different pairs in $mainEntities$.
-$
- M_{i,j}  =
- \begin{pmatrix}
-  e_{1,1} & a_{1,2} & \cdots & e_{1,14} \\
-  e_{2,1} & e_{2,2} & \cdots & e_{2,14} \\
-  \vdots  & \vdots  & \ddots & \vdots  \\
-  e_{m,1} & e_{m,2} & \cdots & e_{14,14}
- \end{pmatrix}
- $
 
 \section{Evaluation}
 \label{sec:evaluation}
 
-The result obtained by this approach will be evaluated against a set of entities provided by an expert.
-We plan to extend this evaluation to a larger corpora and include a more exhaustive evaluation in following publications.
-This is the list of entities provided by the expert, together with some insights about the concept and its relations with the main topic in the video:
+The result obtained by this approach will be evaluated against a set of entities provided by an expert. 
+We plan to extend this evaluation to a larger corpora and include a more exhaustive evaluation in following publications on the same line.
+Currently we start from a list of entities provided by the expert, together with some insights about the importance of the concept and its relevance inside the scope of the video:
 
-\begin{Verbatim}[fontsize=\tiny]
+\begin{Verbatim}[fontsize=\tiny] 
 Edward Joseph Snowden: (M)
 o   Public figure. He is the "who" of the news.
 o   The subject of the main sentence.
+ 
+ Rusia (M)
+o   The location, but also an actor, the indirect object of the main sentence "to whom".
 
 Political Asylum (M)
-o   This is related to the “what” of the news. This is what he requested, the direct object.
-
+o   This is related to the "what" of the news. This is what he requested, the direct object.
+ 
 CIA (M)
 o   Background information on related to Snowden, the main subject of the news, "ex CIA employee".
 o   An actor in the news in a wider sense, not this news in particular, but Snowden’s history.
-
+ 
 Sheremetyevo Airport (NM)
 o   Specific location of the news.
-o   Mentioned as "the Moscow airport"
-
+ 
 Anatoly Kucherena (NM)
 o   Secondary actor and speaker in the video.
 o   Information about an interview or person expressing his opinion.
-
-Rusia (M)
-o   The location, but also an actor, the indirect object of the main sentence "to whom".
-
+ 
 US Department of State (NM)
 o   Involved organization. Not mentioned but related to speaker.
 
 \end{Verbatim}
 
-Evaluating against traditional Named Entity Extraction: Precision \& Rec: there are 3 entities out of 7 spotted. 12 Entities in total
+We will first evaluate the set of entities spotted by the expert against traditional Named Entity Extraction results from NERD. About precision\&recall, 3 entities have been spotted out of the 7 while in total 12 were proposed as candidate results.
 \begin{itemize}
-  \item  The lawyer of the case, Anatoly Kucherena, is never mentioned.
-  %TODO: in the ?
-  \item  The name of the airport. (There are two airport in Moscow, we don't know which one it is)
+  \item  The lawyer of the case, Anatoly Kucherena, is never mentioned in the subtitles, so it has not been detected.
+  \item  The name of the airport: even the word is transcribed in the subtitles, there are two airport in Moscow and we can not assure which one are we talking about.
 \end{itemize}
 
-Evaluating against \textit{MainEntities} in $E_{Expansion}$: Precision \& Rec: there are 6 entities out of 7 spotted. 15 Entities in total
+Secondly, we evaluate against the set of \textit{MainEntities} inside $E_{Expansion}$. In this case, the Precision \& Recall indexes are better: there are 6 entities spotted, out of 7. In total, the 15 entities inside \textit{MainEntities} were offered as output.
 
 \begin{itemize}
-  \item  Assylum, the main subject behind this news item, has been correctly detected
-  \item  Anatoly Kucherena is the lawyer involved in the defense of Edward Snowden, has been correctly detected, but without disambiguation URL.
-  \item  The Name of the airport, Sheremetyevo, has been finally disambiguated. In the original transcript it was not specified in which of the two airports in Moscow Snowden was giving the press conference.
-  \item  Other important entities like "human-rights" and "extradition" are now present, helping to complete the context of the new.
+  \item  Asylum, probably one of the more representative concepts behind this news item, has been correctly detected and disambiguated.
+  \item  \textit{Anatoly Kucherena}, the lawyer involved in the defense of Edward \textit{Snowden}, has been correctly proposed in the result, even no disambiguation URL can be provided.
+  \item  The name of the airport is now known: \textit{Sheremetyevo} has been correctly disambiguated. 
+  \item  Other important entities like \textit{human-rights} and \textit{extradition} are now present in the final set, helping to complete the context of the new.
 \end{itemize}
 
-Evaluating against the final DBpedia $E_{Expansion + DBpedia}$: No differences for the \textit{MainEntities} in which refers to Precision \& recall. However, there are improvements in which concerns:
-
+Finally, we compare the expert's feedback against the final DBpedia $E_{Expansion + DBpedia}$ ranked set of entities. There are no differences for the spotted \textit{MainEntities} in which refers to Precision \& recall. However, we other improvements have been achieved concerning to:
 \begin{itemize}
-  \item  The ranking order inside  \textit{MainEntities} is now better. For example the entity "Sheremetyevo" is now scored higher, which is taking into account that it is the specific location where the action is taking place.
-  \item  There are new entities that were not detected via entity expansion, like the prime Minister of Russia, Igor Shuvalov, that are also relevant in the matter.
-  \item  The adjacency matrix opens room for many other context studies, like topic entity clustering that could help to give extra insight about the studied event.
+  \item  The ranking order inside  \textit{MainEntities}. For example the entity "Sheremetyevo" is now scored higher, which makes sense from the event's perspective since that is the more specific location where the action is taking place.
+  \item  There are new entities that were not detected via entity expansion, like the prime Minister of Russia, Igor Shuvalov, that are also relevant in the matter. They have not been included in the set of proposed results but we will study this possibility for future developments.
+  \item  The adjacency matrix opens room for many other context analysis techniques like topic clustering, which could help to give further insights about the studied event.
 \end{itemize}
 
 \section{Conclusions}
