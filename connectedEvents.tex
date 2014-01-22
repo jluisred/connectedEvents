@@ -263,7 +263,7 @@ We pass on the main start resource, the target and via points. Figure~\ref{fig:p
 
 \subsubsection{Analyzing Context Relevant Paths}
 
-In this step the DPpedia path finding technique implemented in ~\ref{sec:evaluation} will be applied over the set of entities obtained via entity expansion. However, this list is too big and broad. Before, we need to establish a division between the main entities (\textit{MainEntities}, entities with relative score higher than the average), and the additional entities (\textit{additionalEntities}, the rest of entities in $E_{Expansion}\left (subtitles, timePeriod \right )$).
+In this step the DPpedia path finding technique implemented in ~\ref{sec:evaluation} will be applied over the set of entities obtained via entity expansion. However as this list is too big and broad we need to establish in first place a division between what we have considered as the main entities (\textit{MainEntities}, entities whose relative scores fall under the higher 25\% of the relevance range), and the additional entities (\textit{additionalEntities}, the rest of entities in $E_{Expansion}\left (subtitles, timePeriod \right )$).
 
 %in \url{demo.everythingisconnected.be/relations?uris=}
 Afterwards, we calculate paths between all the possible pairs inside the set\textit{MainEntities}.
@@ -272,37 +272,18 @@ Once all the possible paths have been retrieved, we perform various analysis for
 \begin{itemize}
   \item  We detect the most frequent nodes ($F_{nodes} = f_{max}(n_{i})$ in $Paths (mainEntities)$).
   \item  We detect the most frequent predicates ($F_{prop} = f_{max}(p_{i})$ in $Paths (mainEntities)$). The edges (DBpedia properties) will determine which are the most relevant properties inside the context of this news item.
-  \item  We estimate the connectivity between nodes (Adjacency Matrix $M_{i,j}$ where the distance between two entities $e+{i}$ and $e+{j}$ is the average of the lengths of the paths that link those entities $m_{i,j} = \\ Avg (lenght(Paths(e_{i}, e_{j})))$)
+  \item  We estimate the connectivity between nodes (Adjacency Matrix $M_{i,j}$ where the distance between two entities $e+{i}$ and $e+{j}$ is the average of the path lengths that link that pair of items ($m_{i,j} = \\ Avg (lenght(Paths(e_{i}, e_{j})))$)
 \end{itemize}
 
-The output of this process are two different lists and a matrix: a re-expanded and re-ranked list of entities generated out of the expansion set, a list of the most important predicates involved in the paths between the aforementioned entities, and the adjacency matrix.
+The output of this phase is a re-ranked list of entities from the expanded set calculated base on the found DBpedia insights, two ordered lists including the most important predicates and nodes inside the paths between all the possible pairs in $mainEntities$, and the adjacency matrix.
 
 \begin{equation}
 \begin{split}
-\{ E_{Expansion}, F_{nodes}, F_{prop}, M_{i,j} \} \\
+\{Entities_{Extension + DBpedia}, E_{Expansion}, F_{nodes}, F_{prop}, M_{i,j} \} \\
 \end{split}
 \end{equation}
 
-\subsubsection{Reranking entities via Filtering}
-
-We make use of the frequency measures obtained previously in order to re-rank entities. Then we get intermediate items using the commonalities function for some top ranked items. The output is the final set of entities and the adjacency matrix.
-
-\begin{itemize}
-  \item  Most frequent via nodes will reinforce entities already existing in $E_{Expansion}$.
-  \item  Most frequent properties will feed Commonalities function over each entity in $mainEntities$
-  \item  Most frequent entities in Commonalities will promote already existing in $E_{Expansion}$.
-  \item  Most frequent via nodes will reinforce entities already existing in $E_{Expansion}$.
-  \item  Most frequent via nodes will include new entities inside $E_{Expansion}$.
-  \item  Final  $E_{Expansion}$.
-
-The final output of the approach is a set of context entities re-ranked according to the DBpedia insights, and the final adjacency matrix:
-
-\begin{equation}
-\begin{split}
-\{ Entities_{Extension + DBpedia}, M_{i,j} \} \\
-\end{split}
-\end{equation}
-\end{itemize}
+In the future, we plan to use the frequency measures about predicates available in $F_{prop}$ in order to more precisely rank the named entities. By applying the \textit{commonalities} REST function (\url{http://demo.everythingisconnected.be/commonalities?between=resource1&and=resource2&allowed=property})over the $mainEntities$ inside $Entities_{Extension + DBpedia}, and for the properties with highest F_{prop}, we obtain the set of entities directly related with the original ones through the mentioned predicates. Once more, the most frequent entities in Commonalities could promote the already existing entities in $Entities_{Extension + DBpedia}$
 
 %\url{http://demo.everythingisconnected.be/commonalities?between=http://dbpedia.org/resource/Lyon&and=http://dbpedia.org/resource/France&allowed=http://purl.org/dc/terms/spatial}
 
