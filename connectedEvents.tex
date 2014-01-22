@@ -104,6 +104,11 @@ Describing multimedia content in general and TV programs in particular is hard p
 
 %\keywords{ACM proceedings, \LaTeX, text tagging} % NOT required for Proceedings
 
+
+%%%%%%%%%%%%%%%%%%
+%%%  Introduction  %%%
+%%%%%%%%%%%%%%%%%%
+
 \section{Introduction}
 
 %Online media keeps increasing in scale and ubiquity, but it is currently still unstructured and badly connected to media of other formats or from other sources.
@@ -123,6 +128,12 @@ For the Linked Data community, it is a first step to increase the volume of inte
 We therefore use an optimized pathfinding algorithm \cite{de2013discovering} implemented in the Everything is Connected Engine (EiCE).
 %firstly introduced with the Everything is Connected (EiC) Demo at the \emph{ISWC`12 Boston} conference \cite{Sande12}.
 Applying these algorithms to Linked Data facilitates: resolving complex queries that involve the semantics of the relations between resources, discovering relevant resources and context-sensitive filtering resources. Users control and define which kind of relations and types of resources really matter. Each path between the discovered resources has a semantic meaning can be traced back to the original configuration of the user and forms the basis of an explanation rather than a ranking. A major contribution in this approach is that it minimizes the size of the candidate pool of resources in order to optimize queries and increase the quality of the resulting paths.
+
+
+
+%%%%%%%%%%%%%%%%%%
+%%%  Approach  %%%
+%%%%%%%%%%%%%%%%%%
 
 \section{Approach}
 
@@ -296,6 +307,10 @@ The final output of the approach is a set of context entities re-ranked accordin
 %\url{http://demo.everythingisconnected.be/commonalities?between=http://dbpedia.org/resource/Lyon&and=http://dbpedia.org/resource/France&allowed=http://purl.org/dc/terms/spatial}
 
 
+%%%%%%%%%%%%%%%%%%
+%%%  Use Case  %%%
+%%%%%%%%%%%%%%%%%%
+
 \section{Use Case: Snowden Assylum}
 
 We have applied the proposed method over a real scenario corresponding to the news video \url{http://www.bbc.co.uk/news/world-europe-23339199}, from the BBC News Europe Web site. The main story behind this media content is the request of asylum made by Edward Snowden to the Russian government. In an airport in Moscow, he publicly express his desire to obtain political help while he can find a safe way to reach the Latin American countries that offer a safe harbor. The time period for which this particular event is relevant goes from 2013-07-06 to 2013-07-17.
@@ -443,6 +458,10 @@ WikiLeaks					& 0.04432 		& 0.08219 			& 0.00			& -			 	& DBpedia:WikiLeaks \\
 \end{table}
 
 
+%%%%%%%%%%%%%%%%%%
+%%%  Evaluation  %%%
+%%%%%%%%%%%%%%%%%%
+
 \section{Evaluation}
 \label{sec:evaluation}
 
@@ -499,6 +518,12 @@ Finally, we compare the expert's feedback against the final DBpedia $E_{Expansio
   \item  The adjacency matrix opens room for many other context analysis techniques like topic clustering, which could help to give further insights about the studied event.
 \end{itemize}
 
+
+
+%%%%%%%%%%%%%%%%%%
+%%%  Conclusions  %%%
+%%%%%%%%%%%%%%%%%%
+
 \section{Conclusions}
 We presented a new approach for context-aware annotating news events. Our approach is designed to harvest highly precise contexts starting from named entities recognized in a TV fragment about a news event.
 %I think two sentences below can be merged together, common idea of: Named Entity Extraction + Expansion via extraction of additional documents based on the 4W's dimensions.
@@ -523,7 +548,8 @@ The adjacency matrix we introduced we will use for more in depth context studies
 \section{Acknowledgments}
 The research activities described in this paper were funded by Ghent University,
 %iMinds (Interdisciplinary institute for Technology) a research institute founded by the Flemish Government,
-the Institute for the Promotion of Innovation by Science and Technology in Flanders (IWT), the Fund for Scientific Research-Flanders (FWO-Flanders), and the European Union's 7th Framework Programme via the project LinkedTV (GA 287911).
+the Institute for the Promotion of Innovation by Science and Technology in Flanders (IWT), the Fund for Scientific Research-Flanders (FWO-Flanders), and the European Union's 7th Framework Programme via the project LinkedTV (GA 287911). We would like to give special thanks to Michiel Hildebrand and Lilia PŽrez Romero from Centrum Wiskunde & Informatica (CWI) for providing us with ideas and use cases for illustrating the presented approach.
+
 
 %
 % The following two commands are all you need in the
