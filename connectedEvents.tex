@@ -19,6 +19,9 @@
 \usepackage{fancyvrb}
 \usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage[font=small,labelfont=bf]{caption}
+\setcounter{MaxMatrixCols}{20}
+
 
 % listing styles
 \lstset{numbers=left, numberstyle=\tiny,basicstyle=\ttfamily\scriptsize, tabsize=2, keywordstyle=\underbar, stringstyle=\small, backgroundcolor=\color[gray]{0.94}, framexleftmargin=2pt}
@@ -283,7 +286,7 @@ The output of this phase is a re-ranked list of entities from the expanded set c
 \end{split}
 \end{equation}
 
-In the future, we plan to use the frequency measures about predicates available in $F_{prop}$ in order to more precisely rank the named entities. By applying the \textit{commonalities} REST function (\url{http://demo.everythingisconnected.be/commonalities?between=resource1&and=resource2&allowed=property})over the $mainEntities$ inside $Entities_{Extension + DBpedia}, and for the properties with highest F_{prop}, we obtain the set of entities directly related with the original ones through the mentioned predicates. Once more, the most frequent entities in Commonalities could promote the already existing entities in $Entities_{Extension + DBpedia}$
+In the future, we plan to use the frequency measures about predicates available in $F_{prop}$ in order to more precisely rank the named entities. By applying the \textit{commonalities} REST function (\url{http://demo.everythingisconnected.be/commonalities?between=resource1&and=resource2&allowed=property})over the $mainEntities$ inside $Entities_{Extension + DBpedia}$, and for the properties with highest $F_{prop}$, we obtain the set of entities directly related with the original ones through the mentioned predicates. Once more, the most frequent entities in Commonalities could promote the already existing entities in $Entities_{Extension + DBpedia}$.
 
 %\url{http://demo.everythingisconnected.be/commonalities?between=http://dbpedia.org/resource/Lyon&and=http://dbpedia.org/resource/France&allowed=http://purl.org/dc/terms/spatial}
 
@@ -301,7 +304,7 @@ We have applied the proposed method over a real scenario corresponding to the ne
 In a first step, Name Entity Extraction techniques are applied over the video transcript by using NERD. Below we show the list of entities directly extracted via this procedure, which conform a first approximation to the context of the news media item.
 
 \begin{table}[tbp]
-  \resizebox{8.5cm}{!} {
+  \resizebox{8cm}{!} {
 \begin{tabular}{ c | c | c | c | c }
   \hline     
  Label & Relevance & Sentiment & Type & URI  \\ \hline  
@@ -352,7 +355,7 @@ Washington's & 0.075342 & 0 & 22 & Location & DBpedia:Washington,\_D.C. \\
 \caption{Top entities obtained via Named Entity Expansion}
 \end{table}
 
-The final result after the expansion operation is a bigger list of instances (over 100 distinct entities). In some cases, the previously spotted entities (like http://en.wikipedia.org/wiki/Extradition) have been promoted in the hierarchy while others (like http://en.wikipedia.org/wiki/Right\_of\_asylum\\) have been discovered in the new documents. For this use case, we have taken only a fixed number of top entities ($mainEntities = 15$). Those entities will be used as input to the third step of context refining.
+The final result after the expansion operation is a bigger list of instances (over 100 distinct entities). In some cases, the previously spotted entities (like \textit{Extradition}) have been promoted in the hierarchy while others (like \textit{Right\_of\_asylum\\}) have been discovered in the new documents. For this use case, we have taken only a fixed number of top entities ($mainEntities = 15$). Those entities will be used as input to the third step of context refining.
 
 \subsection{Refining Event Context via DBpedia Knowledge}
 
@@ -376,7 +379,7 @@ M_{i,j}  =
 0.7 & 0.7 & 0.9 & 0 & 0 & 1.0 & 0.7 & 1.0 & 0 & 0 & 0 & - & 0 & 0 & 0.7 \\
 1.0 & 0.6 & 0.5 & 0.9 & 0 & 0 & 0.9 & 0 & 0 & 0 & 0 & 0 & - & 0 & 0 \\
 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & - & 0 \\
-0.4 & 0.7 & 0.9 & 0.2 & 0 & 0.8 & 0.7 & 0.8 & 0.3 & 0 & 0 & 0.7 & 0 & 0 & - 
+0.4 & 0.7 & 0.9 & 0.2 & 0 & 0.8 & 0.7 & 0.8 & 0.3 & 0 & 0 & 0.7 & 0 & 0 & - \\
  \end{pmatrix}
  $
  }
@@ -506,30 +509,18 @@ Finally, we compare the expert's feedback against the final DBpedia $E_{Expansio
 %%%%%%%%%%%%%%%%%%
 
 \section{Conclusions}
-We presented a new approach for context-aware annotating news events. Our approach is designed to harvest highly precise contexts starting from named entities recognized in a TV fragment about a news event.
-%I think two sentences below can be merged together, common idea of: Named Entity Extraction + Expansion via extraction of additional documents based on the 4W's dimensions.
-Firstly we extracted named entities from the corresponding subtitles. Because the entities obtained from this first pass are typical insufficient, we expanded them by collecting related documents to the news event based on the 4W's dimensions.
-%This should be mentioning before talking about the expansion, maybe.
-%Here you mean named entity expansion? OK
-Secondly we applied a second pass named entity expansion on these documents.
-We then ranked all the entities obtained and filter out those least occurring or identified as less important based on DBpedia paths between the entities.
-%First Mention DBPedia here instead in the next paragraph? OK
-Finally we refined the remaining entities by reinforcing them and finding important predicates between them. Ultimately this leaded to a re-ranking of the entities belonging to this news event.
-%The idea of connection or adjacency probably here too.
-%introducing an adjacancy matrix presenting the grade of connection between the different pairs
+We presented an approach for context-aware annotating news events, designed to precisely harvest program descriptions starting from named entities recognized in the TV video transcripts. Because the entities initially spotted are typically insufficient for covering the wider range of concepts that can be involved in a particular news clip, we expanded them by analyzing adittional textual descriptions for the same event collected from unstructured sources by querying for the 4W's dimensions.
+The flat ranked list of concepts is afterward completed with cues about their connectivity obtained by analyzing the DBpedia paths that exist between them. Particularly, we promoted entities higher interlinked inside the context and with higher frequency in the nodes of the generated DBpedia paths. Finally we identify also the important predicates linking entities. This leads to a more accurate re-ranking of the entities belonging to this news event. 
 
-Our preliminary results indicate that we can expand the initial set of recognized entities with more relevant entities not detected by the named entity recognition. Reinforcing the entities by exploring DBpedia paths along the found named entities occurring in news media leads to a more accurate ranking of important entities but does not introduce any new important relevant entities that were initially missing as such. It did however bring forward more related entities useful for additional information in the broader context of an event.
-\section{Future Work}
-%Explain how we are going to use predicates.
-%Mention refinements using TF/IDF weights.
-Interesting next steps would include looking at the predicates and checking if more important predicates (e.g. according to tf-idf weights) lead to other important relevant entities or if they could motivate the selection of entities.
-The adjacency matrix we introduced we will use for more in depth context studies to find out extra insight about the studied event. Finally we will extend the evaluation with other use cases to see if the detected trend concerning the entity expansion and reinforced ranking can be affirmed.
+The preliminary results indicate that we can successfully expand the initial set of recognized entities with more relevant concepts not detected by pure named entity recognition approaches. Exploring DBpedia paths along the found named entities occurring in news media leads to a more accurate ranking of important concepts and even it does not necessary introduce any new top item, it brings forward more related entities with additional information about the broader context of an event.
+
+Next steps will include make a better analysis of the DBpedia properties for detecting the most likely used predicates between context entities. By prioritizing paths using those properties and following them we should be able to easier find other  relevant entities or justify the ones that have been previously selected. The adjacency matrix we generate will be also used for more in depth analysis like topic extraction based on entity clustering. Finally we will extend the evaluation to other use cases to see if the contributions exposed can be extrapolated to other scenarios.
 
 %ACKNOWLEDGMENTS are optional
 \section{Acknowledgments}
 The research activities described in this paper were funded by Ghent University,
 %iMinds (Interdisciplinary institute for Technology) a research institute founded by the Flemish Government,
-the Institute for the Promotion of Innovation by Science and Technology in Flanders (IWT), the Fund for Scientific Research-Flanders (FWO-Flanders), and the European Union's 7th Framework Programme via the project LinkedTV (GA 287911). We would like to give special thanks to Michiel Hildebrand and Lilia PŽrez Romero from Centrum Wiskunde & Informatica (CWI) for providing us with ideas and use cases for illustrating the presented approach.
+the Institute for the Promotion of Innovation by Science and Technology in Flanders (IWT), the Fund for Scientific Research-Flanders (FWO-Flanders), and the European Union's 7th Framework Programme via the project LinkedTV (GA 287911). We would like to give special thanks to Michiel Hildebrand and Lilia PŽrez Romero from Centrum Wiskunde \& Informatica (CWI) for providing us with ideas and use cases for illustrating the presented approach.
 
 
 %
