@@ -7,6 +7,22 @@
 % APRIL 2009
 \documentclass{sig-alternate}
 
+% Fix for copyright block height
+\makeatletter
+\def\@copyrightlength{2.5} % Increase this value to leave more space above copyright notice
+\def\ftype@copyrightbox{8}
+\def\@copyrightspace{
+\@float{copyrightbox}[b]
+\begin{center}
+\setlength{\unitlength}{1pc}
+\begin{picture}(20,\@copyrightlength)
+\put(0,-0.95){\crnotice{\@toappear}}
+\end{picture}
+\end{center}
+\end@float}
+\makeatother
+
+
 \newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
 
 \usepackage{url}
@@ -222,7 +238,7 @@ over the labels. The output of this phase is a list of clusters containing diffe
 
 \subsubsection{Entity Ranking}
 
-The final step of the expansion consists of ranking the different named entities obtained so far. To create this ordered list we assigned a score to every entity according to the following features: relative frequency of the entity in the transcripts of the event video; relative frequency of the entity over the extra document; and average relevance for the different instances according to the named entity extractors. The three dimensions are combined via a weighted sum where the relative frequency in the video subtitles has a bigger impact in the final score, followed by the relative frequency on the searched documents and the relevance from the extractors. The final output of the entity expansion operation is a list of entities together with their ranking score and the frequency in both the main video and in the collected extra documents.
+The final step of the expansion consists of ranking the different named entities obtained so far. To create this ordered list we assigned a score to every entity according to the following features: relative frequency in the transcripts of the event video; relative frequency over the extra document; and average relevance according to the named entity extractors. The three dimensions are combined via a weighted sum where the frequency in the video subtitles has a bigger impact, followed by the frequency on the searched documents and the relevance from the extractors. The final output of the entity expansion operation is a list of entities together with their ranking score and the frequency in both the main video and in the collected extra documents.
 
 %\begin{equation}
 %\begin{split}
@@ -352,10 +368,10 @@ The final result after the expansion operation is a bigger list of entities (ove
 
 \subsection{Refining Event Context via DBpedia}
 
-Given the set of $mainEntities$ obtained from the Named Entity Expansion operation, we study how close two graph nodes $e_{i}$, and $e_{i}$ are connected according to the normalized average length of all the intermediate paths between them in DBPedia. The results are expressed in the form of an adjacency matrix, which allows to visually analyze the grade of connection between a particular pair of entitites inside $mainEntities$ .
+Given the set of $mainEntities$ obtained from the Named Entity Expansion operation, we study how close two graph nodes $e_{i}$, and $e_{i}$ are connected according to the normalized average length of all the intermediate paths between them in DBPedia. The results are expressed in the form of an adjacency matrix, which allows to visually analyze the connections between pairs of entities inside $mainEntities$.
 
-\resizebox{8.5cm}{!} {
-$
+\begin{equation}
+\resizebox{.9\hsize}{!}{$
 M_{i,j}  =
  \begin{pmatrix}
 - & 0.4 & 0.6 & 1.0 & 0 & 0.2 & 1.0 & 0.6 & 0 & 0 & 0 & 0.7 & 1.0 & 0 & 0 \\
@@ -373,9 +389,10 @@ M_{i,j}  =
 1.0 & 0.6 & 0.5 & 0.9 & 0 & 0 & 0.9 & 0 & 0 & 0 & 0 & 0 & - & 0 & 0 \\
 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & - & 0 \\
 0.4 & 0.7 & 0.9 & 0.2 & 0 & 0.8 & 0.7 & 0.8 & 0.3 & 0 & 0 & 0.7 & 0 & 0 & - \\
- \end{pmatrix}
- $
+ \end{pmatrix}$
  }
+ \end{equation}
+ 
 This matrix allows to identify different aspects and insights about the $mainEntities$ analyzed. First, the upper left quarter of the matrix, corresponding to the connectivity between the top 8 entities from $E_{Expansion}$ is more dense in connections, which means that the concepts are semantically closer. This corroborates the results obtained in the previous steps since it reinforces the idea of a coherence in the proposed context.
 At the same time, other entities like \textit{WikiLeaks} have a lower number of connections to the rest of elements in the context and are pushed back inside the $mainEntities$ set. For the same reason entities like \textit{Sheremetyevo} are promoted given its relationship with entities like \textit{Russia}, \textit{Moscow}, or \textit{Vladimir Putin}. However, this logic can lead to wrong considerations if applied in entities where the disambiguation URL's is missing, like \textit{Anatoly Kucherena}, but this problem lies in the absence of some DPpedia resources and falls apart the scope of our approach. This intuitive measure, notated in Table~\ref{table:dbpediaRank} as $Conectivity$, is calculated as the sum of the distances from one entity to the rest. This score is then a weighted factor over the former expansion relevance in order to rerank the entities.
 
@@ -486,7 +503,7 @@ We will first evaluate the set of entities spotted by the expert against traditi
 
 Secondly, we evaluate against the set of \textit{MainEntities} inside $E_{Expansion}$. In this case, the Precision \& Recall indexes are better: there are 6 entities spotted, out of 7. In total, the 15 entities inside \textit{MainEntities} were offered as output. Asylum, probably one of the more representative concepts behind this news item, has been correctly detected and disambiguated. \textit{Anatoly Kucherena}, the lawyer involved in the defense of Edward \textit{Snowden}, has been correctly proposed in the result, even no disambiguation URL can be provided. The name of the airport is now known: \textit{Sheremetyevo} has been correctly disambiguated. Other important entities like \textit{human-rights} and \textit{extradition} are now present in the final set, helping to complete the context of the new.
 
-Finally, we compare the expert's feedback against the final DBpedia $E_{Expansion + DBpedia}$ ranked set of entities. There are no differences for the spotted \textit{MainEntities} in which refers to Precision \& recall. However, we other improvements have been achieved concerning to the ranking order inside \textit{MainEntities}. For example the entity ``Sheremetyevo'' is now scored higher, which makes sense from the event's perspective since it is the most specific location where the action takes place. There have appeared relevant entities that were not detected via entity expansion like the prime Minister of Russia, Igor Shuvalov. They have not been included in the set of proposed results but we will study this possibility for future developments. Also, the adjacency matrix opens room for many other context analysis like topic clustering, which could help to give further insights about the studied event.
+Finally, we compare the expert's feedback against the final DBpedia $E_{Expansion + DBpedia}$ ranked set of entities. There are no differences for the spotted \textit{MainEntities} in which refers to Precision \& recall. However, we other improvements have been achieved concerning to the ranking order inside \textit{MainEntities}. For example the entity ``Sheremetyevo'' is now scored higher, which makes sense from the event's perspective since it is the most specific location where the action takes place. There have appeared relevant entities that were not detected via entity expansion like the prime Minister of Russia, Igor Shuvalov. They have not been included in the set of results but we will study this possibility for future developments. Also, the adjacency matrix opens room for many other context analysis like topic clustering, which could help to give further insights about the event.
 
 %%%%%%%%%%%%%%%%%%
 %%%  Conclusions  %%%
