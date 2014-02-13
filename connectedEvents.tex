@@ -55,6 +55,16 @@ morekeywords={version,owl,rdf,rdfs,xml,xsd,dbpedia,dbo,str,sso,scms,fr,ld}
 \newcommand{\hilight}[1]{\colorbox{yellow}{#1}}
 \newcommand{\todo}[1]{\colorbox{red}{#1}}
 
+\permission{Copyright is held by the International World Wide Web Conference Committee (IW3C2). IW3C2 reserves the right to provide a hyperlink to the author's site if the Material is used in electronic media.}
+\conferenceinfo{WWW'14 Companion,}{April 7--11, 2014, Seoul, Korea.}
+\copyrightetc{ACM \the\acmcopyr}
+\crdata{978-1-4503-2745-9/14/04.\\
+http://dx.doi.org/10.1145/2567948.2579326}
+%\\Include the http://DOI string/url which is specific for your submission and included in the ACM rightsreview confirmation email upon completing your IW3C2 form}
+
+\clubpenalty=10000
+\widowpenalty = 10000
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%  Beginning of document  %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -124,7 +134,7 @@ The amount of videos shared on the Web is constantly increasing. From a Semantic
 
 The annotation problem has been traditionally addressed by applying audiovisual techniques, like in \cite{ballan2011event}, but extracting semantic and structured content from a video is still more complex. One possible approach consist on using Named Entity Recognition (NER) over the textual information concerning a particular video fragment. Those techniques are an essential component of the Information Extraction domain that focus on: identifying atomic information units in texts, named entities; classifying entities into predefined categories (also called context types) by classification techniques and linking to real world objects using web identifiers (Named Entity Disambiguation). Various tools provide such computations, like AlchemyAPI\footnote{\fontsize{8pt}{1em}\selectfont \url{http://www.alchemyapi.com/}} or DBpedia Spotlight\footnote{\fontsize{8pt}{1em}\selectfont \url{http://spotlight.dbpedia.org/}}. If the textual information from the video includes temporal references (like in the case of the subtitles), it is possible to align the obtained entities with the time when they appear over video. Research initiatives like Katsiouli et al.~\cite{katsiouli2007} demonstrated that applying named entity recognition techniques in combination with domain ontologies on video subtitles achieves decent results in tasks like video classification.
 
-For the Linked Data community, it is a first step to increase the volume of interconnected data. However from an exploitation point of view those promising techniques still introduce some issues. On the one hand, subtitles are not always complete enough to be the only textual source to rely on. The context around a particular event can be broader than what is transcribed from the video. On the other hand, a plain list of name entities can fail to characterize what is described in the multimedia content: sometimes we also need to know how important they seem to be regarding the event and how they related to each other. 
+For the Linked Data community, it is a first step to increase the volume of interconnected data. However from an exploitation point of view those promising techniques still introduce some issues. On the one hand, subtitles are not always complete enough to be the only textual source to rely on. The context around a particular event can be broader than what is transcribed from the video. On the other hand, a plain list of name entities can fail to characterize what is described in the multimedia content: sometimes we also need to know how important they seem to be regarding the event and how they related to each other.
 
 In this paper we present an approach for deeper annotating a news event video by alleviating the lack of textual resources that limits the application of semantic extraction techniques. We first extend the initial set of descriptions about the current event via Google searches and entity clustering. Secondly, we use an optimized pathfinding algorithm \cite{de2013discovering} implemented in the Everything is Connected Engine (EiCE).
 %firstly introduced with the Everything is Connected (EiC) Demo at the \emph{ISWC`12 Boston} conference \cite{Sande12}.
@@ -136,7 +146,7 @@ Applying these algorithms to Linked Data facilitates: resolving complex queries 
 
 \section{Approach}
 
-To reconstruct the semantic context associated with one particular news video, we highlight the main concepts and entities involved and explain how they are related to each other. The complete processing workflow takes as input the textual transcript of a multimedia resource depicting the event, as well as the start and end date for which that particular event has been considered relevant. 
+To reconstruct the semantic context associated with one particular news video, we highlight the main concepts and entities involved and explain how they are related to each other. The complete processing workflow takes as input the textual transcript of a multimedia resource depicting the event, as well as the start and end date for which that particular event has been considered relevant.
 
 We assume additionally that the analyzed event has a minimal presence and coverage on the Web to ensure that the subsequent data mining techniques can collect sufficient data to reconstruct the event's context. The output of the algorithm is a pair $Context_{Event1}=\left [  \varepsilon , \rho \right ]$  where $\varepsilon$ is a list named entities together with a numeric relevance score ($ \varepsilon =\left \{ E\times \mathbb{R} \right \}$,  being $E$ named entities classified using the NERD ontology\footnote{\fontsize{8pt}{1em}\selectfont \url{http://nerd.eurecom.fr/ontology/nerd-v0.5.n3}}) and $\rho$ is a set of predicates $\left [ e_{1},e_{2}, p \right ]$, relating the aforementioned entities ($e_{1}\in E \vee  e_{2}\in E$).
 
@@ -164,7 +174,7 @@ The entire logic will further be described in the following subsections and main
 
 \subsubsection{Query Generation}
 
-The \emph{Five W's} is a popular concept of information gathering in journalistic reporting. It captures the main aspects of a story or incident: who, when, what, where, and why~\cite{LiJia2007}. We try to represent the news item in terms of four of those five W's (who is involved in the event, where the event is taking place, what the event is about, and when has happened) in order to generate a query that retrieves documents associated to the same event. 
+The \emph{Five W's} is a popular concept of information gathering in journalistic reporting. It captures the main aspects of a story or incident: who, when, what, where, and why~\cite{LiJia2007}. We try to represent the news item in terms of four of those five W's (who is involved in the event, where the event is taking place, what the event is about, and when has happened) in order to generate a query that retrieves documents associated to the same event.
 %This is like a normal user would type in a Web search engine when looking for descriptive documents about the same news event.
 
 Firstly the original entities are mapped to the NERD Core ontology, which considers 10 main classes: Thing, Amount, Animal, Event, Function, Organization, Location, Person, Product and Time. From these ten categories we generalize three classes: the Who from \url{nerd:Person} and \url{nerd:Organization}, the Where from \url{nerd:Location}, and the What from the rest of NERD types after discarding \url{nerd:Time} and \url{nerd:Amount} instances. The When or so-called temporal dimension does not need to be computed since it is provided by the video publisher as an inputs for this approach.
@@ -194,7 +204,7 @@ where \textit{textQuery} is the result of concatenating the labels of the most r
 %\end{split}
 %\end{equation}
 and $t$ the time period dimension.
-This query generation is depicted in the upper part of Figure~\ref{fig:namedEntityExpansion}. 
+This query generation is depicted in the upper part of Figure~\ref{fig:namedEntityExpansion}.
 %For future research in the query construction technique we plan to directly use the Web resources themselves and not only their labels.
 
 \subsubsection{Document Retrieval}
@@ -294,8 +304,8 @@ In a first step, Name Entity Extraction techniques are applied over the video tr
 \begin{table}[tbp]
   \resizebox{8cm}{!} {
 \begin{tabular}{ c | c | c | c | c }
-  \hline     
- Label & Relevance & Sentiment & Type & URI  \\ \hline  
+  \hline
+ Label & Relevance & Sentiment & Type & URI  \\ \hline
 Russia & 0.809216 & Mixed & Location & DBpedia:Russia \\
 Edward Snowden & 0.717369 & Mixed & Person & DBpedia:/Edward\_Snowden \\
 South America & 0.56586 & Mixed & Location & DBpedia:South\_America \\
@@ -305,23 +315,23 @@ Moscow & 0.352101 & Mixed & City & DBpedia:Moscow \\
 CIA & 0.334887 & neutral & Organization & DBpedia:CIA \\
 Bolivia & 0.324607 & neutral & Location & DBpedia:Bolivia \\
 Obama & 0.321901 & negative & Person & DBpedia:Barack\_Obama \\
-  \hline  
-\end {tabular} 
+  \hline
+\end {tabular}
   }
 \caption{Result from Named Entity Extraction in NERD}
 \end{table}
 
 \subsection {Named Entity Expansion}
 
-In a second step, the original set of entities is expanded as described in Section~\ref{sec:expansion}. The query generated for retrieving extra documents has the text "Edward Snowden asylum Russia", and is bounded to the period from 2013-07-06 to 2013-07-28. After analyzing the extra documents the  instances are re-ranked according to their global frequency. 
+In a second step, the original set of entities is expanded as described in Section~\ref{sec:expansion}. The query generated for retrieving extra documents has the text "Edward Snowden asylum Russia", and is bounded to the period from 2013-07-06 to 2013-07-28. After analyzing the extra documents the  instances are re-ranked according to their global frequency.
 
 %\url{curl -X POST --data-binary @snowden.txt "http://localhost:8006/api/rankedentities?startdate=2013-07-16&enddate=2013-08-15&limit=50" --header "Content-Type:text/xml" -v >> snowden_textrazor_50_130716_130815.json2}
 
 \begin{table}[tbp]
   \resizebox{8.5cm}{!} {
 \begin{tabular}{ c | c | c | c | c | l }
-  \hline     
-Label & Relevance & $F_{video}$& $F_{Docu}$ & Type & URI \\ \hline                  
+  \hline
+Label & Relevance & $F_{video}$& $F_{Docu}$ & Type & URI \\ \hline
 Russia & 1.0 & 7 & 264 & Location & DBpedia:Russia \\
 Edward Snowden & 0.80479 & 2 & 227 & Person & http://dbpedia.org/resource/Edward\_Snowden \\
 US & 0.61643 & 5 & 160 & Location & DBpedia:United\_States \\
@@ -337,8 +347,8 @@ White House & 0.10616 & 0 & 31 & Location & DBpedia:White\_House \\
 Sheremetyevo & 0.0890 & 0 & 26 & Location & DBpedia:Sheremetyevo\_International\_Airport \\
 WikiLeaks & 0.08219 & 0 & 24 & Organization & DBpedia:WikiLeaks \\
 Washington's & 0.075342 & 0 & 22 & Location & DBpedia:Washington,\_D.C. \\
-  \hline  
-\end {tabular} 
+  \hline
+\end {tabular}
   }
 \caption{Top entities obtained via Named Entity Expansion}
 \end{table}
@@ -371,19 +381,19 @@ M_{i,j}  =
  \end{pmatrix}
  $
  }
-This matrix allows to identify different aspects and insights about the $mainEntities$ analyzed. First, the upper left quarter of the matrix, corresponding to the connectivity between the top 8 entities from $E_{Expansion}$ is more dense in connections, which means that the concepts are semantically closer. This corroborates the results obtained in the previous steps since it reinforces the idea of a coherence in the proposed context.   
-At the same time, other entities like \textit{WikiLeaks} have a lower number of connections to the rest of elements in the context and are pushed back inside the $mainEntities$ set. For the same reason entities like \textit{Sheremetyevo} are promoted given its relationship with entities like \textit{Russia}, \textit{Moscow}, or \textit{Vladimir Putin}. However, this logic can lead to wrong considerations if applied in entities where the disambiguation URL's is missing, like \textit{Anatoly Kucherena}, but this problem lies in the absence of some DPpedia resources and falls apart the scope of our approach. This intuitive measure, notated in Table~\ref{table:dbpediaRank} as $Conectivity$, is calculated as the sum of the distances from one entity to the rest. This score is then a weighted factor over the former expansion relevance in order to rerank the entities. 
+This matrix allows to identify different aspects and insights about the $mainEntities$ analyzed. First, the upper left quarter of the matrix, corresponding to the connectivity between the top 8 entities from $E_{Expansion}$ is more dense in connections, which means that the concepts are semantically closer. This corroborates the results obtained in the previous steps since it reinforces the idea of a coherence in the proposed context.
+At the same time, other entities like \textit{WikiLeaks} have a lower number of connections to the rest of elements in the context and are pushed back inside the $mainEntities$ set. For the same reason entities like \textit{Sheremetyevo} are promoted given its relationship with entities like \textit{Russia}, \textit{Moscow}, or \textit{Vladimir Putin}. However, this logic can lead to wrong considerations if applied in entities where the disambiguation URL's is missing, like \textit{Anatoly Kucherena}, but this problem lies in the absence of some DPpedia resources and falls apart the scope of our approach. This intuitive measure, notated in Table~\ref{table:dbpediaRank} as $Conectivity$, is calculated as the sum of the distances from one entity to the rest. This score is then a weighted factor over the former expansion relevance in order to rerank the entities.
 
-In addition, we study the frequency of the different middle nodes and properties inside the  set of items that conform the paths for calculating $M_{i,j}$. The most repeated ones are listed in Table~\ref{table:frequentNodesProp}. In the case of the nodes we can observe various interesting findings: on the one hand we get the location \textit{Wilmington}, the city where Edward Snowden was born and he still has family, and important russian-american political figures like \textit{Chap Petersen} or \textit{Igor Panarin}. On the other hand, some entities already spotted in the expansion phase are reinforced, like for example \textit{Russia} or \textit{Washington D.C}. Finally, the absolute frequency of properties reveals also meaningful clues: the first three predicates, and also the fifth and the seventh have clearly to see with spacial dimension, while the forth, sixth and eighth are related with political matters, which clearly makes sense since an asylum request implies a territorial and political conflict. 
+In addition, we study the frequency of the different middle nodes and properties inside the  set of items that conform the paths for calculating $M_{i,j}$. The most repeated ones are listed in Table~\ref{table:frequentNodesProp}. In the case of the nodes we can observe various interesting findings: on the one hand we get the location \textit{Wilmington}, the city where Edward Snowden was born and he still has family, and important russian-american political figures like \textit{Chap Petersen} or \textit{Igor Panarin}. On the other hand, some entities already spotted in the expansion phase are reinforced, like for example \textit{Russia} or \textit{Washington D.C}. Finally, the absolute frequency of properties reveals also meaningful clues: the first three predicates, and also the fifth and the seventh have clearly to see with spacial dimension, while the forth, sixth and eighth are related with political matters, which clearly makes sense since an asylum request implies a territorial and political conflict.
 
 \begin{table}[tbp]
-  \resizebox{8.5cm}{!} { 
+  \resizebox{8.5cm}{!} {
 \begin{tabular}{  c | c | c | c }
   \hline
     \multicolumn{2}{c|}{Nodes} &
     \multicolumn{2}{c}{Properties} \\
   \hline
-  URL & Frequence & URL & Frequence \\ \hline          
+  URL & Frequence & URL & Frequence \\ \hline
 DBpedia:Wilmington,\_North\_Carolina & 14 & http://dbpedia.org/ontology/country & 44 \\
 DBpedia:United\_States & 38 & http://dbpedia.org/ontology/birthPlace & 64 \\
 DBpedia:Russia & 12 & http://purl.org/dc/terms/spatial & 42 \\
@@ -391,7 +401,7 @@ DBpedia:conference/AIPR/2008 & 11 & http://dbpedia.org/ontology/almaMater & 26 \
 DBpedia:Washington,\_D.C. & 10 & http://dbpedia.org/ontology/location & 21 \\
 DBpedia:Igor\_Panarin & 8 & http://dbpedia.org/ontology/profession & 20 \\
 DBpedia:Chap\_Petersen & 8 & http://dbpedia.org/ontology/nationality & 14 \\
-DBpedia:North\_Carolina & 8 & http://dbpedia.org/property/leaderTitle & 14 \\      
+DBpedia:North\_Carolina & 8 & http://dbpedia.org/property/leaderTitle & 14 \\
 DBpedia:Independent\_(politician) & 8 & http://dbpedia.org/ontology/occupation & 14 \\
   \hline
 \end{tabular}
@@ -405,8 +415,8 @@ The $Conectivity$ scores are combined together with the frequency of intermediat
 \begin{table}[tbp]
   \resizebox{8.5cm}{!} {
 \begin{tabular}{ c | c | c | c | c | l }
-  \hline     
-Label 						&$Rel_{Final}$ 	& $Rel_{extension}$ &$Conectivity$ 	& $F_{inPaths}$ & URI \\ \hline 
+  \hline
+Label 						&$Rel_{Final}$ 	& $Rel_{extension}$ &$Conectivity$ 	& $F_{inPaths}$ & URI \\ \hline
 Russia 						& 1.0 			& 1.0 				& 6.10 			& 12 			& DBpedia:Russia \\
 Edward Snowden 				& 0.79469 		& 0.80479 			& 7.60 			& - 			& http://dbpedia.org/resource/Edward\_Snowden \\
 US 							& 0.77188 		& 0.61643 			& 9.40 			& 38 			& DBpedia:United\_States \\
@@ -422,8 +432,8 @@ Central Intelligence Agency 	& 0.09171 		& 0.19178 			& 2.80			& -				& DBpedia:
 Anatoly Kucherena 			& 0.08780 		& 0.147260 			& 0.00 			& -				& -- \\
 extradition 				& 0.06693 		& 0.116438 			& 0.00			& -				& DBpedia:Extradition \\
 WikiLeaks					& 0.04432 		& 0.08219 			& 0.00			& -			 	& DBpedia:WikiLeaks \\
-  \hline  
-\end {tabular} 
+  \hline
+\end {tabular}
   }
 \caption{Top entities reranked via DBpedia clues}
 \label{table:dbpediaRank}
@@ -439,7 +449,7 @@ WikiLeaks					& 0.04432 		& 0.08219 			& 0.00			& -			 	& DBpedia:WikiLeaks \\
 
 The result obtained by this approach will be evaluated against a set of entities provided by an expert. We plan to extend this evaluation to a larger corpora and include a more exhaustive evaluation in following publications on the same line. Currently we start from the list of entities provided by the expert, together with some insights about the relevance of the concept inside the scope of the video:
 
-%\begin{Verbatim}[] 
+%\begin{Verbatim}[]
 %\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`$=3\catcode`_=8},fontsize=\tiny]
 %o   \textbf{Edward Joseph Snowden} (Mentioned)
 %Public figure. He is the "who" of the news.
@@ -463,21 +473,21 @@ The result obtained by this approach will be evaluated against a set of entities
 \begin{table}[bp]
   \resizebox{8.5cm}{!} {
     \begin{tabular}{c | l}
-    \textbf{Entity}              & \textbf{Comments}   \\[0.2cm] \hline 
+    \textbf{Entity}              & \textbf{Comments}   \\[0.2cm] \hline
     Edward Joseph Snowden  & \pbox{20cm}{Public figure. He is the "who" of the news. \\ The subject of the main sentence} \\[0.4cm]
     Rusia                  & The location, but also an actor, the indirect object of the main sentence "to whom".   \\[0.4cm]
     Political Asylum       & This is related to the "what" of the news. This is the Snowden's request, the direct object.     \\[0.4cm]
     CIA                    & \pbox{20cm}{Background information on related to Snowden, since he is an ex-CIA employee. \\ An axe in a wider sense, not this item in particular, but Snowden’s history. }\\[0.4cm]
     Sheremetyevo Airport   & Specific location of the news. \\[0.4cm]
     Anatoly Kucherena      & \pbox{20cm}{Secondary actor and speaker in the video. \\Information about an interview or person expressing his opinion.}     \\[0.4cm]
-    US Department of State & Involved organization. Not mentioned but related to speaker. \\[0.4cm]  
-\end {tabular} 
+    US Department of State & Involved organization. Not mentioned but related to speaker. \\[0.4cm]
+\end {tabular}
   }
     \caption {Relevant Entities from the Experts}
     \label{table:entitiesExpert}
 \end{table}
 
-We will first evaluate the set of entities spotted by the expert against traditional Named Entity Extraction results from NERD. About precision\&recall, 3 entities have been spotted out of the 7 while in total 12 were proposed as candidate results. The lawyer of the case, Anatoly Kucherena, is never mentioned in the subtitles, so it has not been detected. The name of the airport: even the word is transcribed in the subtitles, there are two airport in Moscow and we can not assure which one are we talking about. 
+We will first evaluate the set of entities spotted by the expert against traditional Named Entity Extraction results from NERD. About precision\&recall, 3 entities have been spotted out of the 7 while in total 12 were proposed as candidate results. The lawyer of the case, Anatoly Kucherena, is never mentioned in the subtitles, so it has not been detected. The name of the airport: even the word is transcribed in the subtitles, there are two airport in Moscow and we can not assure which one are we talking about.
 
 Secondly, we evaluate against the set of \textit{MainEntities} inside $E_{Expansion}$. In this case, the Precision \& Recall indexes are better: there are 6 entities spotted, out of 7. In total, the 15 entities inside \textit{MainEntities} were offered as output. Asylum, probably one of the more representative concepts behind this news item, has been correctly detected and disambiguated. \textit{Anatoly Kucherena}, the lawyer involved in the defense of Edward \textit{Snowden}, has been correctly proposed in the result, even no disambiguation URL can be provided. The name of the airport is now known: \textit{Sheremetyevo} has been correctly disambiguated. Other important entities like \textit{human-rights} and \textit{extradition} are now present in the final set, helping to complete the context of the new.
 
@@ -490,7 +500,7 @@ Finally, we compare the expert's feedback against the final DBpedia $E_{Expansio
 \section{Conclusions}
 We presented an approach for context-aware annotating news events, designed to precisely harvest program descriptions starting from named entities recognized in the TV video transcripts. Because the entities initially spotted are typically insufficient for covering the wider range of concepts that can be involved in a particular news clip, we expanded them by analyzing additional textual descriptions about the same event collected from unstructured sources.
 
-The flat ranked list of concepts is afterward completed with cues about their connectivity obtained by analyzing the DBpedia paths that exist between them. Particularly, we promoted entities higher interlinked inside the context and with higher frequency in the nodes of the generated DBpedia paths. Finally we identify also the important predicates linking entities. This leads to a more accurate re-ranking of the entities belonging to this news event. 
+The flat ranked list of concepts is afterward completed with cues about their connectivity obtained by analyzing the DBpedia paths that exist between them. Particularly, we promoted entities higher interlinked inside the context and with higher frequency in the nodes of the generated DBpedia paths. Finally we identify also the important predicates linking entities. This leads to a more accurate re-ranking of the entities belonging to this news event.
 
 The preliminary results indicate that we can successfully expand the initial set of recognized entities with more relevant concepts not detected by pure named entity recognition approaches. Exploring DBpedia paths along the found named entities occurring in news media leads to a more accurate ranking of important concepts and even it does not necessary introduce any new top item, it brings forward more related entities with additional information about the broader context of an event.
 
