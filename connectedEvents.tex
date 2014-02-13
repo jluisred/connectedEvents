@@ -25,7 +25,7 @@
 
 \newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
 
-\usepackage{url}
+\usepackage[hyphens]{url}
 \usepackage{textcomp}
 \usepackage{color}
 \usepackage{listings}
@@ -188,7 +188,7 @@ The entire logic will further be described in the following subsections and main
 The \emph{Five W's} is a popular concept of information gathering in journalistic reporting. It captures the main aspects of a story or incident: who, when, what, where, and why~\cite{LiJia2007}. We try to represent the news item in terms of four of those five W's (who is involved in the event, where the event is taking place, what the event is about, and when has happened) in order to generate a query that retrieves documents associated to the same event.
 %This is like a normal user would type in a Web search engine when looking for descriptive documents about the same news event.
 
-Firstly the original entities are mapped to the NERD Core ontology, which considers 10 main classes: Thing, Amount, Animal, Event, Function, Organization, Location, Person, Product and Time. From these ten categories we generalize three classes: the Who from \url{nerd:Person} and \url{nerd:Organization}, the Where from \url{nerd:Location}, and the What from the rest of NERD types after discarding \url{nerd:Time} and \url{nerd:Amount} instances. The When or so-called temporal dimension does not need to be computed since it is provided by the video publisher as an inputs for this approach.
+Firstly the original entities are mapped to the NERD Core ontology, which considers 10 main classes: Thing, Amount, Animal, Event, Function, Organization, Location, Person, Product and Time. From those ten different categories we generalize to three classes: the Who from \url{nerd:Person} and \url{nerd:Organization}, the Where from \url{nerd:Location}, and the What from the rest of NERD types after discarding \url{nerd:Time} and \url{nerd:Amount}. The When or so-called temporal dimension does not need to be computed since it is considered to be provided by the video publisher.
 
 After generating the three sets of entities, the next step consist in ranking them in relevance according to a weighted sum of two different dimensions: their frequency in the transcripts and their former relevance scores coming from the named entity extractors. We have defined the function \emph{filterEntities(S)} for selecting the $n$ entities inside the set of entities $S$ whose relative relevance
 
@@ -285,7 +285,7 @@ Afterwards, we calculate paths between all the possible pairs inside the set\tex
 Once all the possible paths have been retrieved, we perform various analysis for detecting which are the most frequent classes and predicates:
 \begin{itemize}
   \item  We detect the most frequent nodes ($F_{nodes} = f_{max}(n_{i})$ in $Paths (mainEntities)$).
-  \item  We detect the most frequent predicates ($F_{prop} = f_{max}(p_{i})$ in $Paths (mainEntities)$). The edges (DBpedia properties) will determine which are the most relevant properties taking part in the context of this news item.
+  \item  We find the most frequent properties ($F_{prop} = f_{max}(p_{i})$ in $Paths (mainEntities)$). The edges (DBpedia properties) will determine which are the most relevant properties taking part in the context of this news item.
   \item  We study the connectivity between nodes (Adjacency Matrix $M_{i,j}$ where the distance between $e+{i}$ and $e+{j}$ is the average length of the paths linking them ($m_{i,j} = \\ Avg (lenght(Paths(e_{i}, e_{j})))$)
 \end{itemize}
 
@@ -297,7 +297,7 @@ The output of this phase is a re-ranked list of entities from the expansion enti
 \end{split}
 \end{equation}
 
-In the future, we plan to use the frequency measures about predicates available in $F_{prop}$ in order to more precisely rank the named entities. By applying the \textit{commonalities} REST function (\url{http://demo.everythingisconnected.be/commonalities?between=resource1&and=resource2&allowed=property})over the $mainEntities$ inside $Entities_{Extension + DBpedia}$, and for the properties with highest $F_{prop}$, we obtain the set of entities directly related with the original ones through the top predicates. Once more, the most frequent entities in Commonalities could promote the already existing entities in $Entities_{Extension + DBpedia}$.
+In the future, we plan to use the frequency measures about predicates available in $F_{prop}$ in order to more precisely rank the named entities. By using the \textit{commonalities} function (\url{http://demo.everythingisconnected.be/commonalities?between=Res1&and=Res2&allowed=property}) over the set of $mainEntities$ inside $Entities_{Extension + DBpedia}$ and for the properties with highest $F_{prop}$, we obtain the set of entities directly related with the original ones through the top predicates. Once more, the most frequent entities in Commonalities could promote the already existing entities in $Entities_{Extension + DBpedia}$.
 %\url{http://demo.everythingisconnected.be/commonalities?between=http://dbpedia.org/resource/Lyon&and=http://dbpedia.org/resource/France&allowed=http://purl.org/dc/terms/spatial}
 
 %%%%%%%%%%%%%%%%%%
@@ -422,7 +422,7 @@ DBpedia:Independent\_(politician) & 8 & http://dbpedia.org/ontology/occupation &
 \label{table:frequentNodesProp}
 \end{table}
 
-The $Conectivity$ scores are combined together with the frequency of intermediate nodes in the paths ($F_{inPaths}$) and the former relevance indexes from the entity extension $Rel_{extension}$, for elaborating a new ranked list of entities that intends to effectively represent the context of a news event.
+The $Conectivity$ scores are combined together with the frequency of intermediate nodes in the paths ($F_{inPaths}$) and the former relevance indexes from the entity extension phase ($Rel_{extension}$) for obtaining a new ranked list of entities that intends to better represent the context of the news event.
 
 \begin{table}[tbp]
   \resizebox{8.5cm}{!} {
